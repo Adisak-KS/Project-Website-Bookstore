@@ -72,7 +72,7 @@
                 <li class="menu-title mt-2">จัดการบุคล</li>
 
                 <li>
-                    <a href="#">
+                    <a href="admin_show.php">
                         <i class="fa-solid fa-user"></i>
                         <span> ผู้ดูแลระบบ </span>
                     </a>
