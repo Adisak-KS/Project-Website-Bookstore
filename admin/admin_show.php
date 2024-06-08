@@ -1,11 +1,20 @@
 <?php
 $titlePage = "ผู้ดูแลระบบ";
+
+require_once("../db/connectdb.php");
+require_once("../db/controller/AdminController.php");
+
+$AdminController = new AdminController($conn);
+
+$admins = $AdminController->getAdmin();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require_once('./layouts/head.php') ?>
+    <?php require_once('layouts/head.php') ?>
 </head>
 
 <!-- body start -->
@@ -16,10 +25,10 @@ $titlePage = "ผู้ดูแลระบบ";
     <div id="wrapper">
 
         <!-- ========== Topbar ========== -->
-        <?php require_once('./layouts/nav_topbar.php') ?>
+        <?php require_once('layouts/nav_topbar.php') ?>
 
         <!-- ========== Left bar ========== -->
-        <?php require_once('./layouts/nav_leftbar.php') ?>
+        <?php require_once('layouts/nav_leftbar.php') ?>
 
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
@@ -35,6 +44,11 @@ $titlePage = "ผู้ดูแลระบบ";
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
+                                    <?php
+                                    if (!$admins) {
+                                        echo "  ไม่มี";
+                                    }
+                                    ?>
                                     <h4 class="mt-0 header-title">ข้อมูลผู้ดูแลระบบทั้งหมด</h4>
                                     <div class="my-3">
                                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
@@ -44,72 +58,74 @@ $titlePage = "ผู้ดูแลระบบ";
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-scrollable">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มผู้ดูแลระบบ</h1>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="mb-3">
-                                                            <label for="fname" class="form-label">ชื่อ :</label><span class="text-danger">*</span>
-                                                            <input type="text" name="fname" class="form-control" placeholder="ระบุ ชื่อจริง" maxlength="50">
+                                        <form id="myForm" action="aaa.php" method="post">
+                                            <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มผู้ดูแลระบบ</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label for="lname" class="form-label">นามสกุล :</label><span class="text-danger">*</span>
-                                                            <input type="text" name="lname" class="form-control" placeholder="ระบุ นามสกุล" maxlength="50">
-                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label for="fname" class="form-label">ชื่อ :</label><span class="text-danger">*</span>
+                                                                <input type="text" name="fname" class="form-control" placeholder="ระบุ ชื่อจริง" maxlength="50">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="lname" class="form-label">นามสกุล :</label><span class="text-danger">*</span>
+                                                                <input type="text" name="lname" class="form-control" placeholder="ระบุ นามสกุล" maxlength="50">
+                                                            </div>
 
-                                                        <div class="mb-3">
-                                                            <label for="username" class="form-label">ชื่อผู้ใช้งาน :</label><span class="text-danger">*</span>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text">@</span>
-                                                                <input type="text" class="form-control" placeholder="ระบุ ชื่อผู้ใช้งาน" aria-describedby="inputGroupPrepend" maxlength="50">
+                                                            <div class="mb-3">
+                                                                <label for="username" class="form-label">ชื่อผู้ใช้งาน :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text">@</span>
+                                                                    <input type="text" name="username" class="form-control" placeholder="ระบุ ชื่อผู้ใช้งาน" aria-describedby="inputGroupPrepend" maxlength="50">
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="mb-3">
-                                                            <label for="password" class="form-label">รหัสผ่าน :</label><span class="text-danger">*</span>
-                                                            <div class="input-group">
-                                                                <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
-                                                                <button class="btn btn-outline-secondary" type="button">
-                                                                    <i class="fa-solid fa-eye-slash"></i>
-                                                                </button>
+                                                            <div class="mb-3">
+                                                                <label for="password" class="form-label">รหัสผ่าน :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
+                                                                    <button class="btn btn-outline-secondary password-toggle" type="button">
+                                                                        <i class="fas fa-eye-slash"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="password" class="form-label">ยืนยันรหัสผ่าน :</label><span class="text-danger">*</span>
-                                                            <div class="input-group">
-                                                                <input type="password" class="form-control" name="confirmPassword" placeholder="ระบุ รหัสผ่าน อีกครั้ง" maxlength="255">
-                                                                <button class="btn btn-outline-secondary" type="button">
-                                                                    <i class="fa-solid fa-eye-slash"></i>
-                                                                </button>
+                                                            
+                                                            <div class="mb-3">
+                                                                <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <input type="password" class="form-control" name="confirmPassword" placeholder="ระบุ รหัสผ่าน อีกครั้ง" maxlength="255">
+                                                                    <button class="btn btn-outline-secondary password-toggle" type="button">
+                                                                        <i class="fas fa-eye-slash"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div class="mb-3">
-                                                            <label for="email" class="form-label">อีเมล :</label><span class="text-danger">*</span>
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                                                                <input type="text" class="form-control" placeholder="ระบุ อีเมล" aria-describedby="inputGroupPrepend" maxlength="100">
+                                                            <div class="mb-3">
+                                                                <label for="email" class="form-label">อีเมล :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                                                    <input type="text" name="email" class="form-control" placeholder="ระบุ อีเมล" aria-describedby="inputGroupPrepend" maxlength="100">
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                            <i class="fa-solid fa-xmark"></i>
-                                                            <span> ยกเลิก</span>
-                                                        </button>
-                                                        <button type="submit" class="btn btn-success">
-                                                            <i class="fa-solid fa-floppy-disk"></i>
-                                                            <span> บันทึก</span>
-                                                        </button>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                <i class="fa-solid fa-xmark"></i>
+                                                                <span> ยกเลิก</span>
+                                                            </button>
+                                                            <button type="submit" class="btn btn-success">
+                                                                <i class="fa-solid fa-floppy-disk"></i>
+                                                                <span> บันทึก</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
+                                        </form>
 
                                     </div>
                                     <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
@@ -160,7 +176,7 @@ $titlePage = "ผู้ดูแลระบบ";
 
             </div> <!-- content -->
 
-            <?php require_once('./layouts/nav_footer.php') ?>
+            <?php require_once('layouts/nav_footer.php') ?>
 
         </div>
 
@@ -173,12 +189,9 @@ $titlePage = "ผู้ดูแลระบบ";
     <!-- END wrapper -->
 
     <!-- ========== Right bar ========== -->
-    <?php require_once('./layouts/nav_rightbar.php') ?>
+    <?php require_once('layouts/nav_rightbar.php') ?>
 
-
-
-    <?php require_once('./layouts/vender.php') ?>
-
+    <?php require_once('layouts/vender.php') ?>
 </body>
 
 </html>

@@ -1,10 +1,10 @@
  <?php
-   $nameWebsite = "Bookstore";
+  $nameWebsite = "Bookstore";
 
-   // My Function
-   require_once("includes/functions.php")
+  // My Function
+  require_once("includes/functions.php")
 
-   ?>
+  ?>
 
  <!--  ========== Head ========== -->
  <meta charset="utf-8" />
@@ -15,7 +15,7 @@
  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
  <!-- App favicon -->
- <link rel="shortcut icon" href="assets/images/favicon.ico">
+ <link rel="shortcut icon" href="../uploads/img_web_setting/default.jpg" type="image/x-icon">
 
  <!-- App css -->
  <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
@@ -29,5 +29,4 @@
  <link href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.min.css" rel="stylesheet">
  <link href="https://cdn.datatables.net/searchpanes/2.3.1/css/searchPanes.bootstrap5.min.css" rel="stylesheet">
 
-
-
+ ๋
