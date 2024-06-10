@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ============================== 4. Jquery Validation Form (Employee) ==============================
 $(document).ready(function () {
-    $("#myForm").validate({
+    $("#formEmployee").validate({
         rules: {
             fname: {
                 required: true,
@@ -80,6 +80,9 @@ $(document).ready(function () {
                 minlength: 10,
                 maxlength: 100,
             },
+            newProfile: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
         },
         messages: {
             fname: {
@@ -114,6 +117,9 @@ $(document).ready(function () {
                 email: "รูปแบบอีเมล ไม่ถูกต้อง",
                 minlength: "ต้องมี อย่างน้อย 10 ตัวอักษร",
                 maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+            newProfile: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
             },
         },
         errorElement: 'span',

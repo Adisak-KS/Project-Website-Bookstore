@@ -6,7 +6,7 @@
         <!-- User box -->
         <div class="user-box text-center">
 
-            <img src="../uploads/img_employees/default.jpg" alt="user-img" title="Mat Helme" class="rounded-circle img-thumbnail avatar-md">
+            <img src="../uploads/img_employees/default.png" alt="user-img" title="Mat Helme" class="rounded-circle img-thumbnail avatar-md">
             <div class="dropdown">
                 <a href="#" class="user-name dropdown-toggle h5 mt-2 mb-1 d-block" data-bs-toggle="dropdown" aria-expanded="false">Nowak Helme</a>
                 <div class="dropdown-menu user-pro-dropdown">
@@ -72,13 +72,125 @@
                 <li class="menu-title mt-2">จัดการบุคล</li>
 
                 <li>
+                    <a href="employees_aythority_type_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> ประเภทสิทธิ์พนักงาน </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="owner_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> เจ้าของร้าน / ผู้บริหาร </span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="admin_show.php">
                         <i class="fa-solid fa-user"></i>
                         <span> ผู้ดูแลระบบ </span>
                     </a>
                 </li>
 
-                <li class="menu-title mt-2">Apps</li>
+                <li>
+                    <a href="employee_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> พนักงาน</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> สมาชิก</span>
+                    </a>
+                </li>
+
+                <li class="menu-title mt-2">จัดการสินค้า</li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> ประเภทสินค้า</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> สำนักพิมพ์</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> ผู้แต่ง</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> โปรโมชั่น</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> สินค้า</span>
+                    </a>
+                </li>
+
+                <li class="menu-title mt-2">จัดการการชำระเงิน</li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> ช่องทางชำระเงิน</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> ช่องทางจัดส่ง</span>
+                    </a>
+                </li>
+
+                <li class="menu-title mt-2">รายงาน</li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> รายงานยอดขาย</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span> รายงานยอดเข้าชม</span>
+                    </a>
+                </li>
+
+                <li class="menu-title mt-2">ตั้งค่า</li>
+
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span>ช่องทางติดต่อ</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="member_show.php">
+                        <i class="fa-solid fa-user"></i>
+                        <span>ตั้งค่าเว็บไซต์</span>
+                    </a>
+                </li>
+
+                <li class="menu-title mt-2">อื่น ๆ</li>
 
                 <li>
                     <a href="#">
@@ -95,6 +207,6 @@
 
     </div>
     <!-- Sidebar -left -->
-
+</div>
 </div>
 <!-- ========== Left Sidebar End ========== -->

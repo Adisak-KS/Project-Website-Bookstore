@@ -5,7 +5,7 @@ $titlePage = "หน้าแรก";
 <html lang="en">
 
 <head>
-    <?php require_once('./layouts/head.php') ?>
+    <?php require_once('layouts/head.php') ?>
 </head>
 
 <!-- body start -->
@@ -16,10 +16,10 @@ $titlePage = "หน้าแรก";
     <div id="wrapper">
 
         <!-- ========== Topbar ========== -->
-        <?php require_once('./layouts/nav_topbar.php') ?>
+        <?php require_once('layouts/nav_topbar.php') ?>
 
         <!-- ========== Left bar ========== -->
-        <?php require_once('./layouts/nav_leftbar.php') ?>
+        <?php require_once('layouts/nav_leftbar.php') ?>
 
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
@@ -189,17 +189,15 @@ $titlePage = "หน้าแรก";
         <!-- ============================================================== -->
         <!-- End Page content -->
         <!-- ============================================================== -->
-
-
     </div>
     <!-- END wrapper -->
 
     <!-- ========== Right bar ========== -->
-    <?php require_once('./layouts/nav_rightbar.php') ?>
+    <?php require_once('layouts/nav_rightbar.php') ?>
 
    
 
-    <?php require_once('./layouts/vender.php') ?>
+    <?php require_once('layouts/vender.php') ?>
 
 </body>
 

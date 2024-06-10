@@ -3,7 +3,6 @@ $titlePage = "ผู้ดูแลระบบ";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AdminController.php");
-
 $AdminController = new AdminController($conn);
 
 $admins = $AdminController->getAdmin();
@@ -44,11 +43,6 @@ $admins = $AdminController->getAdmin();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <?php
-                                    if (!$admins) {
-                                        echo "  ไม่มี";
-                                    }
-                                    ?>
                                     <h4 class="mt-0 header-title">ข้อมูลผู้ดูแลระบบทั้งหมด</h4>
                                     <div class="my-3">
                                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
@@ -58,7 +52,7 @@ $admins = $AdminController->getAdmin();
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form id="myForm" action="aaa.php" method="post">
+                                        <form action="process/admin_add.php" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
@@ -93,7 +87,7 @@ $admins = $AdminController->getAdmin();
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                            
+
                                                             <div class="mb-3">
                                                                 <label for="confirmPassword" class="form-label">ยืนยันรหัสผ่าน :</label><span class="text-danger">*</span>
                                                                 <div class="input-group">
@@ -117,7 +111,7 @@ $admins = $AdminController->getAdmin();
                                                                 <i class="fa-solid fa-xmark"></i>
                                                                 <span> ยกเลิก</span>
                                                             </button>
-                                                            <button type="submit" class="btn btn-success">
+                                                            <button type="submit" name="btn-add" class="btn btn-success">
                                                                 <i class="fa-solid fa-floppy-disk"></i>
                                                                 <span> บันทึก</span>
                                                             </button>
@@ -128,46 +122,57 @@ $admins = $AdminController->getAdmin();
                                         </form>
 
                                     </div>
-                                    <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">รูป</th>
-                                                <th class="text-start">ชื่อ</th>
-                                                <th class="text-start">นามสกุล</th>
-                                                <th class="text-start">ชื่อผู้ใช้</th>
-                                                <th class="text-start">อีเมล</th>
-                                                <th class="text-center">สถานะ</th>
-                                                <th>จัดการข้อมูล</th>
-                                            </tr>
-                                        </thead>
+                                    <?php if ($admins) { ?>
+                                        <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">รูป</th>
+                                                    <th class="text-start">ชื่อ</th>
+                                                    <th class="text-start">นามสกุล</th>
+                                                    <th class="text-start">ชื่อผู้ใช้</th>
+                                                    <th class="text-start">อีเมล</th>
+                                                    <th class="text-center">สถานะ</th>
+                                                    <th>จัดการข้อมูล</th>
+                                                </tr>
+                                            </thead>
 
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center">
-                                                    <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/default.jpg">
-                                                </td>
-                                                <td class="text-start">System</td>
-                                                <td class="text-start">Edinburgh</td>
-                                                <td class="text-start">Edinburgh</td>
-                                                <td class="text-start">2011/04/25</td>
-                                                <td class="text-center">ใช้งานได้</td>
-                                                <td>
-                                                    <a href="#" class="btn btn-warning">
-                                                        <i class="fa-solid fa-pen-to-square"></i>
-                                                        <span> แก้ไข</span>
-                                                    </a>
+                                            <tbody>
+                                                <?php foreach ($admins as $row) { ?>
+                                                    <tr>
+                                                        <td class="text-center">
+                                                            <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
+                                                        </td>
+                                                        <td class="text-start"><?php echo $row['emp_fname']; ?></td>
+                                                        <td class="text-start"><?php echo $row['emp_lname']; ?></td>
+                                                        <td class="text-start"><?php echo $row['emp_username']; ?></td>
+                                                        <td class="text-start"><?php echo $row['emp_email']; ?></td>
+                                                        <td class="text-center">
+                                                            <?php if ($row['emp_status'] == 1) { ?>
+                                                                <span class="badge rounded-pill bg-success fs-6">ใช้งานได้</span>
+                                                            <?php } else { ?>
+                                                                <span class="badge rounded-pill bg-danger fs-6">ระงับการใช้งาน</span>
+                                                            <?php } ?>
+                                                        </td>
+                                                        <td>
+                                                            <a href="admin_edit_form.php?id=<?php echo $row['emp_id'] ?>" class="btn btn-warning">
+                                                                <i class="fa-solid fa-pen-to-square me-1"></i>
+                                                                <span>แก้ไข</span>
+                                                            </a>
 
-                                                    <a href="#" class="btn btn-danger ms-2">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                        <span> ลบ</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                            <a href="admin_del_form.php?id=<?php echo $row['emp_id'] ?>" class="btn btn-danger ms-2">
+                                                                <i class="fa-solid fa-trash me-1"></i>
+                                                                <span>ลบข้อมูล</span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    <?php } else { ?>
+                                        <?php require_once("./includes/no_information.php") ?>
+                                    <?php } ?>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <!-- end row -->
@@ -195,3 +200,4 @@ $admins = $AdminController->getAdmin();
 </body>
 
 </html>
+<?php require_once('../includes/sweetalert2.php') ?>
