@@ -18,7 +18,7 @@ function messageError($message, $locationError)
 
 // ==================================================================================
 // Validation Form Add Employee
-function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirmPassword, $email, $locationError)
+function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirmPassword, $email, $eatId, $locationError)
 {
 
     // Check First name
@@ -64,6 +64,12 @@ function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirm
     } elseif (mb_strlen($email, 'UTF-8') < 10 || mb_strlen($email, 'UTF-8') > 100) {
         messageError("อีเมล ต้องมี 10-100 ตัวอักษร", $locationError);
     }
+
+    if (empty($eatId)) {
+        messageError("ไม่พบรหัสประเภทสิทธิ์พนักงาน", $locationError);
+    }elseif (!in_array($eatId, [2, 3, 6])) { // 2 = Owner, 3 = Admin, 6 = Employee
+        messageError("รหัสประเภทสิทธิ์พนักงานไม่ถูกต้อง", $locationError);
+    }
 }
 
 // ==================================================================================
@@ -92,6 +98,22 @@ function checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $ma
 }
 
 
+// ==================================================================================
+function deleteProfileEmployees($profile)
+{
+    // โฟลเดอร์ที่เก็บไฟล์รูปภาพ
+    $folderUploads = "../../uploads/img_employees/";
+
+    // ตรวจสอบว่ามีชื่อไฟล์และไฟล์นั้นมีอยู่ในโฟลเดอร์ที่กำหนดหรือไม่
+    if (!empty($profile) && file_exists($folderUploads . $profile)) {
+        // ลบไฟล์รูปภาพ
+        if (unlink($folderUploads . $profile)) {
+            return true; // คืนค่า true เมื่อการลบสำเร็จ
+        }
+    }
+}
+
+
 
 // ==================================================================================
 function generateUniqueProfileEmployees($extension, $folder)
@@ -103,7 +125,7 @@ function generateUniqueProfileEmployees($extension, $folder)
 }
 
 // ==================================================================================
-function valiDateFormUpdateAdmin($fname, $lname, $status, $authority, $locationError)
+function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError)
 {
 
     // Check First name
@@ -132,5 +154,13 @@ function valiDateFormUpdateAdmin($fname, $lname, $status, $authority, $locationE
     } elseif (!in_array($authority, $validAuthorities)) {
         messageError("กรุณาระบุ สิทธิ์การใช้งานที่ถูกต้อง โปรดแก้ไข Code", $locationError);
     }
-    
+}
+
+// ==================================================================================
+function validateFormDeleteEmployees($Id, $locationError)
+{
+    if (empty($Id) || !filter_var($Id, FILTER_VALIDATE_INT, array("options" => array("min_range" => 1)))) {
+        // ตรวจสอบว่ารหัสพนักงานว่างหรือไม่ และตรวจสอบว่ารหัสพนักงานเป็นจำนวนเต็มบวกหรือไม่
+        messageError("ไม่พบรหัสพนักงานนี้หรือรหัสพนักงานไม่ถูกต้อง", $locationError);
+    }
 }

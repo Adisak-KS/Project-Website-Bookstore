@@ -1,11 +1,12 @@
 <?php
-$titlePage = "ผู้ดูแลระบบ";
+$titlePage = "พนักงาน";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AdminController.php");
-$AdminController = new AdminController($conn);
+require_once("../db/controller/EmployeeController.php");
 
-$admins = $AdminController->getAdmin();
+$EmployeeController = new EmployeeController($conn);
+
+$employees = $EmployeeController->getEmployee();
 
 
 ?>
@@ -43,16 +44,16 @@ $admins = $AdminController->getAdmin();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="mt-0 header-title">ข้อมูลผู้ดูแลระบบทั้งหมด</h4>
+                                    <h4 class="mt-0 header-title">ข้อมูลพนักงานทั้งหมด</h4>
                                     <div class="my-3">
                                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
                                             <i class="fa-solid fa-user-plus"></i>
-                                            <span> เพิ่มผู้ดูแลระบบ</span>
+                                            <span> เพิ่มพนักงาน</span>
                                         </button>
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form action="process/admin_add.php" method="post">
+                                        <form action="process/employee_add.php" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
@@ -105,7 +106,7 @@ $admins = $AdminController->getAdmin();
                                                                     <input type="text" name="email" class="form-control" placeholder="ระบุ อีเมล" aria-describedby="inputGroupPrepend" maxlength="100">
                                                                 </div>
                                                             </div>
-                                                            <input type="hidden" name="eat_id" class="form-control" placeholder="รหัสสิทธิ์พนักงาน" maxlength="1" value="3" readonly>
+                                                            <input type="hidden" name="eat_id" class="form-control" placeholder="รหัสสิทธิ์พนักงาน" maxlength="1" value="6" readonly>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -123,7 +124,7 @@ $admins = $AdminController->getAdmin();
                                         </form>
 
                                     </div>
-                                    <?php if ($admins) { ?>
+                                    <?php if ($employees) { ?>
                                         <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
@@ -132,13 +133,14 @@ $admins = $AdminController->getAdmin();
                                                     <th class="text-start">นามสกุล</th>
                                                     <th class="text-start">ชื่อผู้ใช้</th>
                                                     <th class="text-start">อีเมล</th>
+                                                    <th class="text-center">สิทธิ์</th>
                                                     <th class="text-center">สถานะ</th>
                                                     <th>จัดการข้อมูล</th>
                                                 </tr>
                                             </thead>
 
                                             <tbody>
-                                                <?php foreach ($admins as $row) { ?>
+                                                <?php foreach ($employees as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
                                                             <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
@@ -147,6 +149,22 @@ $admins = $AdminController->getAdmin();
                                                         <td class="text-start"><?php echo $row['emp_lname']; ?></td>
                                                         <td class="text-start"><?php echo $row['emp_username']; ?></td>
                                                         <td class="text-start"><?php echo $row['emp_email']; ?></td>
+                                                        <td class="text-center">
+                                                            <?php
+                                                            $authorityArray = explode(',', $row['authority']);
+                                                            $authorityMapping = array(
+                                                                '4' => '<p class="badge bg-danger mb-1">Accounting</p>',
+                                                                '5' => '<p class="badge bg-success mb-1">Sale</p>',
+                                                                '6' => '<p class="badge bg-primary mb-1">Employee</p>'
+                                                            );
+
+                                                            foreach ($authorityArray as $authority) {
+                                                                echo $authorityMapping[$authority] . "<br>";
+                                                            }
+                                                            ?>
+                                                        </td>
+
+
                                                         <td class="text-center">
                                                             <?php if ($row['emp_status'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-success fs-6">ใช้งานได้</span>
@@ -163,12 +181,12 @@ $admins = $AdminController->getAdmin();
                                                             ?>
 
 
-                                                            <a href="admin_edit_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
+                                                            <a href="employee_edit_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>
                                                             </a>
 
-                                                            <a href="admin_del_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
+                                                            <a href="employee_del_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
                                                                 <i class="fa-solid fa-trash me-1"></i>
                                                                 <span>ลบข้อมูล</span>
                                                             </a>

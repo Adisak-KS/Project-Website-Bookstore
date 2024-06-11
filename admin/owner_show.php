@@ -1,11 +1,11 @@
 <?php
-$titlePage = "ผู้ดูแลระบบ";
+$titlePage = "เจ้าของร้าน / ผู้บริหาร";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AdminController.php");
-$AdminController = new AdminController($conn);
+require_once("../db/controller/OwnerController.php");
+$OwnerController = new OwnerController($conn);
 
-$admins = $AdminController->getAdmin();
+$owners = $OwnerController->getOwner();
 
 
 ?>
@@ -43,16 +43,16 @@ $admins = $AdminController->getAdmin();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="mt-0 header-title">ข้อมูลผู้ดูแลระบบทั้งหมด</h4>
+                                    <h4 class="mt-0 header-title">ข้อมูลเจ้าของ / ผู้บริหารทั้งหมด</h4>
                                     <div class="my-3">
                                         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
                                             <i class="fa-solid fa-user-plus"></i>
-                                            <span> เพิ่มผู้ดูแลระบบ</span>
+                                            <span> เพิ่มเจ้าของ / ผู้บริหาร</span>
                                         </button>
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form action="process/admin_add.php" method="post">
+                                        <form action="process/owner_add.php" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
@@ -105,7 +105,7 @@ $admins = $AdminController->getAdmin();
                                                                     <input type="text" name="email" class="form-control" placeholder="ระบุ อีเมล" aria-describedby="inputGroupPrepend" maxlength="100">
                                                                 </div>
                                                             </div>
-                                                            <input type="hidden" name="eat_id" class="form-control" placeholder="รหัสสิทธิ์พนักงาน" maxlength="1" value="3" readonly>
+                                                            <input type="hidden" name="eat_id" class="form-control" placeholder="รหัสสิทธิ์พนักงาน" maxlength="1" value="2" readonly>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -123,7 +123,7 @@ $admins = $AdminController->getAdmin();
                                         </form>
 
                                     </div>
-                                    <?php if ($admins) { ?>
+                                    <?php if ($owners) { ?>
                                         <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
@@ -138,7 +138,7 @@ $admins = $AdminController->getAdmin();
                                             </thead>
 
                                             <tbody>
-                                                <?php foreach ($admins as $row) { ?>
+                                                <?php foreach ($owners as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
                                                             <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
@@ -155,6 +155,7 @@ $admins = $AdminController->getAdmin();
                                                             <?php } ?>
                                                         </td>
                                                         <td>
+
                                                             <?php
                                                             $originalId = $row["emp_id"];
                                                             require_once("../includes/salt.php");   // รหัส Salte 
@@ -162,13 +163,12 @@ $admins = $AdminController->getAdmin();
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
 
-
-                                                            <a href="admin_edit_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
+                                                            <a href="owner_edit_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>
                                                             </a>
 
-                                                            <a href="admin_del_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
+                                                            <a href="owner_del_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
                                                                 <i class="fa-solid fa-trash me-1"></i>
                                                                 <span>ลบข้อมูล</span>
                                                             </a>

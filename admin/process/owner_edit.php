@@ -1,10 +1,10 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../../db/controller/AdminController.php');
+require_once(__DIR__ . '/../../db/controller/OwnerController.php');
 require_once(__DIR__ . '/../includes/functions.php');
 
 
-$AdminController = new AdminController($conn);
+$OwnerController = new OwnerController($conn);
 
 if (isset($_POST['btn-edit'])) {
     $Id = $_POST['id'];
@@ -17,16 +17,16 @@ if (isset($_POST['btn-edit'])) {
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../admin_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../admin_show.php";
+    $locationError = "Location: ../owner_edit_form.php?id=$base64Encoded";
+    $locationSuccess = "Location: ../owner_show.php";
 
     $authority = $newEatId;
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError);
 
-    // update Detail Admin
-    $updateDetailAdmin = $AdminController->updateDetailAdmin($Id, $fname, $lname, $status);
-    if ($updateDetailAdmin) {
+    // update Detail Owner
+    $updateDetailOwner = $OwnerController->updateDetailOwner($Id, $fname, $lname, $status);
+    if ($updateDetailOwner) {
 
         // หากมีการเปลี่ยนรูปใหม่
         if (!empty($newProfile)) {
@@ -67,12 +67,12 @@ if (isset($_POST['btn-edit'])) {
 
         // หากเป็นการแก้ไขสิทธิ์ใหม่
         if ($newEatId != $oldEatId) {
-            $updateAuthorityAdmin = $AdminController->updateAuthorityAdmin($Id, $newEatId);
+            $updateAuthorityOwner = $OwnerController->updateAuthorityOwner($Id, $newEatId);
         }
     }
 
     
-    if ($updateDetailAdmin || $updateNewProfile || $updateAuthorityAdmin) {
+    if ($updateDetailOwner || $updateNewProfile || $updateAuthorityOwner) {
         $_SESSION['success'] = "แก้ไขข้อมูลผู้ดูแลระบบ สำเร็จ";
     }
 

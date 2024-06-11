@@ -1,0 +1,29 @@
+<?php
+require_once(__DIR__ . '/../../db/connectdb.php');
+require_once(__DIR__ . '/../includes/functions.php');
+
+
+if (isset($_POST["id"])) {
+    $Id = $_POST["id"];
+    $profile = $_POST["profile"];
+
+    $base64Encoded = $_SESSION["base64Encoded"];
+    $locationError = "refresh:1; url=../admin_del_form.php?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../admin_show.php";
+
+
+    validateFormDeleteEmployees($Id, $locationError);
+
+    $deleteEmployee = $BaseController->deleteEmployees($Id);
+    if ($deleteEmployee) {
+        // ลบรูปเดิม
+        deleteProfileEmployees($profile);
+        $_SESSION["success"] = "ลบข้อมูลผู้ดูแลระบบสำเร็จ";
+    }
+
+    header($locationSuccess);
+
+} else {
+    header('Location: ../error.php');
+    exit;
+}

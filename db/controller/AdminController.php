@@ -6,7 +6,8 @@
    4. insertAdmin
    5. getDetailAdmin
    6. updateDetailAdmin
-   7. UpdateNewProfileAdmin
+   7. updateAuthorityAdmin
+   8. UpdateNewProfileAdmin
 
 ============================================================================================ -->
 
@@ -47,78 +48,6 @@ class AdminController extends BaseController
       }
    }
 
-
-   function checkUsernameEmailAdmin($username, $email, $id = null)
-   {
-      try {
-         $sql = " SELECT emp_username, emp_email
-                     FROM bs_employees
-                     WHERE emp_username = :emp_username OR emp_email = :emp_email";
-
-         // หากมีการส่ง $id มาด้วย
-         if ($id !== null) {
-            $sql .= " AND id != :id";
-         }
-
-         $sql .= " LIMIT 1";
-
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(":emp_username", $username, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_email", $email, PDO::PARAM_STR);
-
-         // หากมีการส่ง $id มาด้วย
-         if ($id !== null) {
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-         }
-
-         $stmt->execute();
-         return $stmt->fetch(PDO::FETCH_ASSOC);
-      } catch (PDOException $e) {
-         echo "<hr>Error in  checkUsernameEmailEmployees : " . $e->getMessage();
-      }
-   }
-
-   function insertAdmin($newProfile, $fname, $lname, $username, $hashedPassword, $email)
-   {
-      try {
-         // เริ่มต้น transaction
-         $this->db->beginTransaction();
-
-         // แทรกข้อมูลพนักงานใหม่
-         $sql = " INSERT INTO bs_employees (emp_profile, emp_fname, emp_lname, emp_username, emp_password, emp_email)
-                  VALUES (:emp_profile, :emp_fname, :emp_lname, :emp_username, :emp_password, :emp_email)";
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(":emp_profile", $newProfile, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_fname", $fname, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_lname", $lname, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_username", $username, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_password", $hashedPassword, PDO::PARAM_STR);
-         $stmt->bindParam(":emp_email", $email, PDO::PARAM_STR);
-         $stmt->execute();
-
-         // ดึง ID ของพนักงานที่แทรกล่าสุด
-         $lastInsertId = $this->db->lastInsertId();
-
-         // แทรกข้อมูลสิทธิ์ของพนักงาน
-         $authority = 3; // รหัสสิทธิ์ของพนักงานและผู้ดูแล
-         $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
-                     VALUES (:emp_id, :eat_id)";
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(":emp_id", $lastInsertId, PDO::PARAM_INT);
-         $stmt->bindParam(":eat_id", $authority, PDO::PARAM_INT);
-         $stmt->execute();
-         // ยืนยันการทำธุรกรรม
-         $this->db->commit();
-
-         return true;
-      } catch (PDOException $e) {
-         // ยกเลิกการทำธุรกรรมในกรณีเกิดข้อผิดพลาด
-         $this->db->rollBack();
-         echo "<hr>Error in insertEmployeeAdmin: " . $e->getMessage();
-         return false;
-      }
-   }
-
    function getDetailAdmin($Id)
    {
       try {
@@ -147,62 +76,74 @@ class AdminController extends BaseController
       }
    }
 
-   function updateDetailAdmin($Id, $fname, $lname, $status, $authority)
+   function updateDetailAdmin($Id, $fname, $lname, $status)
    {
-      $this->db->beginTransaction(); // เริ่ม transaction
-
       try {
          // Update Detail
          $sql = " UPDATE bs_employees
-                     SET   emp_fname = :emp_fname,
-                           emp_lname = :emp_lname,
-                           emp_status = :emp_status,
-                           emp_time_update = NOW()
-                     WHERE emp_id = :emp_id";
+                  SET   emp_fname = :emp_fname,
+                        emp_lname = :emp_lname,
+                        emp_status = :emp_status,
+                        emp_time_update = NOW()
+                  WHERE emp_id = :emp_id";
          $stmt = $this->db->prepare($sql);
          $stmt->bindParam(':emp_fname', $fname, PDO::PARAM_STR);
          $stmt->bindParam(':emp_lname', $lname, PDO::PARAM_STR);
          $stmt->bindParam(':emp_status', $status, PDO::PARAM_STR);
          $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
          $stmt->execute();
-
-         // Delete All Authority
-         $sql = " DELETE FROM bs_employees_authority 
-                     WHERE emp_id = :emp_id";
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
-         $stmt->execute();
-
-         // Insert New Authority
-         $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
-                     VALUES (:emp_id, :eat_id)";
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
-         $stmt->bindParam(':eat_id', $authority, PDO::PARAM_INT);
-         $stmt->execute();
-
-         $this->db->commit();
          return true;
       } catch (PDOException $e) {
-         $this->db->rollBack(); // ถ้าเกิดข้อผิดพลาด ให้ rollback การเปลี่ยนแปลงทั้งหมด
          echo "<hr>Error in updateDetailAdmin: " . $e->getMessage();
          return false;
       }
    }
 
-   function updateNewProfileAdmin($Id, $newProfile)
+   function updateAuthorityAdmin($Id, $newEatId)
    {
       try {
-         $sql = " UPDATE bs_employees
-                  SET emp_profile = :emp_profile
+         // ลบทุกสิทธิ์ที่มี emp_id ตรงกับ $Id ที่ส่งมา
+         $sql = " DELETE FROM bs_employees_authority
                   WHERE emp_id = :emp_id";
          $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(':emp_profile', $newProfile);
-         $stmt->bindParam(':emp_id', $Id);
+         $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+         $stmt->execute();
+
+         // insert Authority 
+         $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
+                  VALUES (:emp_id, :eat_id)";
+         $stmt = $this->db->prepare($sql);
+         $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+         $stmt->bindParam(':eat_id', $newEatId, PDO::PARAM_INT);
+         $stmt->execute();
+
+         // ถ้า $newEatId ที่ส่งมา เป็นเลข 4 หรือ 5 (Accounting, Sale) ให้ insert 6 (Employee) ลงไปด้วย
+         if ($newEatId == 4 || $newEatId == 5) {
+            $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
+                     VALUES (:emp_id, 6)";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+         }
+
+         return true;
+      } catch (PDOException $e) {
+         echo "<hr>Error in updateAuthorityAdmin : " . $e->getMessage();
+         return false;
+      }
+   }
+
+   function deleteAdmin($Id)
+   {
+      try {
+         $sql = " DELETE  FROM bs_employees
+                  WHERE emp_id = :emp_id";
+         $stmt = $this->db->prepare($sql);
+         $stmt->bindParam(":emp_id", $Id, PDO::PARAM_INT);
          $stmt->execute();
          return true;
       } catch (PDOException $e) {
-         echo "<hr>Error in updateNewProfileAdmin : " . $e->getMessage();
+         echo "<hr>Error in deleteAdmin : " . $e->getMessage();
          return false;
       }
    }

@@ -5,7 +5,31 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/AdminController.php");
 
 if (isset($_GET['id'])) {
-    $Id = $_GET['id'];
+    $_SESSION["base64Encoded"] = $_GET["id"];
+
+    // เก็บค่า session  ใน base64Encoded
+    $base64Encoded =  $_SESSION["base64Encoded"];
+
+    // ถอดรหัส base64 เพื่อให้ได้ข้อมูลเป็นข้อความธรรมดา
+    $base64Decoded = base64_decode($base64Encoded);
+
+    // ดึงค่า salt จาก session
+    $salt1 = $_SESSION["salt1"];
+    $salt2 = $_SESSION["salt2"];
+
+    // แยกส่วนของ salt และข้อมูลที่ไม่ถูกเข้ารหัส
+    $salt1Length = mb_strlen($salt1, 'UTF-8');
+    $salt2Length = mb_strlen($salt2, 'UTF-8');
+
+    $salt1 = substr($base64Decoded, 0, $salt1Length);
+    $saltedId = substr($base64Decoded, $salt1Length, -$salt2Length);
+    $salt2 = substr($base64Decoded, -$salt2Length);
+
+    // สร้างค่า originalId โดยตัดค่า salt ออก
+    $originalId = str_replace([$salt1, $salt2], '', $saltedId);
+
+    // ใช้ originalId ในการทำงานต่อ
+    $Id = $originalId;
 
     $AdminController = new AdminController($conn);
     $admins = $AdminController->getDetailAdmin($Id);
@@ -124,7 +148,7 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="">
-                                            <img class="rounded-circle mx-auto d-block" id="profile" style="width:150px; height:150px" src="../uploads/img_employees/<?php echo $admins['emp_profile']; ?>">
+                                            <img class="rounded-circle mx-auto d-block img-fluid" id="profile" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_employees/<?php echo $admins['emp_profile']; ?>">
                                             <input type="hidden" name="profile" value="<?php echo $admins['emp_profile'] ?>" readonly>
                                         </div>
                                         <div class="mb-3">
@@ -141,33 +165,33 @@ if (isset($_GET['id'])) {
                                             <i class="fa-solid fa-pen-to-square"></i>
                                             <span>สิทธิ์การใช้งาน</span>
                                         </h4>
-
+                                       <input type="hidden" name="old_eat_id" value="<?php echo $admins['authority']; ?>" readonly>
                                         <div class="form-check mb-2 form-check-pink">
-                                            <input class="form-check-input" type="radio" name="authority" id="1" value="2" <?php if ($admins['authority'] == 2) {
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="1" value="2" <?php if ($admins['authority'] == 2) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">Owner (เจ้าของ / ผู้บริหาร)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-warning">
-                                            <input class="form-check-input" type="radio" name="authority" id="3" value="3" <?php if ($admins['authority'] == 3) {
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="3" value="3" <?php if ($admins['authority'] == 3) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">Admin (ผู้ดูแลระบบ)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="authority" id="4" value="4" <?php if ($admins['authority'] == 4) {
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="4" value="4" <?php if ($admins['authority'] == 4) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">Accounting (พนักงานฝ่ายการเงิน)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="authority" id="5" value="5" <?php if ($admins['authority'] == 5) {
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="5" value="5" <?php if ($admins['authority'] == 5) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">Sale (พนักงานฝ่ายขาย)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-primary">
-                                            <input class="form-check-input" type="radio" name="authority" id="6" value="6" <?php if (!in_array($admins['authority'], [2, 3, 4, 5])) {
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="6" value="6" <?php if (!in_array($admins['authority'], [2, 3, 4, 5])) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">Employee (สิทธิ์เริ่มต้น)</label>
@@ -203,12 +227,9 @@ if (isset($_GET['id'])) {
                 <?php require_once('layouts/nav_footer.php') ?>
 
             </div>
-
             <!-- ============================================================== -->
             <!-- End Page content -->
             <!-- ============================================================== -->
-
-
         </div>
         <!-- END wrapper -->
 

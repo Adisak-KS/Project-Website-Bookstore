@@ -11,8 +11,8 @@ if (isset($_POST['btn-add'])) {
     $email = $_POST['email'];
     $eatId = $_POST['eat_id'];
 
-    $locationError = "Location: ../admin_show.php";
-    $locationSuccess = "Location: ../admin_show.php";
+    $locationError = "Location: ../employee_show.php";
+    $locationSuccess = "Location: ../employee_show.php";
 
 
     // ตรวจสอบข้อมูลจาก Form
@@ -47,8 +47,8 @@ if (isset($_POST['btn-add'])) {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             // Insert Employees
-            $insertAdmin = $BaseController->insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId);
-            $_SESSION['success'] = "เพิ่มข้อมูลผู้ดูแลระบบ สำเร็จ";
+            $insertEmployee = $BaseController->insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId);
+            $_SESSION['success'] = "เพิ่มข้อมูลพนักงาน สำเร็จ";
         } else {
             messageError("คัดลอกไฟล์ผิดพลาด", $locationError);
         }

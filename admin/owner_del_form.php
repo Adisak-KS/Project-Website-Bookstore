@@ -1,8 +1,8 @@
 <?php
-$titlePage = "ลบผู้ดูแลระบบ";
+$titlePage = "ลบเจ้าของร้าน / ผู้บริหาร";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AdminController.php");
+require_once("../db/controller/OwnerController.php");
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -32,16 +32,16 @@ if (isset($_GET['id'])) {
     $Id = $originalId;
 
 
-    $AdminController = new AdminController($conn);
-    $admins = $AdminController->getDetailAdmin($Id);
+    $OwnerController = new OwnerController($conn);
+    $owners = $OwnerController->getDetailOwner($Id);
 
 
-    if (!$admins) {
+    if (!$owners) {
         header('Location: error.php');
         exit;
     }
 } else {
-    header('Location: admin_show.php');
+    header('Location: owner_show.php');
     exit;
 }
 
@@ -78,7 +78,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formEmployee" action="process/admin_del.php" method="post">
+                    <form id="formEmployee" action="process/owner_del.php" method="post">
                         <div class="row">
 
                             <div class="col-lg-6">
@@ -90,29 +90,29 @@ if (isset($_GET['id'])) {
                                         </h4>
                                         <div class="mb-3">
                                             <label for="id" class="form-label">รหัสพนักงาน :</label>
-                                            <p><?php echo $admins['emp_id']; ?></p>
-                                            <input type="hidden" name="id" class="form-control" value="<?php echo $admins['emp_id']; ?>">
+                                            <p><?php echo $owners['emp_id']; ?></p>
+                                            <input type="hidden" name="id" class="form-control" value="<?php echo $owners['emp_id']; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="username" class="form-label">ชื่อผู้ใช้งาน :</label>
-                                            <p><?php echo $admins['emp_username']; ?></p>
+                                            <p><?php echo $owners['emp_username']; ?></p>
                                         </div>
                                         <div class="mb-3">
                                             <label for="email" class="form-label">อีเมล :</label>
                                             <div class="mb-3">
-                                                <p><?php echo $admins['emp_email']; ?></p>
+                                                <p><?php echo $owners['emp_email']; ?></p>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="fname" class="form-label">ชื่อ :</label><span class="text-danger">*</span>
                                             <div class="mb-3">
-                                                <p><?php echo $admins['emp_fname']; ?></p>
+                                                <p><?php echo $owners['emp_fname']; ?></p>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="lname" class="form-label">นามสกุล :</label><span class="text-danger">*</span>
                                             <div class="mb-3">
-                                                <p><?php echo $admins['emp_lname']; ?></p>
+                                                <p><?php echo $owners['emp_lname']; ?></p>
                                             </div>
                                         </div>
                                     </div> <!-- end card-body-->
@@ -126,14 +126,14 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="status" id="1" value="1" <?php if ($admins['emp_status'] == 1) {
+                                            <input class="form-check-input" type="radio" name="status" id="1" value="1" <?php if ($owners['emp_status'] == 1) {
                                                                                                                             echo 'checked';
                                                                                                                         } ?> disabled>
                                             <label class="form-check-label" for="1">ใช้งานได้</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="status" id="0" value="0" <?php if ($admins['emp_status'] != 1) {
+                                            <input class="form-check-input" type="radio" name="status" id="0" value="0" <?php if ($owners['emp_status'] != 1) {
                                                                                                                             echo 'checked';
                                                                                                                         } ?> disabled>
                                             <label class="form-check-label" for="0">ระงับการใช้งาน</label>
@@ -152,8 +152,8 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="">
-                                        <img class="rounded-circle mx-auto d-block img-fluid" id="profile" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_employees/<?php echo $admins['emp_profile']; ?>">
-                                            <input type="hidden" name="profile" value="<?php echo $admins['emp_profile'] ?>" readonly>
+                                            <img class="rounded-circle mx-auto d-block img-fluid" id="profile" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_employees/<?php echo $owners['emp_profile']; ?>">
+                                            <input type="hidden" name="profile" value="<?php echo $owners['emp_profile'] ?>" readonly>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -166,31 +166,31 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="form-check mb-2 form-check-pink">
-                                            <input class="form-check-input" type="radio" name="authority" id="1" value="2" <?php if ($admins['authority'] == 2) {
+                                            <input class="form-check-input" type="radio" name="authority" id="1" value="2" <?php if ($owners['authority'] == 2) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?> disabled>
                                             <label class="form-check-label" for="1">Owner (เจ้าของ / ผู้บริหาร)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-warning">
-                                            <input class="form-check-input" type="radio" name="authority" id="3" value="3" <?php if ($admins['authority'] == 3) {
+                                            <input class="form-check-input" type="radio" name="authority" id="3" value="3" <?php if ($owners['authority'] == 3) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?> disabled>
                                             <label class="form-check-label" for="1">Admin (ผู้ดูแลระบบ)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="authority" id="4" value="4" <?php if ($admins['authority'] == 4) {
+                                            <input class="form-check-input" type="radio" name="authority" id="4" value="4" <?php if ($owners['authority'] == 4) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?> disabled>
                                             <label class="form-check-label" for="1">Accounting (พนักงานฝ่ายการเงิน)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="authority" id="5" value="5" <?php if ($admins['authority'] == 5) {
+                                            <input class="form-check-input" type="radio" name="authority" id="5" value="5" <?php if ($owners['authority'] == 5) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?> disabled>
                                             <label class="form-check-label" for="1">Sale (พนักงานฝ่ายขาย)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-primary">
-                                            <input class="form-check-input" type="radio" name="authority" id="6" value="6" <?php if (!in_array($admins['authority'], [2, 3, 4, 5])) {
+                                            <input class="form-check-input" type="radio" name="authority" id="6" value="6" <?php if (!in_array($owners['authority'], [2, 3, 4, 5])) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>disabled>
                                             <label class="form-check-label" for="1">Employee (สิทธิ์เริ่มต้น)</label>
@@ -202,13 +202,13 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $admins['emp_time_update'] ?></span></h4>
+                                        <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $owners['emp_time_update'] ?></span></h4>
                                         <div>
-                                            <a href="admin_show.php" class="btn btn-secondary me-2">
+                                            <a href="owner_show.php" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $admins["emp_id"]; ?>" data-profile="<?php echo $admins["emp_profile"]; ?>">
+                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $owners["emp_id"]; ?>" data-profile="<?php echo $owners["emp_profile"]; ?>">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>ลบข้อมูล</span>
                                             </button>
@@ -264,7 +264,7 @@ if (isset($_GET['id'])) {
                     cancelButtonText: 'ยกเลิก',
                     preConfirm: function() {
                         return $.ajax({
-                                url: 'process/admin_del.php',
+                                url: 'process/owner_del.php',
                                 type: 'POST',
                                 data: {
                                     id: id,
@@ -272,7 +272,7 @@ if (isset($_GET['id'])) {
                                 },
                             })
                             .done(function() {
-                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า admin_show.php
+                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า owner_show.php
                                 return true;
                             })
                             .fail(function() {
@@ -282,14 +282,14 @@ if (isset($_GET['id'])) {
                                     text: 'เกิดข้อผิดพลาดที่ ajax !',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        document.location.href = 'admin_edit_form.php?id=<?php echo $base64Encoded; ?>';
+                                        document.location.href = 'owner_edit_form.php?id=<?php echo $base64Encoded; ?>';
                                     }
                                 });
                             });
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.location.href = 'admin_show.php';
+                        document.location.href = 'owner_show.php';
                     }
                 });
             }
