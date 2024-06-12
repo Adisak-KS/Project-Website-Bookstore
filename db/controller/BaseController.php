@@ -7,6 +7,7 @@
    5. checkUsernameEmailEmployees
    6. updateNewProfileEmployees
    7. deleteEmployees
+   8. checkLoginEmployees
 
 ============================================================================================ -->
 <?php
@@ -20,6 +21,8 @@ class BaseController
         $this->db = $conn;
         // echo "<br> เรียกใช้ Base Controller สำเร็จ <br>";
     }
+
+
 
     // Check Employees Authority Type Default
     function getEmmpoyeesAuthorityTypeDefault()
@@ -135,7 +138,7 @@ class BaseController
             $this->db->beginTransaction();
 
             // แทรกข้อมูลพนักงานใหม่
-            $sql =" INSERT INTO bs_employees (emp_profile, emp_fname, emp_lname, emp_username, emp_password, emp_email)
+            $sql = " INSERT INTO bs_employees (emp_profile, emp_fname, emp_lname, emp_username, emp_password, emp_email)
                     VALUES (:emp_profile, :emp_fname, :emp_lname, :emp_username, :emp_password, :emp_email)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":emp_profile", $newProfile, PDO::PARAM_STR);

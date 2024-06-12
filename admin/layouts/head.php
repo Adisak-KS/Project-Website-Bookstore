@@ -17,6 +17,8 @@
  <!-- App favicon -->
  <link rel="shortcut icon" href="../uploads/img_web_setting/default.jpg" type="image/x-icon">
 
+ 
+ 
  <!-- App css -->
  <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
  <link rel="stylesheet" href="assets/css/style.css">

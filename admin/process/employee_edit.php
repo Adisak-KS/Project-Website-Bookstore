@@ -1,32 +1,33 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../../db/controller/AdminController.php');
+require_once(__DIR__ . '/../../db/controller/EmployeeController.php');
 require_once(__DIR__ . '/../includes/functions.php');
 
 
-$AdminController = new AdminController($conn);
+$EmployeeController = new EmployeeController($conn);
 
 if (isset($_POST['btn-edit'])) {
     $Id = $_POST['id'];
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $status = $_POST['status'];
-    $oldEatId = $_POST['old_eat_id'];
+    $oldEatId = explode(',', $_POST['old_eat_id']); // ทำเป็น array
     $newEatId = $_POST['new_eat_id'];
     $profile = $_POST['profile'];
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../admin_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../admin_show.php";
+    $locationError = "Location: ../employee_edit_form.php?id=$base64Encoded";
+    $locationSuccess = "Location: ../employee_show.php";
+
 
     $authority = $newEatId;
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError);
 
-    // update Detail Admin
-    $updateDetailAdmin = $AdminController->updateDetailAdmin($Id, $fname, $lname, $status);
-    if ($updateDetailAdmin) {
+    // // update Detail Admin
+    $updateDetailEmployee = $EmployeeController->updateDetailEmployee($Id, $fname, $lname, $status);
+    if ($updateDetailEmployee) {
 
         // หากมีการเปลี่ยนรูปใหม่
         if (!empty($newProfile)) {
@@ -67,12 +68,12 @@ if (isset($_POST['btn-edit'])) {
 
         // หากเป็นการแก้ไขสิทธิ์ใหม่
         if ($newEatId != $oldEatId) {
-            $updateAuthorityAdmin = $AdminController->updateAuthorityAdmin($Id, $newEatId);
+            $updateAuthorityEmployee = $EmployeeController->updateAuthorityEmployee($Id, $newEatId);
         }
     }
 
-    
-    if ($updateDetailAdmin || $updateNewProfile || $updateAuthorityAdmin) {
+
+    if ($updateDetailEmployee || $updateNewProfile || $updateAuthorityEmployee) {
         $_SESSION['success'] = "แก้ไขข้อมูลผู้ดูแลระบบ สำเร็จ";
     }
 

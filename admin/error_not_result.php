@@ -17,7 +17,7 @@ session_start();
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="text-center">
-                        <a href="index.php" class="logo">
+                        <a href="index" class="logo">
                             <img src="assets/images/logo-dark.png" alt="" height="22" class="logo-light mx-auto">
                         </a>
                         <p class="text-muted mt-2 mb-4">ชื่อเว็บไซต์</p>
@@ -31,7 +31,7 @@ session_start();
                                 <h3 class="mt-3 mb-2">ไม่พบข้อมูล</h3>
                                 <p class="text-muted mb-3">ไม่มีข้อมูลที่ค้นหา ลองค้นหาอีกครั้ง</p>
 
-                                <a href="index.php" class="btn btn-danger waves-effect waves-light">
+                                <a href="index" class="btn btn-danger waves-effect waves-light">
                                     <i class="fa-solid fa-house me-1"></i>
                                     <span>กลับหน้าหลัก</span>
                                 </a>

@@ -83,6 +83,9 @@ $(document).ready(function () {
             newProfile: {
                 accept: "image/png,image/jpg,image/jpeg",
             },
+            username_email: {
+                required: true,
+            }
         },
         messages: {
             fname: {
@@ -120,6 +123,9 @@ $(document).ready(function () {
             },
             newProfile: {
                 accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+            username_email: {
+                required: "กรุณาระบุ ชื่อผู้ใช้งาน หรือ อีเมล",
             },
         },
         errorElement: 'span',

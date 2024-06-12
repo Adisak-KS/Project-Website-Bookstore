@@ -78,6 +78,6 @@ if (isset($_POST['btn-edit'])) {
 
     header($locationSuccess);
 } else {
-    header('../error.php');
+   header('Location: ../error_not_result.php');
     exit;
 }

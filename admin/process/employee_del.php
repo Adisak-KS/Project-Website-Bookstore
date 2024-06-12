@@ -8,15 +8,17 @@ if (isset($_POST["id"])) {
     $profile = $_POST["profile"];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "refresh:1; url=../owner_del_form.php?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../owner_show.php";
+    $locationError = "refresh:1; url=../employee_del_form.php?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../employee_show.php";
+
+
+    validateFormDeleteEmployees($Id, $locationError);
 
     $deleteEmployee = $BaseController->deleteEmployees($Id);
-
     if ($deleteEmployee) {
         // ลบรูปเดิม
         deleteProfileEmployees($profile);
-        $_SESSION["success"] = "ลบข้อมูลเจ้าของร้าน / ผู้บริหาร สำเร็จ";
+        $_SESSION["success"] = "ลบข้อมูลทีมงานสำเร็จ";
     }
 
     header($locationSuccess);

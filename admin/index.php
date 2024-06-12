@@ -1,5 +1,6 @@
 <?php
 $titlePage = "หน้าแรก";
+require_once("../db/connectdb.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -195,10 +196,11 @@ $titlePage = "หน้าแรก";
     <!-- ========== Right bar ========== -->
     <?php require_once('layouts/nav_rightbar.php') ?>
 
-   
+
 
     <?php require_once('layouts/vender.php') ?>
 
 </body>
 
 </html>
+<?php require_once('../includes/sweetalert2.php') ?>

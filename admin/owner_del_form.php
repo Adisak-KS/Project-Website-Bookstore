@@ -37,11 +37,11 @@ if (isset($_GET['id'])) {
 
 
     if (!$owners) {
-        header('Location: error.php');
+        header('Location: error_not_result');
         exit;
     }
 } else {
-    header('Location: owner_show.php');
+    header('Location: owner_show');
     exit;
 }
 
@@ -78,7 +78,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formEmployee" action="process/owner_del.php" method="post">
+                    <form id="formEmployee" action="process/owner_del" method="post">
                         <div class="row">
 
                             <div class="col-lg-6">
@@ -204,7 +204,7 @@ if (isset($_GET['id'])) {
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $owners['emp_time_update'] ?></span></h4>
                                         <div>
-                                            <a href="owner_show.php" class="btn btn-secondary me-2">
+                                            <a href="owner_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
@@ -264,7 +264,7 @@ if (isset($_GET['id'])) {
                     cancelButtonText: 'ยกเลิก',
                     preConfirm: function() {
                         return $.ajax({
-                                url: 'process/owner_del.php',
+                                url: 'process/owner_del',
                                 type: 'POST',
                                 data: {
                                     id: id,
@@ -272,7 +272,7 @@ if (isset($_GET['id'])) {
                                 },
                             })
                             .done(function() {
-                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า owner_show.php
+                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า owner_show
                                 return true;
                             })
                             .fail(function() {
@@ -282,14 +282,14 @@ if (isset($_GET['id'])) {
                                     text: 'เกิดข้อผิดพลาดที่ ajax !',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        document.location.href = 'owner_edit_form.php?id=<?php echo $base64Encoded; ?>';
+                                        document.location.href = 'owner_edit_form?id=<?php echo $base64Encoded; ?>';
                                     }
                                 });
                             });
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.location.href = 'owner_show.php';
+                        document.location.href = 'owner_show';
                     }
                 });
             }

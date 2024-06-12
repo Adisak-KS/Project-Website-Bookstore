@@ -17,10 +17,10 @@ if (isset($_POST['btn-add'])) {
 
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormAddEmployees($fname, $lname, $username, $password, $confirmPassword, $email, $eatId, $locationError);
-    
+
     // ตรวจสอบ Username, Email ซ้ำ
     $check = $BaseController->checkUsernameEmailEmployees($username, $email);
-    
+
     if ($check) {
         messageError("ไม่สามารถใช้ชื่อผู้ใช้ หรือ อีเมลนี้ได้", $locationError);
     } else {
@@ -56,6 +56,6 @@ if (isset($_POST['btn-add'])) {
 
     header($locationSuccess);
 } else {
-    header('Location: ../error.php');
+    header('Location: ../error_not_result.php');
     exit;
 }

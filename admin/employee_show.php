@@ -53,7 +53,7 @@ $employees = $EmployeeController->getEmployee();
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form action="process/employee_add.php" method="post">
+                                        <form id="formEmployee" action="process/employee_add" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
@@ -181,12 +181,12 @@ $employees = $EmployeeController->getEmployee();
                                                             ?>
 
 
-                                                            <a href="employee_edit_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
+                                                            <a href="employee_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>
                                                             </a>
 
-                                                            <a href="employee_del_form.php?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
+                                                            <a href="employee_del_form?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
                                                                 <i class="fa-solid fa-trash me-1"></i>
                                                                 <span>ลบข้อมูล</span>
                                                             </a>

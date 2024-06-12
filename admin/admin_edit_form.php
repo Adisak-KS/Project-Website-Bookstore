@@ -36,11 +36,11 @@ if (isset($_GET['id'])) {
 
 
     if (!$admins) {
-        header('Location: error.php');
+        header('Location: error_not_result');
         exit;
     }
 } else {
-    header('Location: admin_show.php');
+    header('Location: admin_show');
     exit;
 }
 
@@ -77,7 +77,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formEmployee" action="process/admin_edit.php" method="post" enctype="multipart/form-data">
+                    <form id="formEmployee" action="process/admin_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
 
                             <div class="col-lg-6">
@@ -205,7 +205,7 @@ if (isset($_GET['id'])) {
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $admins['emp_time_update'] ?></span></h4>
                                         <div>
-                                            <a href="admin_show.php" class="btn btn-secondary me-2">
+                                            <a href="admin_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark"></i>
                                                 <span>ยกเลิก</span>
                                             </a>

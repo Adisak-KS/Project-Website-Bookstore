@@ -67,7 +67,7 @@ function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirm
 
     if (empty($eatId)) {
         messageError("ไม่พบรหัสประเภทสิทธิ์พนักงาน", $locationError);
-    }elseif (!in_array($eatId, [2, 3, 6])) { // 2 = Owner, 3 = Admin, 6 = Employee
+    } elseif (!in_array($eatId, [2, 3, 6])) { // 2 = Owner, 3 = Admin, 6 = Employee
         messageError("รหัสประเภทสิทธิ์พนักงานไม่ถูกต้อง", $locationError);
     }
 }
@@ -148,11 +148,25 @@ function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locat
         messageError("สถานะบัญชีต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
     }
 
+
     $validAuthorities = [2, 3, 4, 5, 6];  // Owner, Admin, Accounting, Sale, Employee (Default)
+
+    // Ensure $authority is always treated as an array
     if (!isset($authority)) {
         messageError("กรุณาระบุ สิทธิ์การใช้งาน", $locationError);
-    } elseif (!in_array($authority, $validAuthorities)) {
-        messageError("กรุณาระบุ สิทธิ์การใช้งานที่ถูกต้อง โปรดแก้ไข Code", $locationError);
+    } else {
+        // If $authority is not an array, convert it to an array
+        if (!is_array($authority)) {
+            $authority = explode(',', $authority);
+        }
+
+        // Validate each value in the $authority array
+        foreach ($authority as $auth) {
+            if (!in_array($auth, $validAuthorities)) {
+                messageError("กรุณาระบุ สิทธิ์การใช้งานที่ถูกต้อง โปรดแก้ไข Code", $locationError);
+                break;
+            }
+        }
     }
 }
 

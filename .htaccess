@@ -1,0 +1,18 @@
+# เปิดการใช้งานการเขียน URL ใหม่
+RewriteEngine On
+
+# ถ้าคำขอไม่ใช่ไฟล์ที่มีอยู่
+RewriteCond %{REQUEST_FILENAME} !-f
+# และถ้าคำขอไม่ใช่ไดเรกทอรีที่มีอยู่
+RewriteCond %{REQUEST_FILENAME} !-d
+# และถ้าคำขอไม่มีนามสกุล
+RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{2,4}$
+
+# เขียน URL ใหม่เพื่อเพิ่ม .php ถ้า URL นั้นไม่มีนามสกุล
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+# ป้องกันการเข้าถึงไฟล์ .htaccess
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>
