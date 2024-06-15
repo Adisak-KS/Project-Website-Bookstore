@@ -36,8 +36,9 @@ class LoginController extends BaseController
         }
     }
 
-    function checkStatusBlockedEmployees($Id){
-        try{
+    function checkStatusBlockedEmployees($Id)
+    {
+        try {
             $sql = "SELECT emp_id, emp_status
                     FROM bs_employees
                     WHERE emp_id = :emp_id";
@@ -45,9 +46,34 @@ class LoginController extends BaseController
             $stmt->bindParam(':emp_id', $Id);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
-
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in checkStatusEmployees : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function useLoginEmployees($empId)
+    {
+        try {
+            $sql = "SELECT 
+                        bs_employees.emp_id,
+                        bs_employees.emp_profile,
+                        bs_employees.emp_fname,
+                        bs_employees.emp_lname,
+                        bs_employees.emp_username,
+                        bs_employees.emp_status,
+                        GROUP_CONCAT(bs_employees_authority_type.eat_id) AS authority
+                    FROM bs_employees
+                    JOIN bs_employees_authority ON bs_employees.emp_id = bs_employees_authority.emp_id
+                    JOIN bs_employees_authority_type ON bs_employees_authority.eat_id = bs_employees_authority_type.eat_id
+                    WHERE bs_employees.emp_id = :emp_id AND  bs_employees.emp_status = 1
+                    GROUP BY bs_employees.emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_id', $empId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in useLoginEmployees : " . $e->getMessage();
             return false;
         }
     }

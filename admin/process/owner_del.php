@@ -20,6 +20,7 @@ if (isset($_POST["id"])) {
     }
 
     header($locationSuccess);
+    exit;
 
 } else {
      header('Location: ../error_not_result.php');

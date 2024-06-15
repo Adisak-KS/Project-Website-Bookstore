@@ -53,7 +53,7 @@ $employees = $EmployeeController->getEmployee();
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form id="formEmployee" action="process/employee_add" method="post">
+                                        <form id="formUser" action="process/employee_add" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
@@ -110,11 +110,11 @@ $employees = $EmployeeController->getEmployee();
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                                <i class="fa-solid fa-xmark"></i>
+                                                                <i class="fa-solid fa-xmark me-1"></i>
                                                                 <span> ยกเลิก</span>
                                                             </button>
                                                             <button type="submit" name="btn-add" class="btn btn-success">
-                                                                <i class="fa-solid fa-floppy-disk"></i>
+                                                                <i class="fa-solid fa-floppy-disk me-1"></i>
                                                                 <span> บันทึก</span>
                                                             </button>
                                                         </div>

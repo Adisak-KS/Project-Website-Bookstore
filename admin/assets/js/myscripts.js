@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ============================== 4. Jquery Validation Form (Employee) ==============================
 $(document).ready(function () {
-    $("#formEmployee").validate({
+    $("#formUser").validate({
         rules: {
             fname: {
                 required: true,
@@ -126,6 +126,97 @@ $(document).ready(function () {
             },
             username_email: {
                 required: "กรุณาระบุ ชื่อผู้ใช้งาน หรือ อีเมล",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+
+// ============================== 5. Jquery Validation Form (Publishere) ==============================
+$(document).ready(function () {
+    $("#formPublisher").validate({
+        rules: {
+            pub_name: {
+                required: true,
+                maxlength: 100,
+            },
+            pub_detail: {
+                required: true,
+                maxlength: 100,
+            },
+            pub_newImg: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            pub_name: {
+                required: "กรุณาระบุ ชื่อสำนักพิมพ์",
+                maxlength: "ชื่อสำนักพิมพ์ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            pub_detail: {
+                required: "กรุณาระบุ รายละเอียดสำนักพิมพ์",
+                maxlength: "รายละเอียดสำนักพิมพ์ ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            pub_newImg: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formProductType").validate({
+        rules: {
+            pty_name: {
+                required: true,
+                maxlength: 100,
+            },
+            pty_detail: {
+                required: true,
+                maxlength: 100,
+            },
+            pty_newCover: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            pty_name: {
+                required: "กรุณาระบุ ชื่อประเภทสินค้า",
+                maxlength: "ชื่อประเภทสินค้าต้องไม่เกิน 100 ตัวอักษร",
+            },
+            pty_detail: {
+                required: "กรุณาระบุ รายละเอียดประเภทสินค้า",
+                maxlength: "รายละเอียดประเภทสินค้าต้องไม่เกิน 100 ตัวอักษร",
+            },
+            pty_newCover: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
             },
         },
         errorElement: 'span',

@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formEmployee" action="process/owner_edit" method="post" enctype="multipart/form-data">
+                    <form id="formUser" action="process/owner_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
 
                             <div class="col-lg-6">
@@ -206,7 +206,7 @@ if (isset($_GET['id'])) {
                                         <h4 class="mb-3 header-title text-warning">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $owners['emp_time_update'] ?></span></h4>
                                         <div>
                                             <a href="owner_show" class="btn btn-secondary me-2">
-                                                <i class="fa-solid fa-xmark"></i>
+                                                <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
                                             <button type="submit" name="btn-edit" class="btn btn-warning">

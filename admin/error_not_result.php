@@ -1,6 +1,5 @@
 <?php
 $titlePage = "ไม่พบข้อมูล";
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,6 +1,12 @@
 <?php
 $titlePage = "เข้าสู่ระะบบ";
 require_once("../db/connectdb.php");
+
+if(!empty($_SESSION['emp_id'])){
+    header('Location: index.php');
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +26,7 @@ require_once("../db/connectdb.php");
                         <a href="index.html">
                             <img src="assets/images/logo-dark.png" alt="" height="22" class="mx-auto">
                         </a>
-                        <p class="text-muted mt-2 mb-4">ชื่อเว็บไซต์</p>
+                        <p class="text-muted mt-2 mb-4"><?php echo $websiteName; ?></p>
 
                     </div>
                     <div class="card">
@@ -30,7 +36,7 @@ require_once("../db/connectdb.php");
                                 <h4 class="text-uppercase mt-0">เข้าสู่ระบบ สำหรับพนักงาน</h4>
                             </div>
 
-                            <form id="formEmployee" action="process/login_chk" method="post">
+                            <form id="formUser" action="process/login_chk" method="post">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">ชื่อผู้ใช้งาน หรือ อีเมล : </label><span class="text-danger">*</span>
                                     <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้หรืออีเมลล">

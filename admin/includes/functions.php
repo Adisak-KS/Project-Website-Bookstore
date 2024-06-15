@@ -77,7 +77,7 @@ function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirm
 function checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError)
 {
     if (!file_exists($defaultImagePath)) {
-        messageError("ไม่มีรูปภาพ default.jpg ในโฟลเดอร์ uploads/img_employees/", $locationError);
+        messageError("ไม่มีรูปภาพ default.png ในโฟลเดอร์ uploads/", $locationError);
     }
 
     $fileExtension = strtolower(pathinfo($defaultImagePath, PATHINFO_EXTENSION));
@@ -112,7 +112,6 @@ function deleteProfileEmployees($profile)
         }
     }
 }
-
 
 
 // ==================================================================================
@@ -178,3 +177,188 @@ function validateFormDeleteEmployees($Id, $locationError)
         messageError("ไม่พบรหัสพนักงานนี้หรือรหัสพนักงานไม่ถูกต้อง", $locationError);
     }
 }
+
+// ==================================================================================
+function valiDateFormAddMember($fname, $lname, $username, $password, $confirmPassword, $email, $locationError)
+{
+
+    // Check First name
+    if (empty($fname)) {
+        messageError("กรุณาระบุชื่อ", $locationError);
+    } elseif (mb_strlen($fname, 'UTF-8') > 50) {
+        messageError("ชื่อ ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    // Check Last name
+    if (empty($lname)) {
+        messageError("กรุณาระบุ นามสกุล", $locationError);
+    } elseif (mb_strlen($lname, 'UTF-8') > 50) {
+        messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    // Check Username
+    if (empty($username)) {
+        messageError("กรุณาระบุ ชื่อผู้ใช้", $locationError);
+    } elseif (mb_strlen($username, 'UTF-8') < 6 || mb_strlen($username, 'UTF-8') > 50) {
+        messageError("ชื่อผู้ใช้ ต้องมี 6-50 ตัวอักษร", $locationError);
+    }
+
+    // Check Password
+    if (empty($password)) {
+        messageError("กรุณาระบุ รหัสผ่าน", $locationError);
+    } elseif (mb_strlen($password, 'UTF-8') < 8 || mb_strlen($password, 'UTF-8') > 255) {
+        messageError("รหัสผ่าน ต้องมี 8-255 ตัวอักษร", $locationError);
+    }
+
+    // Check Confirm Password
+    if (empty($confirmPassword)) {
+        messageError("กรุณายืนยัน รหัสผ่าน อีกครั้ง", $locationError);
+    } elseif ($password !== $confirmPassword) {
+        messageError("ยืนยัน รหัสผ่าน ไม่ถูกต้อง", $locationError);
+    }
+
+    // Check Email
+    if (empty($email)) {
+        messageError("กรุณาระบุอีเมล", $locationError);
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        messageError("รูปแบบของอีเมลไม่ถูกต้อง", $locationError);
+    } elseif (mb_strlen($email, 'UTF-8') < 10 || mb_strlen($email, 'UTF-8') > 100) {
+        messageError("อีเมล ต้องมี 10-100 ตัวอักษร", $locationError);
+    }
+}
+
+// ==================================================================================
+function valiDateFormUpdateMember($fname, $lname, $status,  $locationError)
+{
+
+    // Check First name
+    if (empty($fname)) {
+        messageError("กรุณาระบุชื่อ", $locationError);
+    } elseif (mb_strlen($fname, 'UTF-8') > 50) {
+        messageError("ชื่อ ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    // Check Last name
+    if (empty($lname)) {
+        messageError("กรุณาระบุ นามสกุล", $locationError);
+    } elseif (mb_strlen($lname, 'UTF-8') > 50) {
+        messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    if (!isset($status)) {
+        messageError("กรุณาระบุ สถานะบัญชี", $locationError);
+    } elseif ($status !== "1" && $status !== "0") {
+        messageError("สถานะบัญชีต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
+// ==================================================================================
+function deleteProfileMember($profile)
+{
+    // โฟลเดอร์ที่เก็บไฟล์รูปภาพ
+    $folderUploads = "../../uploads/img_member/";
+
+    // ตรวจสอบว่ามีชื่อไฟล์และไฟล์นั้นมีอยู่ในโฟลเดอร์ที่กำหนดหรือไม่
+    if (!empty($profile) && file_exists($folderUploads . $profile)) {
+        // ลบไฟล์รูปภาพ
+        if (unlink($folderUploads . $profile)) {
+            return true; // คืนค่า true เมื่อการลบสำเร็จ
+        }
+    }
+}
+// ==================================================================================
+
+
+
+function generateUniqueImg($fileExtension, $folderUploads)
+{
+    do {
+        $fileName = 'img_' . uniqid() . bin2hex(random_bytes(10)) . time() . '.' . $fileExtension;
+    } while (file_exists($folderUploads . $fileName));
+    return $fileName;
+}
+function deleteImg($img, $folderUploads)
+{
+
+    // ตรวจสอบว่ามีชื่อไฟล์และไฟล์นั้นมีอยู่ในโฟลเดอร์ที่กำหนดหรือไม่
+    if (!empty($img) && file_exists($folderUploads . $img)) {
+        // ลบไฟล์รูปภาพ
+        if (unlink($folderUploads . $img)) {
+            return true; // คืนค่า true เมื่อการลบสำเร็จ
+        }
+    }
+}
+
+function valiDateFormAddProductType($ptyName, $ptyDetail, $ptyStatus, $locationError)
+{
+
+    // Check Product Type Name
+    if (empty($ptyName)) {
+        messageError("กรุณาระบุชื่อประเภทสินค้า", $locationError);
+    } elseif (mb_strlen($ptyName, 'UTF-8') > 100) {
+        messageError("ชื่อประเภทสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+
+    // Check Product Type Detail
+    if (empty($ptyDetail)) {
+        messageError("กรุณาระบุ รายละเอียดประเภทสินค้า", $locationError);
+    } elseif (mb_strlen($ptyDetail, 'UTF-8') > 100) {
+        messageError("ชื่อประเภทสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!isset($ptyStatus)) {
+        messageError("กรุณาระบุ สถานะประเภทสินค้า", $locationError);
+    } elseif (!is_numeric($ptyStatus) || ($ptyStatus != 1 && $ptyStatus != 0)) {
+        messageError("สถานะประเภทสินค้า ต้องเป็นเลข 1 หรือ 0", $locationError);
+    }
+}
+
+function valiDateFormUpdateProductType($ptyName, $ptyDetail, $ptyStatus, $locationError)
+{
+
+    // Check Product Type name
+    if (empty($ptyName)) {
+        messageError("กรุณาระบุชื่อประเภทสินค้า", $locationError);
+    } elseif (mb_strlen($ptyName, 'UTF-8') > 100) {
+        messageError("ชื่อชื่อประเภทสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    // Check Product Type Detail
+    if (empty($ptyDetail)) {
+        messageError("กรุณาระบุ รายละเอียดประเภทสินค้า", $locationError);
+    } elseif (mb_strlen($ptyDetail, 'UTF-8') > 100) {
+        messageError("รายละเอียดประเภทสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!isset($ptyStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดงประเภท", $locationError);
+    } elseif ($ptyStatus !== "1" && $ptyStatus !== "0") {
+        messageError("สถานะการแสดงประเภทต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
+
+function valiDateFormPublischer($pubName, $pubDetail,  $pubStatus, $locationError)
+{
+    // Check Product Type name
+    if (empty($pubName)) {
+        messageError("กรุณาระบุชื่อสำนักพิมพ์", $locationError);
+    } elseif (mb_strlen($pubName, 'UTF-8') > 100) {
+        messageError("ชื่อชื่อสำนักพิมพ์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    // Check Product Type Detail
+    if (empty($pubDetail)) {
+        messageError("กรุณาระบุ รายละเอียดสำนักพิมพ์", $locationError);
+    } elseif (mb_strlen($pubDetail, 'UTF-8') > 100) {
+        messageError("รายละเอียดสำนักพิมพ์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!isset($pubStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดงประเภท", $locationError);
+    } elseif ($pubStatus !== "1" && $pubStatus !== "0") {
+        messageError("สถานะการแสดงประเภทต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
+
+
+

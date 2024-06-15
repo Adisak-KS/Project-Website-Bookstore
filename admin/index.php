@@ -1,6 +1,5 @@
 <?php
 $titlePage = "หน้าแรก";
-require_once("../db/connectdb.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">

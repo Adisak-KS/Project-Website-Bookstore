@@ -22,6 +22,8 @@ try {
 
     // ตรวจสอบและเพิ่มประภทสิทธิ์ (Default)
     $BaseController->insertEmployeesTypeDefault();
+    // Super Admin
+    $BaseController->insertSuperAdminDefault();
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }

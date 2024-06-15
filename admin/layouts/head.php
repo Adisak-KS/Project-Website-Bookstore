@@ -1,24 +1,45 @@
  <?php
-  $nameWebsite = "Bookstore";
+    // My Function
+    require_once("includes/functions.php");
+    require_once(__DIR__ . '/../../db/connectdb.php');
+    require_once(__DIR__ . '/../../db/controller/SettingWebsiteController.php');
 
-  // My Function
-  require_once("includes/functions.php")
-
-  ?>
+    $SettingWebsiteController = new SettingWebsiteController($conn);
+    $settingsWebsite = $SettingWebsiteController->useSettingsWebsite();
+    ?>
 
  <!--  ========== Head ========== -->
  <meta charset="utf-8" />
- <title><?php echo $titlePage . " | " . $nameWebsite ?></title>
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
  <meta content="Coderthemes" name="author" />
  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
- <!-- App favicon -->
- <link rel="shortcut icon" href="../uploads/img_web_setting/default.jpg" type="image/x-icon">
+ <?php
+    // ชื่อเว็บไซต์ที่ Tab (st_id = 1)
+    $websiteName = "ชื่อเว็บไซต์"; // ค่าเริ่มต้นถ้าไม่พบข้อมูล
+    $faviconUrl = "../uploads/img_web_setting/default_favicon.ico"; // URL ของ favicon ค่าเริ่มต้น
 
- 
- 
+    // ค้นหาข้อมูลจาก $settingsWebsite เพียงครั้งเดียว
+    foreach ($settingsWebsite as $setting) {
+        if ($setting['st_id'] == 1) {
+            $websiteName = $setting['st_detail'];
+        } elseif ($setting['st_id'] == 2) {
+            $faviconUrl = "../uploads/img_web_setting/" . $setting['st_detail'];
+        }
+    }
+
+    // แสดงผลใน <title>
+    echo "<title>$titlePage | $websiteName</title>";
+    // แสดง favicon
+    echo '<link rel="shortcut icon" href="' . $faviconUrl . '" type="image/x-icon">';
+    ?>
+
+
+
+ <!-- App favicon -->
+
+
  <!-- App css -->
  <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
  <link rel="stylesheet" href="assets/css/style.css">
@@ -31,5 +52,3 @@
  <link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
  <link href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.bootstrap5.min.css" rel="stylesheet">
  <link href="https://cdn.datatables.net/searchpanes/2.3.1/css/searchPanes.bootstrap5.min.css" rel="stylesheet">
-
- 

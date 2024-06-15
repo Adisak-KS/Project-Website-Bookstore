@@ -95,10 +95,30 @@ class BaseController
     function getEmployeesSuperAdminDefault()
     {
         try {
+
+            $sql = "SELECT 
+                        bs_employees.emp_id,
+                        bs_employees.emp_username,
+                        bs_employees.emp_email,
+                        bs_employees.emp_status,
+                        GROUP_CONCAT(bs_employees_authority_type.eat_id) AS authority
+                     FROM bs_employees
+                     JOIN bs_employees_authority ON bs_employees.emp_id = bs_employees_authority.emp_id
+                     JOIN bs_employees_authority_type ON bs_employees_authority.eat_id = bs_employees_authority_type.eat_id
+                     WHERE bs_employees_authority.eat_id = 1 AND bs_employees.emp_status = 1
+                     GROUP BY bs_employees.emp_id
+                     LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "<hr>Error in getEmployeesSuperAdminDefault : " . $e->getMessage();
+            return false;
         }
     }
+
+
+
 
     // check Usernname and Email  Employees
     function checkUsernameEmailEmployees($username, $email, $id = null)
@@ -167,6 +187,54 @@ class BaseController
             // ยกเลิกการทำธุรกรรมในกรณีเกิดข้อผิดพลาด
             $this->db->rollBack();
             echo "<hr>Error in insertEmployees : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function insertSuperAdminDefault()
+    {
+        try {
+
+            $check = $this->getEmployeesSuperAdminDefault();
+            if (!$check) {
+
+                $fname = "ผู้ดูแลระบบ";
+                $lname = "สูงสุด";
+                $username = "superAdmin";
+                $hashedPassword = password_hash("superAdmin", PASSWORD_DEFAULT);
+                $email = "Adisak@example@gmail.com";
+                $eatId = 1;
+
+
+                // เงื่อนไขรูปภาพ default
+                $folderUploads = "../uploads/img_employees/";
+                $imgDefault = "default.png";
+                $defaultImagePath = $folderUploads . $imgDefault;
+                $allowedExtensions = ['png', 'jpg', 'jpeg'];
+                $maxFileSize = 2 * 1024 * 1024; // 2 MB in bytes
+                $fileExtension = pathinfo($defaultImagePath, PATHINFO_EXTENSION);
+
+                function generateUniqueProfileSuperAdmin($extension, $folder)
+                {
+                    do {
+                        $fileName = 'profile_' . uniqid() . bin2hex(random_bytes(10)) . time() . '.' . $extension;
+                    } while (file_exists($folder . $fileName));
+                    return $fileName;
+                }
+
+                // ส่มชื่อรูปภาพใหม่
+                $newProfile = generateUniqueProfileSuperAdmin($fileExtension, $folderUploads);
+                $targetFilePath = $folderUploads . $newProfile;
+
+                // Copy default image to new file
+                if (copy($defaultImagePath, $targetFilePath)) {
+
+                    // Insert Employees
+                    $insertSuperAdminDefault = $this->insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId);
+                }
+            }
+        } catch (PDOException $e) {
+            echo "<hr>Error in insertSuperAdminDefault : " . $e->getMessage();
             return false;
         }
     }
