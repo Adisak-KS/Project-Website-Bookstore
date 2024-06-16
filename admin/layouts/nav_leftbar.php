@@ -152,14 +152,14 @@
                     </li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="author_show">
                             <i class="fa-solid fa-user"></i>
                             <span> ผู้แต่ง</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="promotion_show">
                             <i class="fa-solid fa-user"></i>
                             <span> โปรโมชั่น</span>
                         </a>

@@ -235,4 +235,49 @@ $(document).ready(function () {
     });
 });
 
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formAuthor").validate({
+        rules: {
+            auth_name: {
+                required: true,
+                maxlength: 100,
+            },
+            auth_detail: {
+                required: true,
+                maxlength: 100,
+            },
+            auth_newImg: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            auth_name: {
+                required: "กรุณาระบุ ชื่อผู้แต่ง",
+                maxlength: "ชื่อผู้แต่งต้องไม่เกิน 100 ตัวอักษร",
+            },
+            auth_detail: {
+                required: "กรุณาระบุ รายละเอียดผู้แต่ง",
+                maxlength: "รายละเอียดผู้แต่งต้องไม่เกิน 100 ตัวอักษร",
+            },
+            auth_newImg: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
 

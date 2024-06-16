@@ -360,5 +360,62 @@ function valiDateFormPublischer($pubName, $pubDetail,  $pubStatus, $locationErro
     }
 }
 
+function valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError)
+{
+    // Check Author name
+    if (empty($authName)) {
+        messageError("กรุณาระบุชื่อผู้แต่ง", $locationError);
+    } elseif (mb_strlen($authName, 'UTF-8') > 100) {
+        messageError("ชื่อชื่อผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
 
+    // Check Author Detail
+    if (empty($authDetail)) {
+        messageError("กรุณาระบุ รายละเอียดผู้แต่ง", $locationError);
+    } elseif (mb_strlen($authDetail, 'UTF-8') > 100) {
+        messageError("รายละเอียดผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
 
+    if (!isset($authStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดงประเภท", $locationError);
+    } elseif ($authStatus !== "1" && $authStatus !== "0") {
+        messageError("สถานะการแสดงประเภทต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
+
+function  validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus, $locationError)
+{
+    if (empty($proName)) {
+        messageError("กรุณาระบุ ชื่อโปรโมขั่น", $locationError);
+    } elseif (mb_strlen($proName, 'UTF-8') > 100) {
+        messageError("ชื่อโปรโมชั่น ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if ($proPercentDiscount === '' || $proPercentDiscount === null) {
+        messageError("กรุณาระบุ ส่วนลดโปรโมขั่น", $locationError);
+    } elseif (!is_numeric($proPercentDiscount) || $proPercentDiscount < 0 || $proPercentDiscount > 100) {
+        messageError("ส่วนลดโปรโมชันต้องเป็นตัวเลข ระหว่าง 0 - 100", $locationError);
+    }
+
+    if (empty($proTimeStart) || strtotime($proTimeStart) === false) {
+        messageError("กรุณาระบุ วันเริ่มโปรโมชันที่ถูกต้อง", $locationError);
+    }
+
+    if (empty($proTimeEnd) || strtotime($proTimeEnd) === false) {
+        messageError("กรุณาระบุ วันสิ้นสุดโปรโมชันที่ถูกต้อง", $locationError);
+    }elseif (strtotime($proTimeEnd) < strtotime($proTimeStart)) {
+        messageError("วันสิ้นสุดโปรโมชันต้องมากกว่า วันเริ่มโปรโมชั่น", $locationError);
+    }
+
+    if(empty($proDetail)){
+        messageError("กรุณาระบุ รายละเอียดโปรโมชั่น", $locationError);
+    }elseif(mb_strlen($proDetail, 'UTF-8') > 100){
+        messageError("รายละเอียดโปรโมชั่น ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!isset($proStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดงโปรโมชั่น", $locationError);
+    } elseif ($proStatus !== "1" && $proStatus !== "0") {
+        messageError("สถานะการแสดโปรโมชั่นต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
