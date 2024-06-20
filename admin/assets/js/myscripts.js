@@ -280,4 +280,75 @@ $(document).ready(function () {
     });
 });
 
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formPromotion").validate({
+        rules: {
+            pro_name: {
+                required: true,
+                maxlength: 100,
+            },
+            pro_percent_discount: {
+                required: true,
+                number: true,
+                pattern: /^(?:100|[1-9]?[0-9])$/
+            },
+            pro_time_start: {
+                required: true,
+            },
+            pro_time_end: {
+                required: true,
+                greaterThan: "#pro_time_start"
+            },
+            pro_detail:{
+                required: true,
+                maxlength: 100,
+            },
+            pro_newImg: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            pro_name: {
+                required: "กรุณาระบุ ชื่อโปรโมชั่น",
+                maxlength: "ชื่อโปรโมชั่นต้องไม่เกิน 100 ตัวอักษร",
+            },
+            pro_percent_discount: {
+                required: "กรุณาระบุ เปอร์เซ็นต์ส่วนลด",
+                number: "เปอร์เซ็นต์ส่วนลด ต้องเป็นตัวเลข",
+                pattern: "ต้องเป็นตัวเลข 0 - 100 เท่านั้น"
+            },
+            pro_time_start: {
+                required: "กรุณาระบุ วันเริ่มโปรโมชั่น",
+            },
+            pro_time_end: {
+                required: "กรุณาระบุ วันสิ้นสุดโปรโมชั่น",
+                greaterThan: "วันสิ้นสุดโปรโมชั่น ต้องมากกว่า วันเริ่มโปรโมชั่น"
+            },
+            pro_detail:{
+                required: "กรุณาระบุ รายละเอียดโปรโมชั่น",
+                maxlength: "รายละเอียดโปรโมชั่น ไม่เกิน 100 ตัวอักษร",
+            },
+            pro_newImg: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+
+
 

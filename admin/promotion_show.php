@@ -68,14 +68,13 @@ $promotions = $PromotionController->getPromotions();
                                                             <div class="mb-3">
                                                                 <label for="pro_percent_discount" class="form-label">ส่วนลด :</label><span class="text-danger">*</span>
                                                                 <div class="input-group">
-                                                                    
-                                                                    <input type="number" name="pro_percent_discount" class="form-control" placeholder="ระบุ ส่วนลดเป็นตัวเลข 0-100" aria-describedby="inputGroupPrepend" min="0" max="100" value="0">
+                                                                    <input type="number" name="pro_percent_discount" class="form-control" placeholder="ระบุ ส่วนลดเป็นตัวเลข 0-100" aria-describedby="inputGroupPrepend" value="0">
                                                                     <span class="input-group-text">%</span>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_time_start" class="form-label">วันเริ่ม :</label><span class="text-danger">*</span>
-                                                                <input type="datetime-local" class="form-control" name="pro_time_start">
+                                                                <input type="datetime-local" class="form-control" name="pro_time_start" id="pro_time_start">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="pro_time_end" class="form-label">วันสิ้นสุด :</label><span class="text-danger">*</span>

@@ -100,11 +100,11 @@ if (isset($_GET['id'])) {
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="pro_time_start" class="form-label">วันเริ่ม :</label><span class="text-danger">*</span>
-                                            <input type="datetime-local" class="form-control" name="pro_time_start" value="<?php echo $promotion['pro_time_start']; ?>">
+                                            <label for="pro_time_start" class="form-label">เดือน / วัน / ปี เริ่ม :</label><span class="text-danger">*</span>
+                                            <input type="datetime-local" class="form-control" name="pro_time_start" id="pro_time_start" value="<?php echo $promotion['pro_time_start']; ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="pro_time_end" class="form-label">วันสิ้นสุด :</label><span class="text-danger">*</span>
+                                            <label for="pro_time_end" class="form-label">เดือน / วัน / ปี สิ้นสุด :</label><span class="text-danger">*</span>
                                             <input type="datetime-local" class="form-control" name="pro_time_end" value="<?php echo $promotion['pro_time_end']; ?>">
                                         </div>
                                         <div class="mb-3">

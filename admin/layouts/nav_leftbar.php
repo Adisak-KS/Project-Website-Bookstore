@@ -166,7 +166,7 @@
                     </li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="product_show">
                             <i class="fa-solid fa-user"></i>
                             <span> สินค้า</span>
                         </a>
