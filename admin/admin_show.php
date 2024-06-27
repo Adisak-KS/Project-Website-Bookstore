@@ -7,7 +7,6 @@ $AdminController = new AdminController($conn);
 
 $admins = $AdminController->getAdmin();
 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

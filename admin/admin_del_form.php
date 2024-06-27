@@ -3,50 +3,25 @@ $titlePage = "ลบผู้ดูแลระบบ";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AdminController.php");
+require_once("../includes/salt.php");
+require_once('../admin/includes/functions.php');
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
-
-    // เก็บค่า session  ใน base64Encoded
     $base64Encoded =  $_SESSION["base64Encoded"];
 
-    // ถอดรหัส base64 เพื่อให้ได้ข้อมูลเป็นข้อความธรรมดา
-    $base64Decoded = base64_decode($base64Encoded);
-
-    // ดึงค่า salt จาก session
-    $salt1 = $_SESSION["salt1"];
-    $salt2 = $_SESSION["salt2"];
-
-    // แยกส่วนของ salt และข้อมูลที่ไม่ถูกเข้ารหัส
-    $salt1Length = mb_strlen($salt1, 'UTF-8');
-    $salt2Length = mb_strlen($salt2, 'UTF-8');
-
-    $salt1 = substr($base64Decoded, 0, $salt1Length);
-    $saltedId = substr($base64Decoded, $salt1Length, -$salt2Length);
-    $salt2 = substr($base64Decoded, -$salt2Length);
-
-    // สร้างค่า originalId โดยตัดค่า salt ออก
-    $originalId = str_replace([$salt1, $salt2], '', $saltedId);
-
-    // ใช้ originalId ในการทำงานต่อ
-    $Id = $originalId;
-
+    // ถอดรหัส Id 
+    $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
     $AdminController = new AdminController($conn);
     $admins = $AdminController->getDetailAdmin($Id);
 
-
-    if (!$admins) {
-        header('Location: error_not_result');
-        exit;
-    }
+     //ตรวจสอบว่ามีข้อมูลหรือไม่
+    checkResultDetail($admins);    
 } else {
     header('Location: admin_show');
     exit;
 }
-
-
-
 
 ?>
 <!DOCTYPE html>

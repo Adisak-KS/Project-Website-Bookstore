@@ -1,12 +1,13 @@
 <?php
-// ======================== My Function =====================
+// ======================== My Function For Admin =====================
 /*
-    1. 
+    1. messageError
 
 
 */
 
 // เก็บข้อความ error
+
 function messageError($message, $locationError)
 {
     $_SESSION['error'] = $message;
@@ -94,6 +95,36 @@ function checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $ma
 
     if ($fileSize > $maxFileSize) {
         messageError("ไฟล์ Default ต้องไม่เกิน 2 MB", $locationError);
+    }
+}
+
+// ==================================================================================
+function decodeBase64ID($base64Encoded, $salt1, $salt2)
+{
+    // ถอดรหัส base64 เพื่อให้ได้ข้อมูลเป็นข้อความธรรมดา
+    $base64Decoded = base64_decode($base64Encoded);
+
+    // แยกส่วนของ salt และข้อมูลที่ไม่ถูกเข้ารหัส
+    $salt1Length = mb_strlen($salt1, 'UTF-8');
+    $salt2Length = mb_strlen($salt2, 'UTF-8');
+
+    $extractedSalt1 = substr($base64Decoded, 0, $salt1Length);
+    $saltedId = substr($base64Decoded, $salt1Length, -$salt2Length);
+    $extractedSalt2 = substr($base64Decoded, -$salt2Length);
+
+    // สร้างค่า originalId โดยตัดค่า salt ออก
+    $originalId = str_replace([$extractedSalt1, $extractedSalt2], '', $saltedId);
+
+    return $originalId;
+}
+
+
+// ==================================================================================
+function checkResultDetail($resultDetail)
+{
+    if (!$resultDetail) {
+        header('Location: error_not_result');
+        exit;
     }
 }
 
@@ -403,13 +434,13 @@ function  validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $p
 
     if (empty($proTimeEnd) || strtotime($proTimeEnd) === false) {
         messageError("กรุณาระบุ วันสิ้นสุดโปรโมชันที่ถูกต้อง", $locationError);
-    }elseif (strtotime($proTimeEnd) < strtotime($proTimeStart)) {
+    } elseif (strtotime($proTimeEnd) < strtotime($proTimeStart)) {
         messageError("วันสิ้นสุดโปรโมชันต้องมากกว่า วันเริ่มโปรโมชั่น", $locationError);
     }
 
-    if(empty($proDetail)){
+    if (empty($proDetail)) {
         messageError("กรุณาระบุ รายละเอียดโปรโมชั่น", $locationError);
-    }elseif(mb_strlen($proDetail, 'UTF-8') > 100){
+    } elseif (mb_strlen($proDetail, 'UTF-8') > 100) {
         messageError("รายละเอียดโปรโมชั่น ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 

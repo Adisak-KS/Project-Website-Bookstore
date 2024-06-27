@@ -8,11 +8,10 @@ $LoginController = new LoginController($conn);
 $empId = $_SESSION['emp_id'];
 $useLoginEmployee = $LoginController->useLoginEmployees($empId);
 
+
 if (!$useLoginEmployee || empty($empId)) {
     $_SESSION['error'] = "กรุณาเข้าสู่ระบบ ก่อนใช้งาน";
-    echo '<script type="text/javascript">';
-    echo 'window.location.href="login_form.php";';
-    echo '</script>';
+    header("Location: login_form");
     exit;
 }
 ?>
