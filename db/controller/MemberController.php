@@ -65,9 +65,14 @@ class MemberController extends BaseController
         }
     }
 
-    function insertMember($newProfile, $fname, $lname, $username, $hashedPassword, $email)
+    function insertMember($newProfile, $fname, $lname, $username, $password, $email)
     {
         try {
+
+            // Hashed Password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+
             // แทรกข้อมูลพนักงานใหม่
             $sql = " INSERT INTO bs_member (mem_profile, mem_fname, mem_lname, mem_username, mem_password, mem_email)
                     VALUES (:mem_profile, :mem_fname, :mem_lname, :mem_username, :mem_password, :mem_email)";

@@ -151,11 +151,15 @@ class BaseController
         }
     }
 
-    function insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId)
+    function insertEmployees($newProfile, $fname, $lname, $username, $password, $email, $eatId)
     {
         try {
             // เริ่มต้น transaction
             $this->db->beginTransaction();
+
+
+             // Hashed Password
+             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             // แทรกข้อมูลพนักงานใหม่
             $sql = " INSERT INTO bs_employees (emp_profile, emp_fname, emp_lname, emp_username, emp_password, emp_email)

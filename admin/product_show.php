@@ -5,7 +5,11 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
 
 $ProductController = new ProductController($conn);
+
 $products = $ProductController->getProduct();
+$productType = $ProductController->getProductType();
+$publisher = $ProductController->getPublisher();
+$author = $ProductController->getAuthor();
 
 ?>
 <!DOCTYPE html>
@@ -44,39 +48,125 @@ $products = $ProductController->getProduct();
                                 <div class="card-body">
                                     <h4 class="mt-0 header-title">ข้อมูลสินค้าทั้งหมด</h4>
                                     <div class="my-3">
-                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
-                                            <i class="fa-regular fa-square-plus me-1"></i>
-                                            <span>เพิ่มประเภทสินค้า</span>
-                                        </button>
+
+                                        <?php if (empty($productType) || empty($publisher) || empty($author)) { ?>
+
+                                            <?php if (empty($productType)) { ?>
+                                                <p class="text-danger">* ต้องมีข้อมูลประเภทสินค้า อย่างน้อย 1 รายการ <a href="product_type_show">แสดงประเภทสินค้า</a></p>
+                                            <?php } elseif (empty($publisher)) { ?>
+                                                <p class="text-danger">* ต้องมีข้อมูลสำนักพิมพ์ อย่างน้อย 1 รายการ <a href="publisher_show">แสดงสำนักพิมพ์</a></p>
+                                            <?php } elseif (empty($author)) { ?>
+                                                <p class="text-danger">* ต้องมีข้อมูลชื่อผู้แต่ง อย่างน้อย 1 รายการ <a href="author_show">แสดงผู้แต่ง</a></p>
+                                            <?php } ?>
+                                            <button class="btn btn-success" disabled>
+                                                <i class="fa-regular fa-square-plus me-1"></i>
+                                                <span>เพิ่มสินค้า</span>
+                                            </button>
+
+                                        <?php } else { ?>
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">
+                                                <i class="fa-regular fa-square-plus me-1"></i>
+                                                <span>เพิ่มสินค้า</span>
+                                            </button>
+                                        <?php } ?>
+
                                         <hr>
 
                                         <!-- Scrollable modal -->
-                                        <form id="formProductType" action="process/product_type_add.php" method="post">
+                                        <form id="formProduct" novalidate action="process/product_add.php" method="post">
                                             <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAdd" data-bs-backdrop="static" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มประเภทสินค้า</h1>
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มสินค้า</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="mb-3">
-                                                                <label for="pty_name" class="form-label">ชื่อประเภทสินค้า :</label><span class="text-danger">*</span>
-                                                                <input type="text" name="pty_name" class="form-control" placeholder="ระบุ ชื่อประเภทสินค้า" maxlength="100">
+                                                                <label for="prd_name" class="form-label">ชื่อสินค้า :</label><span class="text-danger">*</span>
+                                                                <input type="text" name="prd_name" class="form-control" placeholder="ระบุ ชื่อสินค้า" maxlength="100">
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="pty_detail" class="form-label">รายละเอียดประเภทสินค้า :</label><span class="text-danger">*</span>
-                                                                <textarea name="pty_detail" class="form-control" placeholder="ระบุ ชื่อประเภทสินค้า" maxlength="100"></textarea>
+                                                                <label for="prd_isbn" class="form-label">รหัส ISBN :</label><span class="text-danger">*</span>
+                                                                <input type="text" name="prd_isbn" class="form-control" placeholder="ระบุ รหัส ISBN สินค้า" maxlength="100">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_coin" class="form-label">เหรียญที่จะได้รับ :</label><span class="text-danger">*</span>
+                                                                <input type="number" name="prd_coin" class="form-control" placeholder="ระบุ จำนวน เหรียญที่จะได้รับ" value="0">
                                                             </div>
 
                                                             <div class="mb-3">
-                                                                <label for="pty_status" class="form-label">สถานะการแสดง :</label><span class="text-danger">*</span>
+                                                                <label for="prd_quantity" class="form-label">จำนวนสินค้า :</label><span class="text-danger">*</span>
+                                                                <input type="number" name="prd_quantity" class="form-control" placeholder="ระบุ จำนวนสินค้า">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_number_pages" class="form-label">จำนวนหน้าหนังสือ :</label><span class="text-danger">*</span>
+                                                                <input type="number" name="prd_number_pages" class="form-control" placeholder="ระบุ จำนวนหน้าหนังสือ">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_price" class="form-label">ราคาสินค้า :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <input type="number" name="prd_price" class="form-control" placeholder="ระบุ ราคาสินค้า">
+                                                                    <span class="input-group-text">บาท</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_percent_discount" class="form-label">ส่วนลดสินค้า (เฉพาะชิ้นนี้) :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <input type="number" name="prd_percent_discount" class="form-control" placeholder="ระบุ ส่วนลดสินค้า (เฉพาะชิ้นนี้)" value="0">
+                                                                    <span class="input-group-text">%</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="pty_id" class="form-label">ประเภทสินค้า :</label><span class="text-danger">*</span>
+                                                                <select class="form-select" name="pty_id">
+                                                                    <option value="" selected>กรุณาระบุ ประเภทสินค้า</option>
+                                                                    <?php foreach ($productType as $row) { ?>
+                                                                        <option value="<?php echo $row['pty_id'] ?>"><?php echo $row['pty_name']; ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="pub_id" class="form-label">ชื่อสำนักพิมพ์ :</label><span class="text-danger">*</span>
+                                                                <select class="form-select" name="pub_id">
+                                                                    <option value="" selected>กรุณาระบุ สำนักพิมพ์</option>
+
+                                                                    <?php foreach ($publisher as $row) { ?>
+                                                                        <option value="<?php echo $row['pub_id'] ?>"><?php echo $row['pub_name']; ?></option>
+                                                                    <?php } ?>
+
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="auth_id" class="form-label">ชื่อผู้แต่ง :</label><span class="text-danger">*</span>
+                                                                <select class="form-select" name="auth_id">
+                                                                    <option value="" selected>กรุณาระบุ ชื่อผู้แต่ง</option>
+                                                                    <?php foreach ($author as $row) { ?>
+                                                                        <option value="<?php echo $row['auth_id'] ?>"><?php echo $row['auth_name']; ?></option>
+                                                                    <?php } ?>
+
+                                                                </select>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_preorder" class="form-label"> ชนิดสินค้า :</label><span class="text-danger">*</span>
+                                                                <div class="form-check mb-2 form-check-primary">
+                                                                    <input class="form-check-input" type="radio" name="prd_preorder" id="1" value="1" checked>
+                                                                    <label class="form-check-label" for="1">สินค้าปกติ</label>
+                                                                </div>
+                                                                <div class="form-check mb-2 form-check-warning">
+                                                                    <input class="form-check-input" type="radio" name="prd_preorder" id="0" value="0">
+                                                                    <label class="form-check-label" for="0">สินค้าพรีออเดอร์</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="prd_status" class="form-label">สถานะการแสดง :</label><span class="text-danger">*</span>
                                                                 <div class="form-check mb-2 form-check-success">
-                                                                    <input class="form-check-input" type="radio" name="pty_status" id="1" value="1" checked>
+                                                                    <input class="form-check-input" type="radio" name="prd_status" id="1" value="1" checked>
                                                                     <label class="form-check-label" for="1">แสดง</label>
                                                                 </div>
                                                                 <div class="form-check mb-2 form-check-danger">
-                                                                    <input class="form-check-input" type="radio" name="pty_status" id="0" value="0">
+                                                                    <input class="form-check-input" type="radio" name="prd_status" id="0" value="0">
                                                                     <label class="form-check-label" for="0">ไม่แสดง</label>
                                                                 </div>
                                                             </div>
@@ -97,13 +187,16 @@ $products = $ProductController->getProduct();
                                         </form>
 
                                     </div>
-                                    <?php if (!$products) { ?>
+                                    <?php if ($products) { ?>
                                         <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">รูป</th>
                                                     <th class="text-center">ชื่อสินค้า</th>
-                                                    <th class="text-center">ยอดเข้าชม (ครั้ง)</th>
+                                                    <th class="text-center">ราคา</th>
+                                                    <th class="text-center">ส่วนลด</th>
+                                                    <th class="text-center">ประเภทสินค้า</th>
+                                                    <th class="text-center">ชนิดสินค้า</th>
                                                     <th class="text-center">สถานะ</th>
                                                     <th class="text-center">จัดการข้อมูล</th>
                                                 </tr>
@@ -113,14 +206,22 @@ $products = $ProductController->getProduct();
                                                 <?php foreach ($products as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
-                                                            <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_author/<?php echo $row['auth_img'] ?>">
+                                                            <img class="rounded" width="40px" height="50px" src="../uploads/img_product/<?php echo $row['prd_img1'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['prd_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php echo mb_substr($row['prd_name'], 0, 20, 'utf-8');
+                                                            if (mb_strlen($row['prd_name'], 'utf-8') > 20) echo '...';
+                                                            ?>
+                                                        </td>
+
+                                                        <td class="text-start"><?php echo "฿" . number_format($row['prd_price'], 2); ?></td>
+                                                        <td class="text-start"><?php echo number_format($row['prd_percent_discount']) . " %"; ?></td>
+                                                        <td class="text-center"><?php echo $row['pty_name'] ?></td>
                                                         <td class="text-center">
                                                             <?php if ($row['prd_preorder'] == 1) { ?>
-                                                                <span class="badge rounded-pill bg-success fs-6">สินค้าปกติ</span>
+                                                                <span class="badge rounded-pill bg-primary fs-6">ปกติ</span>
                                                             <?php } else { ?>
-                                                                <span class="badge rounded-pill bg-danger fs-6">สินค้าพรีออเดอร์</span>
+                                                                <span class="badge rounded-pill bg-warning text-dark fs-6">พรีออเดอร์</span>
                                                             <?php } ?>
                                                         </td>
                                                         <td class="text-center">

@@ -24,9 +24,11 @@ if (isset($_POST['btn-add'])) {
     //  ตรวจสอบ Username, Email ซ้ำ
     $check = $MemberController->checkUsernameEmailMember($username, $email);
 
+
     if ($check) {
         messageError("ไม่สามารถใช้ชื่อผู้ใช้ หรือ อีเมลนี้ได้", $locationError);
     } else {
+
         // เงื่อนไขรูปภาพ default
         $folderUploads = "../../uploads/img_member/";
         $imgDefault = "default.png";
@@ -36,20 +38,18 @@ if (isset($_POST['btn-add'])) {
         $fileExtension = pathinfo($defaultImagePath, PATHINFO_EXTENSION);
 
         // ตรวจสอบรูป Default
-        checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
+        checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
 
         // ส่มชื่อรูปภาพใหม่
         $newProfile = generateUniqueProfileEmployees($fileExtension, $folderUploads);
         $targetFilePath = $folderUploads . $newProfile;
 
+
         // Copy default image to new file
         if (copy($defaultImagePath, $targetFilePath)) {
-
-            // Hashed Password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
+            
             // Insert Employees
-            $insertMember = $MemberController->insertMember($newProfile, $fname, $lname, $username, $hashedPassword, $email);
+            $insertMember = $MemberController->insertMember($newProfile, $fname, $lname, $username, $password, $email);
             $_SESSION['success'] = "เพิ่มข้อมูลสมาชิก สำเร็จ";
         } else {
             messageError("คัดลอกไฟล์ผิดพลาด", $locationError);

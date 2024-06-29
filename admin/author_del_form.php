@@ -3,6 +3,8 @@ $titlePage = "ลบผู้แต่ง";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AuthorController.php");
+require_once("../includes/salt.php");
+require_once("../admin/includes/functions.php");
 
 if (isset($_GET['id'])) {
 

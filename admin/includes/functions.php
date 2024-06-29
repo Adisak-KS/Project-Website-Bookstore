@@ -75,7 +75,7 @@ function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirm
 
 // ==================================================================================
 
-function checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError)
+function checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError)
 {
     if (!file_exists($defaultImagePath)) {
         messageError("ไม่มีรูปภาพ default.png ในโฟลเดอร์ uploads/", $locationError);
@@ -87,12 +87,11 @@ function checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $ma
         messageError("รูปภาพต้องมีนามสกุล .png, .jpg, หรือ .jpeg เท่านั้น", $locationError);
     }
 
-    $fileSize = filesize($defaultImagePath);
 
+    $fileSize = filesize($defaultImagePath);
     if ($fileSize === false) {
         messageError("ไม่สามารถตรวจสอบขนาดของไฟล์ default.jpg ได้", $locationError);
     }
-
     if ($fileSize > $maxFileSize) {
         messageError("ไฟล์ Default ต้องไม่เกิน 2 MB", $locationError);
     }
@@ -448,5 +447,197 @@ function  validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $p
         messageError("กรุณาระบุ สถานะการแสดงโปรโมชั่น", $locationError);
     } elseif ($proStatus !== "1" && $proStatus !== "0") {
         messageError("สถานะการแสดโปรโมชั่นต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    }
+}
+// ==================================================================================
+
+function validateFormAddProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus, $locationError)
+{
+
+    // if (empty($prdName)) {
+    //     messageError("กรุณาระบุ ชื่อสินค้า", $locationError);
+    // } elseif (mb_strlen($prdName, 'UTF-8') > 100) {
+    //     messageError("ชื่อสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    // }
+
+    // if (empty($prdISBN)) {
+    //     messageError("กรุณาระบุ รหัส ISBN สินค้า", $locationError);
+    // } elseif (!is_numeric($prdISBN)) {
+    //     messageError("รหัส ISBN ต้องเป็นตัวเลขเท่านั้น", $locationError);
+    // } elseif ($prdISBN < 0) {
+    //     messageError("รหัส ISBN ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    // } elseif (!(mb_strlen($prdISBN, 'UTF-8') == 10 || mb_strlen($prdISBN, 'UTF-8') == 13)) {
+    //     messageError("รหัส ISBN ต้องมีตัวเลข 10 หรือ 13 ตัว", $locationError);
+    // }
+
+    // if ($prdCoin === null || $prdCoin === '') {
+    //     messageError("กรุณาระบุ จำนวนเหรียญ", $locationError);
+    // } elseif (!is_numeric($prdCoin)) {
+    //     messageError("จำนวนเหรียญ ต้องเป็นตัวเลข", $locationError);
+    // } elseif ($prdCoin < 0) {
+    //     messageError("จำนวนเหรียญ ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    // } elseif (strpos($prdCoin, '.') !== false) {
+    //     messageError("จำนวนเหรียญ ต้องเป็นจำนวนเต็ม", $locationError);
+    // }
+
+    // if ($prdQuantity === null || $prdQuantity === '') {
+    //     messageError("กรุณาระบุ จำนวนสินค้า", $locationError);
+    // } elseif (!is_numeric($prdQuantity)) {
+    //     messageError("จำนวนสินค้า ต้องเป็นตัวเลข", $locationError);
+    // } elseif ($prdQuantity < 0) {
+    //     messageError("จำนวนสินค้า ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    // } elseif (strpos($prdQuantity, '.') !== false) {
+    //     messageError("จำนวนสินค้า ต้องเป็นจำนวนเต็ม", $locationError);
+    // }
+
+    // if($prdNumberPages === null || $prdNumberPages === ''){
+    //     messageError("กรุณาระบุ จำนวนหน้าหนังสือ", $locationError);
+    // } elseif (!is_numeric($prdNumberPages)) {
+    //     messageError("จำนวนหน้าหนังสือ ต้องเป็นตัวเลข", $locationError);
+    // } elseif ($prdNumberPages < 0) {
+    //     messageError("จำนวนหน้าหนังสือ ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    // } elseif (strpos($prdNumberPages, '.') !== false) {
+    //     messageError("จำนวนหน้าหนังสือ ต้องเป็นจำนวนเต็ม", $locationError);
+    // }
+
+    // if ($prdPrice === null || $prdPrice === '') {
+    //     messageError("กรุณาระบุ ราคาสินค้า", $locationError);
+    // } elseif (!is_numeric($prdPrice) || $prdPrice < 0) {
+    //     messageError("ราคาสินค้า ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    // }
+
+    // if ($prdPercentDiscount === null || $prdPercentDiscount === '') {
+    //     messageError("กรุณาระบุ ส่วนลดสินค้า", $locationError);
+    // } elseif (!is_numeric($prdPercentDiscount) || $prdPercentDiscount < 0 || $prdPercentDiscount > 100) {
+    //     messageError("ส่วนลดสินค้า ต้องเป็นตัวเลขระหว่าง 0 - 100", $locationError);
+    // } elseif (strpos($prdPercentDiscount, '.') !== false) {
+    //     messageError("ส่วนลดสินค้า ต้องเป็นจำนวนเต็ม", $locationError);
+    // }
+
+    // if (empty($ptyId)) {
+    //     messageError("กรุณาระบุ ประเภทสินค้า", $locationError);
+    // } elseif (!is_numeric($ptyId) || $ptyId <= 0) {
+    //     messageError("ประเภทสินค้า ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    // }
+
+    // if (empty($pubId)) {
+    //     messageError("กรุณาระบุ สำนักพิมพ์", $locationError);
+    // } elseif (!is_numeric($pubId) || $pubId <= 0) {
+    //     messageError("สำนักพิมพ์ ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    // }
+
+    // if (empty($authId)) {
+    //     messageError("กรุณาระบุ ชื่อผู้แต่ง", $locationError);
+    // } elseif (!is_numeric($authId) && $authId <= 0) {
+    //     messageError("ชื่อผู้แต่ง ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    // }
+
+    // if (!isset($prdPreorder)) {
+    //     messageError("กรุณาระบุ ชนิดสินค้า", $locationError);
+    // } elseif ($prdPreorder != 1 && $prdPreorder != 0) {
+    //     messageError("ชนิดสินค้าไม่ถูกต้อง", $locationError);
+    // }
+
+    // if (!isset($prdStatus)) {
+    //     messageError("กรุณาระบุ สถานะการแสดง", $locationError);
+    // } elseif ($prdStatus != 1 && $prdStatus != 0) {
+    //     messageError("เลขสถานะการแสดงไม่ถูกต้อง", $locationError);
+    // }
+}
+function  validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus, $locationError)
+{
+
+    if (empty($prdName)) {
+        messageError("กรุณาระบุ ชื่อสินค้า", $locationError);
+    } elseif (mb_strlen($prdName, 'UTF-8') > 100) {
+        messageError("ชื่อสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (empty($prdISBN)) {
+        messageError("กรุณาระบุ รหัส ISBN สินค้า", $locationError);
+    } elseif (!is_numeric($prdISBN)) {
+        messageError("รหัส ISBN ต้องเป็นตัวเลขเท่านั้น", $locationError);
+    } elseif ($prdISBN < 0) {
+        messageError("รหัส ISBN ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    } elseif (!(mb_strlen($prdISBN, 'UTF-8') == 10 || mb_strlen($prdISBN, 'UTF-8') == 13)) {
+        messageError("รหัส ISBN ต้องมีตัวเลข 10 หรือ 13 ตัว", $locationError);
+    }
+
+    if (empty($prdCoin)) {
+        messageError("กรุณาระบุ จำนวนเหรียญ", $locationError);
+    } elseif (!is_numeric($prdCoin)) {
+        messageError("จำนวนเหรียญ ต้องเป็นตัวเลข", $locationError);
+    } elseif ($prdCoin < 0) {
+        messageError("จำนวนเหรียญ ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    } elseif (strpos($prdCoin, '.') !== false) {
+        messageError("จำนวนเหรียญ ต้องเป็นจำนวนเต็ม", $locationError);
+    }
+
+    if (empty($prdQuantity)) {
+        messageError("กรุณาระบุ จำนวนสินค้า", $locationError);
+    } elseif (!is_numeric($prdQuantity)) {
+        messageError("จำนวนสินค้า ต้องเป็นตัวเลข", $locationError);
+    } elseif ($prdQuantity < 0) {
+        messageError("จำนวนสินค้า ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    } elseif (strpos($prdQuantity, '.') !== false) {
+        messageError("จำนวนสินค้า ต้องเป็นจำนวนเต็ม", $locationError);
+    }
+
+
+    if (empty($prdNumberPages)) {
+        messageError("กรุณาระบุ จำนวนหน้า", $locationError);
+    } elseif (!is_numeric($prdNumberPages)) {
+        messageError("จำนวนหน้า ต้องเป็นตัวเลข", $locationError);
+    } elseif ($prdNumberPages < 0) {
+        messageError("จำนวนหน้า ต้องเป็นเลข 0 ขึ้นไป", $locationError);
+    } elseif (strpos($prdNumberPages, '.') !== false) {
+        messageError("จำนวนหน้า ต้องเป็นจำนวนเต็ม", $locationError);
+    }
+
+
+    if (empty($prdPrice)) {
+        messageError("กรุณาระบุ ราคาสินค้า", $locationError);
+    } elseif (!is_numeric($prdPrice) || $prdPrice < 0) {
+        messageError("ราคาสินค้า ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    }
+
+    if (empty($prdPercentDiscount)) {
+        messageError("กรุณาระบุ ส่วนลด", $locationError);
+    } elseif (!is_numeric($prdPercentDiscount)) {
+        messageError("ส่วนลด ต้องเป็นตัวเลข", $locationError);
+    } elseif ($prdPercentDiscount < 0 || $prdPercentDiscount > 100) {
+        messageError("ส่วนลด ต้องเป็นเลขระหว่าง 0 ถึง 100", $locationError);
+    } elseif (strpos($prdPercentDiscount, '.') !== false) {
+        messageError("ส่วนลด ต้องเป็นจำนวนเต็ม", $locationError);
+    }
+
+    if (empty($ptyId)) {
+        messageError("กรุณาระบุ ประเภทสินค้า", $locationError);
+    } elseif (!is_numeric($ptyId) || $ptyId <= 0) {
+        messageError("ประเภทสินค้า ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    }
+
+    if (empty($pubId)) {
+        messageError("กรุณาระบุ สำนักพิมพ์", $locationError);
+    } elseif (!is_numeric($pubId) || $pubId <= 0) {
+        messageError("สำนักพิมพ์ ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    }
+
+    if (empty($authId)) {
+        messageError("กรุณาระบุ ชื่อผู้แต่ง", $locationError);
+    } elseif (!is_numeric($authId) && $authId <= 0) {
+        messageError("ชื่อผู้แต่ง ต้องเป็นตัวเลขมากกว่า 0", $locationError);
+    }
+
+    if (!isset($prdPreorder)) {
+        messageError("กรุณาระบุ ชนิดสินค้า", $locationError);
+    } elseif ($prdPreorder != 1 && $prdPreorder != 0) {
+        messageError("ชนิดสินค้าไม่ถูกต้อง", $locationError);
+    }
+
+    if (!isset($prdStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดง", $locationError);
+    } elseif ($prdStatus != 1 && $prdStatus != 0) {
+        messageError("เลขสถานะการแสดงไม่ถูกต้อง", $locationError);
     }
 }

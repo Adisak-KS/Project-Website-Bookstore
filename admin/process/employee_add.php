@@ -34,7 +34,7 @@ if (isset($_POST['btn-add'])) {
         $fileExtension = pathinfo($defaultImagePath, PATHINFO_EXTENSION);
 
         // ตรวจสอบรูป Default
-        checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
+        checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
 
         // ส่มชื่อรูปภาพใหม่
         $newProfile = generateUniqueProfileEmployees($fileExtension, $folderUploads);
@@ -43,11 +43,8 @@ if (isset($_POST['btn-add'])) {
         // Copy default image to new file
         if (copy($defaultImagePath, $targetFilePath)) {
 
-            // Hashed Password
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
             // Insert Employees
-            $insertEmployee = $BaseController->insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId);
+            $insertEmployee = $BaseController->insertEmployees($newProfile, $fname, $lname, $username, $password, $email, $eatId);
             $_SESSION['success'] = "เพิ่มข้อมูลพนักงาน สำเร็จ";
         } else {
             messageError("คัดลอกไฟล์ผิดพลาด", $locationError);

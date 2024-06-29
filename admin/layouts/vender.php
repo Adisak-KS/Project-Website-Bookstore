@@ -36,6 +36,17 @@
 
  <!-- Sweetalert2  -->
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
- 
+
+
+ <script type="importmap">
+     {
+        "imports": {
+            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
+            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.0/"
+        }
+     }
+ </script>
+ <script type="module" src="assets/js/main-CKEditor.js"></script>
+
  <!-- My Scripts  -->
  <script src="assets/js/myScripts.js"></script>

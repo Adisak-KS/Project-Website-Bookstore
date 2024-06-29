@@ -32,7 +32,7 @@ if (isset($_POST['btn-add'])) {
         $fileExtension = pathinfo($defaultImagePath, PATHINFO_EXTENSION);
 
         // // ตรวจสอบรูป Default
-        checkDefaultProfileEmployees($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
+        checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
 
         // ส่มชื่อรูปภาพใหม่
         $newImg = generateUniqueImg($fileExtension, $folderUploads);
