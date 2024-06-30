@@ -88,7 +88,7 @@ $author = $ProductController->getAuthor();
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="prd_isbn" class="form-label">รหัส ISBN :</label><span class="text-danger">*</span>
-                                                                <input type="text" name="prd_isbn" class="form-control" placeholder="ระบุ รหัส ISBN สินค้า" maxlength="100">
+                                                                <input type="text" name="prd_isbn" class="form-control" placeholder="ระบุ รหัส ISBN สินค้า" maxlength="13">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="prd_coin" class="form-label">เหรียญที่จะได้รับ :</label><span class="text-danger">*</span>
@@ -234,7 +234,7 @@ $author = $ProductController->getAuthor();
                                                         <td class="text-center">
                                                             <?php
                                                             $originalId = $row["prd_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salte 
+                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>

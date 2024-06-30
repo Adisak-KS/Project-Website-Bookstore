@@ -1,15 +1,10 @@
 <?php
-$titlePage = "แก้ไขสินค้า";
+$titlePage = "ลบสินค้า";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../admin/includes/functions.php");
-
-$originalId = $row["emp_id"];
-require_once("../includes/salt.php");   // รหัส Salt 
-$saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-$base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
 
 if (isset($_GET['id'])) {
 
@@ -24,6 +19,10 @@ if (isset($_GET['id'])) {
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($product);
+
+    $productType = $ProductController->getProductType();
+    $publisher = $ProductController->getPublisher();
+    $author = $ProductController->getAuthor();
 } else {
     header('Location: product_show');
     exit;
@@ -65,8 +64,8 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-6">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-warning">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <h4 class="mb-3 header-title text-danger">
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>ข้อมูลสินค้า</span>
                                         </h4>
 
@@ -76,44 +75,38 @@ if (isset($_GET['id'])) {
                                             <input type="hidden" name="prd_id" class="form-control" value="<?php echo $product['prd_id']; ?>" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_name" class="form-label">ชื่อสินค้า :</label><span class="text-danger">*</span>
-                                            <input type="text" name="prd_name" class="form-control" placeholder="ระบุ ชื่อสินค้า" maxlength="100" value="<?php echo $product['prd_name']; ?>">
+                                            <label for="prd_name" class="form-label">ชื่อสินค้า :</label>
+                                            <p><?php echo $product['prd_name']; ?></p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_isbn" class="form-label">รหัส ISBN :</label><span class="text-danger">*</span>
-                                            <input type="text" name="prd_isbn" class="form-control" placeholder="ระบุ รหัส ISBN สินค้า" maxlength="13" value="<?php echo $product['prd_isbn']; ?>">
+                                            <label for="prd_isbn" class="form-label">รหัส ISBN :</label>
+                                            <p><?php echo $product['prd_isbn']; ?></p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_coin" class="form-label">เหรียญที่จะได้รับ :</label><span class="text-danger">*</span>
-                                            <input type="number" name="prd_coin" class="form-control" placeholder="ระบุ จำนวน เหรียญที่จะได้รับ" value="<?php echo $product['prd_coin']; ?>">
+                                            <label for="prd_coin" class="form-label">เหรียญที่จะได้รับ :</label>
+                                            <p><?php echo number_format($product['prd_coin']) ?> เหรียญ</p>
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="prd_quantity" class="form-label">จำนวนสินค้า :</label><span class="text-danger">*</span>
-                                            <input type="number" name="prd_quantity" class="form-control" placeholder="ระบุ จำนวนสินค้า" value="<?php echo $product['prd_quantity']; ?>">
+                                            <label for="prd_quantity" class="form-label">จำนวนสินค้า :</label>
+                                            <p><?php echo number_format($product['prd_quantity']); ?> รายการ</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_number_pages" class="form-label">จำนวนหน้าหนังสือ :</label><span class="text-danger">*</span>
-                                            <input type="number" name="prd_number_pages" class="form-control" placeholder="ระบุ จำนวนหน้าหนังสือ" value="<?php echo $product['prd_number_pages']; ?>">
+                                            <label for="prd_number_pages" class="form-label">จำนวนหน้าหนังสือ :</label>
+                                            <p><?php echo number_format($product['prd_number_pages']); ?> หน้า</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_price" class="form-label">ราคาสินค้า :</label><span class="text-danger">*</span>
-                                            <div class="input-group">
-                                                <input type="number" name="prd_price" class="form-control" placeholder="ระบุ ราคาสินค้า" value="<?php echo $product['prd_price']; ?>">
-                                                <span class="input-group-text">บาท</span>
-                                            </div>
+                                            <label for="prd_price" class="form-label">ราคาสินค้า :</label>
+                                            <p><?php echo number_format($product['prd_price'], 2) ?> บาท</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="prd_percent_discount" class="form-label">ส่วนลดสินค้า (เฉพาะชิ้นนี้) :</label><span class="text-danger">*</span>
-                                            <div class="input-group">
-                                                <input type="number" name="prd_percent_discount" class="form-control" placeholder="ระบุ ส่วนลดสินค้า (เฉพาะชิ้นนี้)" value="<?php echo $product['prd_percent_discount']; ?>">
-                                                <span class="input-group-text">%</span>
-                                            </div>
+                                            <label for="prd_percent_discount" class="form-label">ส่วนลดสินค้า (เฉพาะชิ้นนี้) :</label>
+                                            <p><?php echo $product['prd_percent_discount']; ?> %</p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="pty_id" class="form-label">ประเภทสินค้า :</label><span class="text-danger">*</span>
+                                            <label for="pty_id" class="form-label">ประเภทสินค้า :</label>
                                             <input type="hidden" name="old_pty_id" value="<?php echo $product['pty_id']; ?>">
-                                            <select class="form-select" name="pty_id">
+                                            <select class="form-select" name="pty_id" disabled>
                                                 <option value="" selected>กรุณาระบุ ประเภทสินค้า</option>
                                                 <?php foreach ($productType as $row) { ?>
                                                     <option value="<?php echo $row['pty_id'] ?>" <?php if ($product['pty_id'] == $row['pty_id']) {
@@ -124,8 +117,8 @@ if (isset($_GET['id'])) {
                                         </div>
 
                                         <div class="mb-3">
-                                            <label for="pub_id" class="form-label">ชื่อสำนักพิมพ์ :</label><span class="text-danger">*</span>
-                                            <select class="form-select" name="pub_id">
+                                            <label for="pub_id" class="form-label">ชื่อสำนักพิมพ์ :</label>
+                                            <select class="form-select" name="pub_id" disabled>
                                                 <option value="" selected>กรุณาระบุ สำนักพิมพ์</option>
 
                                                 <?php foreach ($publisher as $row) { ?>
@@ -137,8 +130,8 @@ if (isset($_GET['id'])) {
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="auth_id" class="form-label">ชื่อผู้แต่ง :</label><span class="text-danger">*</span>
-                                            <select class="form-select" name="auth_id">
+                                            <label for="auth_id" class="form-label">ชื่อผู้แต่ง :</label>
+                                            <select class="form-select" name="auth_id" disabled>
                                                 <option value="" selected>กรุณาระบุ ชื่อผู้แต่ง</option>
                                                 <?php foreach ($author as $row) { ?>
                                                     <option value="<?php echo $row['auth_id'] ?>" <?php if ($product['auth_id'] == $row['auth_id']) {
@@ -158,8 +151,8 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-6">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-warning">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <h4 class="mb-3 header-title text-danger">
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>รูปภาพหลักของสินค้า</span>
                                         </h4>
                                         <div class="">
@@ -173,17 +166,13 @@ if (isset($_GET['id'])) {
                                             <?php } ?>
                                             <input type="hidden" name="prd_img1" value="<?php echo $product['prd_img1']; ?>" readonly>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="formFile" class="form-label mt-2">รูปภาพใหม่ :</label><span class="text-danger"> (ขนาดไฟล์ไม่เกิน 2 MB)</span>
-                                            <input class="form-control" name="prd_newImg1" id="prd_newImg1" type="file" accept="image/png,image/jpg,image/jpeg">
-                                        </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
 
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-warning">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <h4 class="mb-3 header-title text-danger">
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>รูปภาพรองของสินค้า</span>
                                         </h4>
                                         <div class="">
@@ -194,17 +183,8 @@ if (isset($_GET['id'])) {
                                                 </div>
                                             <?php } else { ?>
                                                 <img class="rounded mx-auto d-block img-fluid" id="prd_img2" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_product/<?php echo $product['prd_img2']; ?>">
-                                                <button class="btn btn-danger float-end btn-delete-img" data-id="<?php echo $product["prd_id"]; ?>" data-img2="<?php echo $product["prd_img2"]; ?>">
-                                                    <i class="fa-solid fa-trash"></i>
-                                                    ลบรูปภาพ
-                                                </button>
                                             <?php } ?>
                                             <input type="hidden" name="prd_img2" value="<?php echo $product['prd_img2']; ?>" readonly>
-
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="formFile" class="form-label mt-2">รูปภาพใหม่ :</label><span class="text-danger"> (ขนาดไฟล์ไม่เกิน 2 MB)</span>
-                                            <input class="form-control" name="prd_newImg2" id="prd_newImg2" type="file" accept="image/png,image/jpg,image/jpeg">
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div>
@@ -212,8 +192,8 @@ if (isset($_GET['id'])) {
 
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-2 header-title text-warning">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <h4 class="mb-2 header-title text-danger">
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>ชนิดสินค้า</span>
                                         </h4>
 
@@ -221,13 +201,13 @@ if (isset($_GET['id'])) {
                                             <div class="form-check mb-2 form-check-primary">
                                                 <input class="form-check-input" type="radio" name="prd_preorder" id="1" value="1" <?php if ($product['prd_preorder'] == 1) {
                                                                                                                                         echo 'checked';
-                                                                                                                                    } ?>>
+                                                                                                                                    } ?> disabled>
                                                 <label class="form-check-label" for="1">สินค้าปกติ</label>
                                             </div>
                                             <div class="form-check mb-2 form-check-warning">
                                                 <input class="form-check-input" type="radio" name="prd_preorder" id="0" value="0" <?php if ($product['prd_preorder'] != 1) {
                                                                                                                                         echo 'checked';
-                                                                                                                                    } ?>>
+                                                                                                                                    } ?> disabled>
                                                 <label class="form-check-label" for="0">สินค้าพรีออเดอร์</label>
                                             </div>
                                         </div>
@@ -236,22 +216,22 @@ if (isset($_GET['id'])) {
                                 </div> <!-- end card-->
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-2 header-title text-warning">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <h4 class="mb-2 header-title text-danger">
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>สถานะการแสดง</span>
                                         </h4>
 
                                         <div class="form-check mb-2 form-check-success">
                                             <input class="form-check-input" type="radio" name="prd_status" id="1" value="1" <?php if ($product['prd_status'] == 1) {
                                                                                                                                 echo 'checked';
-                                                                                                                            } ?>>
+                                                                                                                            } ?> disabled>
                                             <label class="form-check-label" for="1">แสดง</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
                                             <input class="form-check-input" type="radio" name="prd_status" id="0" value="0" <?php if ($product['prd_status'] != 1) {
                                                                                                                                 echo 'checked';
-                                                                                                                            } ?>>
+                                                                                                                            } ?> disabled>
                                             <label class="form-check-label" for="0">ไม่แสดง</label>
                                         </div>
 
@@ -262,8 +242,15 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label for="prd_price" class="form-label">รายละเอียดสินค้า :</label><span class="text-danger">*</span>
-                                            <textarea class="form-control" name="prd_detail" id="CKEditor" placeholder="กรุณาระบุ รายละเอียดสินค้า"><?php echo $product['prd_detail']; ?></textarea>
+                                            <label for="prd_price" class="form-label">รายละเอียดสินค้า :</label>
+                                            <br>
+                                            <?php
+                                                if($product['prd_detail'] == "ไม่พบรายละเอียดสินค้า"){
+                                                    echo '<span class="text-danger">* ไม่พบรายละเอียดสินค้า</span>';
+                                                }else{
+                                                    echo $product['prd_detail'];
+                                                }
+                                             ?>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -271,15 +258,15 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-warning">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $product['prd_time_update'] ?></span></h4>
+                                        <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $product['prd_time_update'] ?></span></h4>
                                         <div>
                                             <a href="product_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <button type="submit" name="btn-edit" class="btn btn-warning">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>บันทึกการแก้ไข</span>
+                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $product["prd_id"]; ?>" data-img1="<?php echo $product["prd_img1"]; ?>"  data-img2="<?php echo $product["prd_img2"]; ?>">
+                                                <i class="fa-solid fa-trash"></i>
+                                                <span>ลบข้อมูล</span>
                                             </button>
                                         </div>
 
@@ -306,98 +293,41 @@ if (isset($_GET['id'])) {
 
         <?php require_once('layouts/vender.php') ?>
 
-        <!-- preview New Profile, check file type, file size  -->
-        <script>
-            const handleFileChange = (inputId, imgId, containerId, previewId, originalSrc) => {
-                document.getElementById(inputId).addEventListener('change', function(event) {
-                    const file = event.target.files[0];
-                    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-                    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
-                    const imgElement = document.getElementById(imgId);
-                    const imgContainer = document.getElementById(containerId);
-                    const newPreviewElement = document.getElementById(previewId);
-
-                    const resetToOriginal = () => {
-                        if (imgElement) {
-                            imgElement.src = originalSrc;
-                        } else {
-                            imgContainer.style.display = 'none';
-                            newPreviewElement.src = '';
-                        }
-                    };
-
-                    const showWarning = (message) => {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'คำเตือน',
-                            text: message
-                        });
-                    };
-
-                    if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            if (imgElement) {
-                                imgElement.src = e.target.result;
-                            } else {
-                                newPreviewElement.src = e.target.result;
-                                imgContainer.style.display = 'block';
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                    } else {
-                        // Reset the input
-                        event.target.value = '';
-                        // Reset to the original image or hide the preview if no original image
-                        resetToOriginal();
-
-                        // Show alert if the file type or size is invalid
-                        if (!allowedTypes.includes(file.type)) {
-                            showWarning('ต้องเป็นไฟล์ .png .jpg .jpeg เท่านั้น');
-                        } else if (file.size > maxSize) {
-                            showWarning('ขนาดไฟล์เกิน 2 MB');
-                        }
-                    }
-                });
-            };
-
-            // Initialize file change handlers
-            handleFileChange('prd_newImg1', 'prd_img1', 'img-container1', 'new_preview1', '../uploads/img_product/<?php echo $product["prd_img1"]; ?>');
-            handleFileChange('prd_newImg2', 'prd_img2', 'img-container2', 'new_preview2', '../uploads/img_product/<?php echo $product["prd_img2"]; ?>');
-        </script>
-
-        <script>
+          <!-- Delete  -->
+          <script>
             $(document).ready(function() {
-                $(".btn-delete-img").click(function(e) {
+                $(".btn-delete").click(function(e) {
                     e.preventDefault();
                     let id = $(this).data('id');
+                    let img1 = $(this).data('img1');
                     let img2 = $(this).data('img2');
 
-                    deleteConfirm(id, img2);
+                    deleteConfirm(id, img1, img2);
                 });
             });
 
-            function deleteConfirm(id, img2) {
+            function deleteConfirm(id, img1, img2) {
                 Swal.fire({
                     icon: "warning",
                     title: 'คุณแน่ใจหรือไม่?',
-                    text: "คุณต้องการลบรูปภาพนี้ใช่ไหม!",
+                    text: "คุณต้องการลบข้อมูลนี้ใช่ไหม!",
                     showCancelButton: true,
                     confirmButtonColor: '#f34e4e',
-                    confirmButtonText: 'ใช่, ลบรูปภาพเลย!',
+                    confirmButtonText: 'ใช่, ลบข้อมูลเลย!',
                     cancelButtonText: 'ยกเลิก',
                     preConfirm: function() {
                         return $.ajax({
-                                url: 'process/product_img_del.php',
+                                url: 'process/product_del.php',
                                 type: 'POST',
                                 data: {
                                     id: id,
+                                    img1: img1,
                                     img2: img2,
                                 },
                             })
                             .done(function() {
                                 // การลบสำเร็จ ทำการ redirect ไปยังหน้า product_show
-                                document.location.href = 'product_edit_form?id=<?php echo $base64Encoded; ?>';
+                                return true;
                             })
                             .fail(function() {
                                 Swal.fire({
@@ -406,14 +336,14 @@ if (isset($_GET['id'])) {
                                     text: 'เกิดข้อผิดพลาดที่ ajax !',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        document.location.href = 'product_edit_form?id=<?php echo $base64Encoded; ?>';
+                                        document.location.href = 'product_del_form?id=<?php echo $base64Encoded; ?>';
                                     }
                                 });
                             });
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.location.href = 'product_edit_form?id=<?php echo $base64Encoded; ?>';
+                        document.location.href = 'product_show';
                     }
                 });
             }

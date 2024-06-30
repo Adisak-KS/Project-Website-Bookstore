@@ -126,7 +126,7 @@ $authors = $AuthorController->getAuthor();
                                                         <td class="text-center">
                                                             <?php
                                                             $originalId = $row["auth_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salte 
+                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>

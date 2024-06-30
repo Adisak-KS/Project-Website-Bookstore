@@ -48,7 +48,7 @@
                 <?php
                 // อาเรย์สำหรับแมพตัวเลขกับชื่อบทบาท
                 $roleMap = [
-                    1 => 'superAdmin',
+                    1 => 'super Admin',
                     2 => 'Owner',
                     3 => 'Admin',
                     4 => 'Accounting',

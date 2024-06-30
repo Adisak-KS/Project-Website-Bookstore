@@ -124,4 +124,95 @@ class EmployeeController extends BaseController
             return false;
         }
     }
+
+    function updateEmployeeDataProfile($fname, $lname, $Id)
+    {
+
+        try {
+            $sql = "UPDATE bs_employees 
+                    SET emp_fname = :emp_fname,
+                        emp_lname = :emp_lname
+                    WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_fname', $fname, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_lname', $lname, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateEmployeeAccount : " . $e->getMessage();
+            return false;
+        }
+    }
+    function updateEmployeeUsername($username, $Id)
+    {
+
+        try {
+            $sql = "UPDATE bs_employees 
+                    SET emp_username = :emp_username
+                    WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_username', $username, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateEmployeeUsername : " . $e->getMessage();
+            return false;
+        }
+    }
+    function updateEmployeeEmail($email, $Id)
+    {
+
+        try {
+            $sql = "UPDATE bs_employees 
+                    SET emp_email = :emp_email
+                    WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_email', $email, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateEmployeeEmail : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function checkEmployeePassword($Id)
+    {
+        try {
+            $sql = "SELECT emp_password
+            FROM bs_employees
+            WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":emp_id", $Id);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in checkEmployeePassword : " . $e->getMessage();
+            return false;
+        }
+    }
+
+
+    function updateEmployeePassword($newPassword, $Id)
+    {
+        try {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            $sql = "UPDATE bs_employees
+                    SET emp_password = :emp_password
+                    WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_password', $hashedPassword, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateEmployeePassword : " . $e->getMessage();
+            return false;
+        }
+    }
 }

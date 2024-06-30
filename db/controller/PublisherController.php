@@ -116,32 +116,48 @@ class PublisherController extends BaseController
     function updateNewImgPublisher($newImg, $pubId)
     {
         try {
-                $sql = "UPDATE bs_publisher
+            $sql = "UPDATE bs_publisher
                         SET pub_img = :pub_img,
                             pub_time_update = NOW()
                         WHERE pub_id = :pub_id";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':pub_img', $newImg);
-                $stmt->bindParam(':pub_id', $pubId);
-                $stmt->execute();
-                return true;
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pub_img', $newImg);
+            $stmt->bindParam(':pub_id', $pubId);
+            $stmt->execute();
+            return true;
         } catch (PDOException $e) {
             echo "<hr>Error in updateNewImgPublisher : " . $e->getMessage();
             return false;
         }
     }
 
-    function deletePublisher($pubId){
-        try{
+    function deletePublisher($pubId)
+    {
+        try {
             $sql = "DELETE FROM bs_publisher
                     WHERE pub_id = :pub_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pub_id', $pubId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deletePublisher : " . $e->getMessage();
             return false;
+        }
+    }
+
+    function amountProductInPublisher($Id)
+    {
+        try {
+            $sql = "SELECT COUNT(pub_id) AS amount 
+                    FROM bs_product
+                    WHERE pub_id = :pub_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pub_id', $Id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in amountProductInPublisher : " . $e->getMessage();
         }
     }
 }

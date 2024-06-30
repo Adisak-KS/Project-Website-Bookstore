@@ -158,7 +158,7 @@ $owners = $OwnerController->getOwner();
 
                                                             <?php
                                                             $originalId = $row["emp_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salte 
+                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
@@ -209,4 +209,4 @@ $owners = $OwnerController->getOwner();
 </body>
 
 </html>
-<?php require_once('../includes/sweetalert2.php') ?>
+<?php require_once('../includes/sweetAlert2.php') ?>

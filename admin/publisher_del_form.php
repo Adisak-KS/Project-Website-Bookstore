@@ -18,6 +18,8 @@ if (isset($_GET['id'])) {
     $PublisherController = new PublisherController($conn);
     $publisher = $PublisherController->getDetailPublisher($Id);
 
+    $qtyProduct = $PublisherController->amountProductInPublisher($Id);
+
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($publisher);
 } else {
@@ -128,15 +130,28 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $publisher['pub_time_update'] ?></span></h4>
+                                        <?php if ($qtyProduct['amount'] > 0) { ?>
+                                            <p class="text-danger">มีสินค้าอยู่ในสำนักพิมพ์นี้ <?php echo number_format($qtyProduct['amount']) ?> รายการ กรุณาลบ หรือเปลี่ยนแปลงสำนักพิมพ์ ที่สินค้าก่อน</p>
+                                        <?php } else { ?>
+                                            <p class="text-danger">มีสินค้าอยู่ในสำนักพิมพ์นี้ <?php echo number_format($qtyProduct['amount']) ?> รายการ</p>
+                                        <?php } ?>
                                         <div>
                                             <a href="publisher_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $publisher["pub_id"]; ?>" data-img="<?php echo $publisher["pub_img"]; ?>">
+                                            <?php if ($qtyProduct['amount'] > 0) { ?>
+                                                <button type="button" class="btn btn-danger btn-delete" disabled>
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>ลบข้อมูล</span>
                                             </button>
+                                            <?php } else { ?>
+                                                <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $publisher["pub_id"]; ?>" data-img="<?php echo $publisher["pub_img"]; ?>">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                    <span>ลบข้อมูล</span>
+                                                </button>
+                                            <?php } ?>
+
                                         </div>
 
                                     </div> <!-- end card-body-->

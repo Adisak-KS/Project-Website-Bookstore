@@ -146,8 +146,23 @@ class AuthorController extends BaseController
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo "<hr>Error in deleteAuthorr : " . $e->getMessage();
+            echo "<hr>Error in deleteAuthor : " . $e->getMessage();
             return false;
+        }
+    }
+
+    function amountProductInAuthor($Id)
+    {
+        try {
+            $sql = "SELECT COUNT(auth_id) AS amount 
+                    FROM bs_product
+                    WHERE auth_id = :auth_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':auth_id', $Id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in amountProductInAuthor : " . $e->getMessage();
         }
     }
 }

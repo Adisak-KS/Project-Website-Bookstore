@@ -1,7 +1,7 @@
 <!-- ================ Base Controller (Controller เริ่มต้น แลัรวม Function ที่ใช้งานร่วมกัน) ============
  
    1.  __construct
-   2. getEmmpoyeesAuthorityTypeDefault
+   2. getEmployeesAuthorityTypeDefault
    3. insertEmployeesTypeDefault
    4. getEmployeesSuperAdminDefault
    5. checkUsernameEmailEmployees
@@ -25,7 +25,7 @@ class BaseController
 
 
     // Check Employees Authority Type Default
-    function getEmmpoyeesAuthorityTypeDefault()
+    function getEmployeesAuthorityTypeDefault()
     {
         try {
             $sql = "SELECT eat_id, eat_name
@@ -35,7 +35,7 @@ class BaseController
             $stmt = $this->db->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "<hr>Error in getEmmpoyeesAuthorityTypeDefault : " . $e->getMessage();
+            echo "<hr>Error in getEmployeesAuthorityTypeDefault : " . $e->getMessage();
             return false;
         }
     }
@@ -45,7 +45,7 @@ class BaseController
     {
         try {
             // ตรวจสอบ Employee Authority Type 
-            $check = $this->getEmmpoyeesAuthorityTypeDefault();
+            $check = $this->getEmployeesAuthorityTypeDefault();
 
 
             // สร้างรายการของสิทธิ์ที่ต้องการในตาราง
@@ -120,7 +120,7 @@ class BaseController
 
 
 
-    // check Usernname and Email  Employees
+    // check Username and Email  Employees
     function checkUsernameEmailEmployees($username, $email, $id = null)
     {
         try {
@@ -130,7 +130,7 @@ class BaseController
 
             // หากมีการส่ง $id มาด้วย
             if ($id !== null) {
-                $sql .= " AND id != :id";
+                $sql .= " AND emp_id != :emp_id";
             }
 
             $sql .= " LIMIT 1";
@@ -141,7 +141,7 @@ class BaseController
 
             // หากมีการส่ง $id มาด้วย
             if ($id !== null) {
-                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->bindParam(":emp_id", $id, PDO::PARAM_INT);
             }
 
             $stmt->execute();
@@ -206,7 +206,7 @@ class BaseController
                 $lname = "สูงสุด";
                 $username = "superAdmin";
                 $hashedPassword = password_hash("superAdmin", PASSWORD_DEFAULT);
-                $email = "Adisak@example@gmail.com";
+                $email = "Adisak@example.com";
                 $eatId = 1;
 
 

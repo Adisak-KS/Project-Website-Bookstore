@@ -7,7 +7,7 @@
    5. getDetailProductType
    6. updateDetailProductType
    7. updateNewCoverProductType
-   8. eleteProductType
+   8. DeleteProductType
 
 ============================================================================================ -->
 <?php
@@ -164,6 +164,20 @@ class ProductTypeController extends BaseController
         }catch(PDOException $e){
             echo "<hr>Error in deleteProductType : " . $e->getMessage();
             return false;
+        }
+    }
+
+    function amountProductInProductType($Id){
+        try{
+            $sql = "SELECT COUNT(prd_id) AS amount 
+                    FROM bs_product
+                    WHERE pty_id = :pty_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pty_id', $Id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "<hr>Error in amountProduct : " . $e->getMessage();
         }
     }
 }

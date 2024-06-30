@@ -3,31 +3,40 @@ require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/EmployeeController.php');
 require_once(__DIR__ . '/../includes/functions.php');
 
-
 $EmployeeController = new EmployeeController($conn);
 
 if (isset($_POST['btn-edit'])) {
     $Id = $_POST['id'];
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
-    $status = $_POST['status'];
-    $oldEatId = explode(',', $_POST['old_eat_id']); // ทำเป็น array
-    $newEatId = $_POST['new_eat_id'];
+
     $profile = $_POST['profile'];
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../employee_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../employee_show.php";
+    $locationError = "Location: ../account_profile_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../account_show";
 
 
-    $authority = $newEatId;
-    // ตรวจสอบข้อมูลจาก Form
-    valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError);
+    if (empty($fname)) {
+        messageError("กรุณาระบุชื่อ", $locationError);
+    } elseif (mb_strlen($fname, 'UTF-8') > 50) {
+        messageError("ชื่อ ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
 
-    // // update Detail Admin
-    $updateDetailEmployee = $EmployeeController->updateDetailEmployee($Id, $fname, $lname, $status);
-    if ($updateDetailEmployee) {
+    // Check Last name
+    if (empty($lname)) {
+        messageError("กรุณาระบุ นามสกุล", $locationError);
+    } elseif (mb_strlen($lname, 'UTF-8') > 50) {
+        messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+
+    $updateEmployeeDataProfile = $EmployeeController->updateEmployeeDataProfile($fname, $lname, $Id);
+
+    
+    if ($updateEmployeeDataProfile) {
+        $_SESSION['success'] = "แก้ไขข้อมูลส่วนตัว สำเร็จ";
 
         // หากมีการเปลี่ยนรูปใหม่
         if (!empty($newProfile)) {
@@ -65,20 +74,10 @@ if (isset($_POST['btn-edit'])) {
                 messageError("คัดลอกไฟล์ผิดพลาด", $locationError);
             }
         }
-
-        // หากเป็นการแก้ไขสิทธิ์ใหม่
-        if ($newEatId != $oldEatId) {
-            $updateAuthorityEmployee = $EmployeeController->updateAuthorityEmployee($Id, $newEatId);
-        }
-    }
-
-
-    if ($updateDetailEmployee || $updateNewProfile || $updateAuthorityEmployee) {
-        $_SESSION['success'] = "แก้ไขข้อมูลผู้ดูแลระบบ สำเร็จ";
     }
 
     header($locationSuccess);
 } else {
-   header('Location: ../error_not_result');
+    header('Location: ../error_not_result');
     exit;
 }

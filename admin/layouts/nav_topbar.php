@@ -39,7 +39,7 @@ if (!$useLoginEmployee || empty($empId)) {
                 </div>
 
                 <!-- item-->
-                <a href="contacts-profile.html" class="dropdown-item notify-item">
+                <a href="account_show" class="dropdown-item notify-item">
                     <i class="fa-solid fa-user-gear"></i>
                     <span>บัญชีของฉัน</span>
                 </a>
@@ -53,7 +53,7 @@ if (!$useLoginEmployee || empty($empId)) {
                 <div class="dropdown-divider"></div>
 
                 <!-- item-->
-                <a href="logout" class="dropdown-item notify-item">
+                <a href="logout" class="dropdown-item notify-item" onclick="confirmLogout(event)">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span>ออกจากระบบ</span>
                 </a>
