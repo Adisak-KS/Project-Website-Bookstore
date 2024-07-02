@@ -1,8 +1,8 @@
 <?php
-$titlePage = "แก้ไขสำนักพิมพ์";
+$titlePage = "แก้ไขข้อมูลช่องทางจัดส่ง";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/PublisherController.php");
+require_once("../db/controller/ShippingController.php");
 require_once("../includes/salt.php");
 require_once("../admin/includes/functions.php");
 
@@ -12,15 +12,15 @@ if (isset($_GET['id'])) {
     $base64Encoded =  $_SESSION["base64Encoded"];
 
     // ถอดรหัส Id
-    $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
+    $shpId = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-    $PublisherController = new PublisherController($conn);
-    $publisher = $PublisherController->getDetailPublisher($Id);
+    $ShippingController = new ShippingController($conn);
+    $shipping = $ShippingController->getDetailShipping($shpId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
-    checkResultDetail($publisher);
+    checkResultDetail($shipping);
 } else {
-    header('Location: publisher_show');
+    header('Location: shipping_show');
     exit;
 }
 
@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formPublisher" action="process/publisher_edit" method="post" enctype="multipart/form-data">
+                    <form id="formPublisher" action="process/shipping_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <!-- id="formProductType" -->
                             <div class="col-lg-6">
@@ -62,21 +62,28 @@ if (isset($_GET['id'])) {
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
                                             <i class="fa-solid fa-pen-to-square"></i>
-                                            <span>ข้อมูลสำนักพิมพ์</span>
+                                            <span>ข้อมูลช่องทางขนส่ง</span>
                                         </h4>
 
                                         <div class="mb-3">
-                                            <label for="id" class="form-label">รหัสสำนักพิมพ์ :</label>
-                                            <p><?php echo  $publisher['pub_id']; ?></p>
-                                            <input type="hidden" name="pub_id" class="form-control" value="<?php echo $publisher['pub_id']; ?>">
+                                            <label for="id" class="form-label">รหัสช่องทางขนส่ง :</label>
+                                            <p><?php echo  $shipping['shp_id']; ?></p>
+                                            <input type="hidden" name="shp_id" class="form-control" value="<?php echo $shipping['shp_id']; ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="pub_name" class="form-label">ชื่อสำนักพิมพ์ :</label><span class="text-danger">*</span>
-                                            <input type="text" name="pub_name" class="form-control" placeholder="ระบุ ชื่อสำนักพิมพ์" maxlength="50" value="<?php echo $publisher['pub_name']; ?>">
+                                            <label for="shp_name" class="form-label">ชื่อขนส่ง :</label><span class="text-danger">*</span>
+                                            <input type="text" name="shp_name" class="form-control" placeholder="ระบุ ชื่อขนส่ง" maxlength="100" value="<?php echo $shipping['shp_name']; ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="pub_detail" class="form-label">รายละเอียดสำนักพิมพ์ :</label><span class="text-danger">*</span>
-                                            <textarea name="pub_detail" class="form-control" rows="4" placeholder="ระบุ รายละเอียดสำนักพิมพ์" maxlength="100"><?php echo $publisher['pub_detail']; ?></textarea>
+                                            <label for="shp_price" class="form-label">ราคา :</label><span class="text-danger">*</span>
+                                            <div class="input-group">
+                                                <input type="number" name="shp_price" class="form-control" placeholder="ระบุ ราคา" maxlength="100" value="<?php echo $shipping['shp_price']; ?>">
+                                                <span class="input-group-text">บาท</span>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="shp_detail" class="form-label">รายละเอียด :</label><span class="text-danger">*</span>
+                                            <textarea name="shp_detail" class="form-control" placeholder="ระบุ รายละเอียด" maxlength="255"><?php echo $shipping['shp_detail']; ?></textarea>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -89,16 +96,16 @@ if (isset($_GET['id'])) {
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
                                             <i class="fa-solid fa-pen-to-square"></i>
-                                            <span>รูปภาพสำนักพิมพ์</span>
+                                            <span>รูปภาพช่องทางขนส่ง</span>
                                         </h4>
 
                                         <div class="">
-                                            <img class="rounded mx-auto d-block img-fluid" id="pub_img" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_publisher/<?php echo $publisher['pub_img']; ?>">
-                                            <input type="hidden" name="pub_img" value="<?php echo $publisher['pub_img']; ?>" readonly>
+                                            <img class="rounded mx-auto d-block img-fluid" id="shp_logo" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_shipping/<?php echo $shipping['shp_logo']; ?>">
+                                            <input type="hidden" name="shp_logo" value="<?php echo $shipping['shp_logo']; ?>" readonly>
                                         </div>
                                         <div class="mb-3">
                                             <label for="formFile" class="form-label mt-4">รูปภาพใหม่ :</label><span class="text-danger"> (ขนาดไฟล์ไม่เกิน 2 MB)</span>
-                                            <input class="form-control" name="pub_newImg" id="pub_newImg" type="file" accept="image/png,image/jpg,image/jpeg">
+                                            <input class="form-control" name="shp_newLogo" id="shp_newLogo" type="file" accept="image/png,image/jpg,image/jpeg">
                                         </div>
 
                                     </div> <!-- end card-body-->
@@ -111,14 +118,14 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="pub_status" id="1" value="1" <?php if ($publisher['pub_status'] == 1) {
+                                            <input class="form-check-input" type="radio" name="shp_status" id="1" value="1" <?php if ($shipping['shp_status'] == 1) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="1">แสดง</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="pub_status" id="0" value="0" <?php if ($publisher['pub_status'] != 1) {
+                                            <input class="form-check-input" type="radio" name="shp_status" id="0" value="0" <?php if ($shipping['shp_status'] != 1) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
                                             <label class="form-check-label" for="0">ไม่แสดง</label>
@@ -131,9 +138,9 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-warning">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $publisher['pub_time_update'] ?></span></h4>
+                                        <h4 class="mb-3 header-title text-warning">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $shipping['shp_time_update'] ?></span></h4>
                                         <div>
-                                            <a href="publisher_show" class="btn btn-secondary me-2">
+                                            <a href="shipping_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
@@ -168,7 +175,7 @@ if (isset($_GET['id'])) {
 
         <!-- preview New Profile, check file type, file size  -->
         <script>
-            document.getElementById('pub_newImg').addEventListener('change', function(event) {
+            document.getElementById('shp_newLogo').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
                 const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
@@ -176,14 +183,14 @@ if (isset($_GET['id'])) {
                 if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        document.getElementById('pub_img').src = e.target.result;
+                        document.getElementById('shp_logo').src = e.target.result;
                     };
                     reader.readAsDataURL(file);
                 } else {
                     // Reset the input
                     event.target.value = '';
                     // Reset to the original image
-                    document.getElementById('pub_img').src = '../uploads/img_publisher/<?php echo $publisher["pub_img"]; ?>';
+                    document.getElementById('shp_logo').src = '../uploads/img_shipping/<?php echo $shipping["shp_logo"]; ?>';
                     if (!allowedTypes.includes(file.type)) {
                         Swal.fire({
                             icon: 'warning',

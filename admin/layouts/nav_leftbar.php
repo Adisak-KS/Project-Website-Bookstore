@@ -175,14 +175,14 @@
                     <li class="menu-title mt-2">จัดการการชำระเงิน</li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="payment_show">
                             <i class="fa-solid fa-user"></i>
                             <span> ช่องทางชำระเงิน</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="shipping_show">
                             <i class="fa-solid fa-user"></i>
                             <span> ช่องทางจัดส่ง</span>
                         </a>
@@ -191,14 +191,14 @@
                     <li class="menu-title mt-2">รายงาน</li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="report_product_sales">
                             <i class="fa-solid fa-user"></i>
                             <span> รายงานยอดขาย</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="member_show">
+                        <a href="report_product_views">
                             <i class="fa-solid fa-user"></i>
                             <span> รายงานยอดเข้าชม</span>
                         </a>

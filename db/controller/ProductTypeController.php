@@ -24,16 +24,16 @@ class ProductTypeController extends BaseController
     {
         try {
             $sql = "SELECT
-                        bs_product_type.pty_id,
-                        bs_product_type.pty_cover,
-                        bs_product_type.pty_name,
-                        bs_product_type.pty_detail,
-                        bs_product_type.pty_status,
-                        bs_product_type.pty_time_update,
-                        SUM( bs_product_views.prv_view) AS total_view
-                    FROM bs_product_type
-                    LEFT JOIN bs_product_views ON bs_product_type.pty_id =  bs_product_views.pty_id
-                    GROUP BY bs_product_type.pty_id";
+                        bs_products_type.pty_id,
+                        bs_products_type.pty_cover,
+                        bs_products_type.pty_name,
+                        bs_products_type.pty_detail,
+                        bs_products_type.pty_status,
+                        bs_products_type.pty_time_update,
+                        SUM( bs_products_views.prv_view) AS total_view
+                    FROM bs_products_type
+                    LEFT JOIN bs_products_views ON bs_products_type.pty_id =  bs_products_views.pty_id
+                    GROUP BY bs_products_type.pty_id";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -47,7 +47,7 @@ class ProductTypeController extends BaseController
     {
         try {
             $sql = "SELECT pty_name
-                    FROM bs_product_type
+                    FROM bs_products_type
                     WHERE pty_name = :pty_name";
 
             if ($Id !== null) {
@@ -72,7 +72,7 @@ class ProductTypeController extends BaseController
     function insertProductType($newCover, $ptyName, $ptyDetail, $ptyStatus)
     {
         try {
-            $sql = "INSERT INTO bs_product_type(pty_cover, pty_name, pty_detail, pty_status)
+            $sql = "INSERT INTO bs_products_type(pty_cover, pty_name, pty_detail, pty_status)
                     VALUES (:pty_cover, :pty_name, :pty_detail, :pty_status)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_cover', $newCover);
@@ -91,17 +91,17 @@ class ProductTypeController extends BaseController
     {
         try {
             $sql = "SELECT
-                        bs_product_type.pty_id,
-                        bs_product_type.pty_cover,
-                        bs_product_type.pty_name,
-                        bs_product_type.pty_detail,
-                        bs_product_type.pty_status,
-                        bs_product_type.pty_time_update,
-                        SUM( bs_product_views.prv_view) AS total_view
-            FROM bs_product_type
-            LEFT JOIN bs_product_views ON bs_product_type.pty_id =  bs_product_views.pty_id
-            WHERE bs_product_type.pty_id = :pty_id
-            GROUP BY bs_product_type.pty_id";
+                        bs_products_type.pty_id,
+                        bs_products_type.pty_cover,
+                        bs_products_type.pty_name,
+                        bs_products_type.pty_detail,
+                        bs_products_type.pty_status,
+                        bs_products_type.pty_time_update,
+                        SUM( bs_products_views.prv_view) AS total_view
+            FROM bs_products_type
+            LEFT JOIN bs_products_views ON bs_products_type.pty_id =  bs_products_views.pty_id
+            WHERE bs_products_type.pty_id = :pty_id
+            GROUP BY bs_products_type.pty_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_id', $Id);
             $stmt->execute();
@@ -115,7 +115,7 @@ class ProductTypeController extends BaseController
     function updateDetailProductType($ptyName, $ptyDetail, $ptyStatus, $Id)
     {
         try {
-            $sql = "UPDATE bs_product_type
+            $sql = "UPDATE bs_products_type
                     SET pty_name = :pty_name,
                         pty_detail = :pty_detail,
                         pty_status = :pty_status, 
@@ -137,7 +137,7 @@ class ProductTypeController extends BaseController
     function updateNewCoverProductType($newCover, $Id)
     {
         try {
-            $sql = "UPDATE bs_product_type
+            $sql = "UPDATE bs_products_type
                     SET pty_cover = :pty_cover,
                         pty_time_update = NOW()
                     WHERE pty_id = :pty_id";
@@ -154,7 +154,7 @@ class ProductTypeController extends BaseController
 
     function deleteProductType($Id){
         try{
-            $sql = "DELETE FROM bs_product_type
+            $sql = "DELETE FROM bs_products_type
                     WHERE pty_id = :pty_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_id', $Id);
@@ -170,7 +170,7 @@ class ProductTypeController extends BaseController
     function amountProductInProductType($Id){
         try{
             $sql = "SELECT COUNT(prd_id) AS amount 
-                    FROM bs_product
+                    FROM bs_products
                     WHERE pty_id = :pty_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_id', $Id);

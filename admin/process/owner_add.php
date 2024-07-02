@@ -53,6 +53,6 @@ if (isset($_POST['btn-add'])) {
 
     header($locationSuccess);
 } else {
-     header('Location: ../error_not_result.php');
+     header('Location: ../error_not_result');
     exit;
 }

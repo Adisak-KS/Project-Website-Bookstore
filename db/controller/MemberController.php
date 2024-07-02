@@ -24,7 +24,7 @@ class MemberController extends BaseController
     {
         try {
             $sql = "SELECT mem_id, mem_profile, mem_fname, mem_lname, mem_username, mem_email, mem_status
-                    FROM bs_member";
+                    FROM bs_members";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -39,7 +39,7 @@ class MemberController extends BaseController
     {
         try {
             $sql = " SELECT mem_username, mem_email
-                      FROM bs_member
+                      FROM bs_members
                       WHERE mem_username = :mem_username OR mem_email = :mem_email";
 
             // หากมีการส่ง $id มาด้วย
@@ -74,7 +74,7 @@ class MemberController extends BaseController
 
 
             // แทรกข้อมูลพนักงานใหม่
-            $sql = " INSERT INTO bs_member (mem_profile, mem_fname, mem_lname, mem_username, mem_password, mem_email)
+            $sql = " INSERT INTO bs_members (mem_profile, mem_fname, mem_lname, mem_username, mem_password, mem_email)
                     VALUES (:mem_profile, :mem_fname, :mem_lname, :mem_username, :mem_password, :mem_email)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":mem_profile", $newProfile, PDO::PARAM_STR);
@@ -95,7 +95,7 @@ class MemberController extends BaseController
     function getDetailMember($Id)
     {
         try {
-            $sql = "SELECT * FROM bs_member
+            $sql = "SELECT * FROM bs_members
                     WHERE mem_id = :mem_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':mem_id', $Id);
@@ -111,7 +111,7 @@ class MemberController extends BaseController
     {
         try {
             // Update Detail
-            $sql = "UPDATE bs_member
+            $sql = "UPDATE bs_members
                     SET     mem_fname = :mem_fname,
                             mem_lname = :mem_lname,
                             mem_status = :mem_status,
@@ -133,7 +133,7 @@ class MemberController extends BaseController
     function updateNewProfileMember($Id, $newProfile)
     {
         try {
-            $sql = "UPDATE bs_member
+            $sql = "UPDATE bs_members
                     SET mem_profile = :mem_profile
                     WHERE mem_id = :mem_id";
             $stmt = $this->db->prepare($sql);
@@ -150,7 +150,7 @@ class MemberController extends BaseController
     function deleteMember($Id)
     {
         try {
-            $sql = " DELETE  FROM bs_member
+            $sql = " DELETE  FROM bs_members
                   WHERE mem_id = :mem_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":mem_id", $Id, PDO::PARAM_INT);

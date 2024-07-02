@@ -544,6 +544,8 @@ function validateFormAddProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prd
         messageError("เลขสถานะการแสดงไม่ถูกต้อง", $locationError);
     }
 }
+
+// ==================================================================================
 function validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdDetail, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus, $locationError)
 {
 
@@ -569,8 +571,6 @@ function validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $
         messageError("จำนวนเหรียญ ต้องเป็นตัวเลข", $locationError);
     } elseif ($prdCoin < 0) {
         messageError("จำนวนเหรียญ ต้องเป็นเลข 0 ขึ้นไป", $locationError);
-    } elseif (strpos($prdCoin, '.') !== false) {
-        messageError("จำนวนเหรียญ ต้องเป็นจำนวนเต็ม", $locationError);
     }
 
     if ($prdQuantity === null || $prdQuantity === '') {
@@ -639,5 +639,69 @@ function validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $
         messageError("กรุณาระบุ สถานะการแสดง", $locationError);
     } elseif ($prdStatus != 1 && $prdStatus != 0) {
         messageError("เลขสถานะการแสดงไม่ถูกต้อง", $locationError);
+    }
+}
+
+// ==================================================================================
+function validateFormAddPayment($pmtBank, $pmtName, $pmtNumber, $pmtDetail, $pmtStatus, $locationError)
+{
+
+    if (empty($pmtBank)) {
+        messageError("กรุณาระบุ ชื่อธนาคาร", $locationError);
+    } elseif (mb_strlen($pmtBank, 'UTF-8') > 100) {
+        messageError("ชื่อธนาคาร ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (empty($pmtName)) {
+        messageError("กรุณาระบุ ชื่อบัญชี", $locationError);
+    } elseif (mb_strlen($pmtName, 'UTF-8') > 100) {
+        messageError("ชื่อบัญชี ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (empty($pmtNumber)) {
+        messageError("กรุณาระบุ หมายเลขบัญชี", $locationError);
+    } elseif (!is_numeric($pmtNumber)) {
+        messageError("หมายเลขบัญชี ต้องเป็นตัวเลข", $locationError);
+    } elseif (($pmtNumber < 0) || strpos($pmtNumber, '.') !== false) {
+        messageError("หมายเลขบัญชี ต้องไม่มีเลขติดลบและทศนิยม", $locationError);
+    } elseif (mb_strlen($pmtNumber, 'UTF-8') != 10) {
+        messageError("หมายเลขบัญชี ต้องมี 10 ตัว", $locationError);
+    }
+
+    if (empty($pmtDetail)) {
+        messageError("กรุณาระบุ รายละเอียด", $locationError);
+    }
+
+    if (!isset($pmtStatus)) {
+        messageError("กรุณาระบุ สถานะการแสดง", $locationError);
+    } elseif ($pmtStatus != 1 && $pmtStatus != 0) {
+        messageError("เลขสถานะการแสดงไม่ถูกต้อง", $locationError);
+    }
+}
+
+// ==================================================================================
+function validateFormShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $locationError)
+{
+
+    if (!isset($shpName)) {
+        messageError("กรุณาระบุ ชื่อขนส่ง", $locationError);
+    } elseif (mb_strlen($shpName, 'UTF-8') > 100) {
+        messageError("ชื่อขนส่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if(empty($shpPrice)){
+        messageError("กรุณาระบุ ราคาขนส่ง", $locationError);
+    }elseif(!is_numeric($shpPrice) || $shpPrice < 0){
+        messageError("ราคาขนส่ง ต้องเป็นตัวเลข และมากกว่า 0", $locationError);
+    }
+
+    if(empty($shpDetail)){
+        messageError("กรุณาระบุ รายละเอียด", $locationError);
+    }
+
+    if(!isset($shpStatus)){
+        messageError("กรุณาระบุ สถานะการแสดง", $locationError);
+    }elseif($shpStatus != 1 && $shpStatus != 0){
+        messageError("สถานะการแสดงผิดพลาด", $locationError);
     }
 }

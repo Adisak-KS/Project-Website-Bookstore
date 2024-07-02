@@ -40,6 +40,6 @@ if (isset($_POST['btn-edit'])) {
         header($locationSuccess);
     }
 } else {
-    header('Location: ../error_not_result');
+  
     exit;
 }

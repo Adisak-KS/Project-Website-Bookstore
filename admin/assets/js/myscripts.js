@@ -655,6 +655,89 @@ $(document).ready(function () {
     });
 });
 
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formPayment").validate({
+        rules: {
+            pmt_bank: {
+                required: true,
+                maxlength: 100,
+            },
+            pmt_name:{
+                required: true,
+                maxlength: 100,
+            },
+            pmt_number:{
+                required: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            pmt_detail:{
+                required: true,
+                maxlength: 255,
+            },
+            pmt_status: {
+                required: true,
+                digits: true,
+                min: 0,
+                max: 1,
+            },
+            prd_newImg1: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+            prd_newImg2: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            pmt_bank: {
+                required: "กรุณาระบุ ชื่อธนาคาร",
+                maxlength: "ชื่อธนาคาร มีตัวอักษรได้ไม่เกิน 100 ตัวอักษร",
+            },
+            pmt_name:{
+                required: "กรุณาระบุ ชื่อบัญชีธนาคาร",
+                maxlength: "ชื่อบัญชีธนาคาร มีตัวอักษรได้ไม่เกิน 100 ตัวอักษร",
+            },
+            pmt_number:{
+                required: "กรุณาระบุ หมายเลขบัญชีธนาคาร",
+                digits: "หมายเลขบัญชีธนาคาร ต้องเป็นตัวเลขจำนวนเต็ม",
+                minlength: "หมายเลขบัญชีธนาคาร ต้องมี 10 หมายเลข",
+                maxlength:  "หมายเลขบัญชีธนาคาร ต้องมี 10 หมายเลข",
+            },
+            pmt_detail:{
+                required: "กรุณาระบุ รายละเอียดช่องทางชำระเงิน",
+                maxlength:  "มีตัวอักษรได้ไม่เกิน 255 ตัวอักษร",
+            },
+            pmt_status: {
+                required: "กรุณาระบุ สถานะการแสดง",
+                digits: "สถานะการแสดง ต้องเป็นตัวเลขจำนวนเต็ม",
+                min: "ค่าต่ำสุดคือ 0",
+                max: "ค่าสูงสุดคือ 1",
+            },
+            prd_newImg1: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+            prd_newImg2: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
 
 
 

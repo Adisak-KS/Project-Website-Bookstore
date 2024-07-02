@@ -32,6 +32,6 @@ if (isset($_POST['btn-edit'])) {
         messageError("รหัสผ่านเดิมไม่ถูกต้อง", $locationError);
     }
 } else {
-    header('Location: ../error_not_result');
+  
     exit;
 }

@@ -6,11 +6,6 @@ require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../admin/includes/functions.php");
 
-$originalId = $row["emp_id"];
-require_once("../includes/salt.php");   // รหัส Salt 
-$saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-$base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
-
 if (isset($_GET['id'])) {
 
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -24,6 +19,10 @@ if (isset($_GET['id'])) {
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($product);
+
+    $productType = $ProductController->getProductType();
+    $publisher = $ProductController->getPublisher();
+    $author = $ProductController->getAuthor();
 } else {
     header('Location: product_show');
     exit;

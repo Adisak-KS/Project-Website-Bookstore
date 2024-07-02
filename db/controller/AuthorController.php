@@ -24,7 +24,7 @@ class AuthorController extends BaseController
     {
         try {
             $sql = "SELECT auth_id, auth_img, auth_name, auth_status
-                    FROM bs_author";
+                    FROM bs_authors";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -38,7 +38,7 @@ class AuthorController extends BaseController
     {
         try {
             $sql = "SELECT auth_name  
-                    FROM bs_author
+                    FROM bs_authors
                     WHERE auth_name = :auth_name ";
 
             if ($authId !== null) {
@@ -65,7 +65,7 @@ class AuthorController extends BaseController
     function insertAuthor($newImg, $authName, $authDetail, $authStatus)
     {
         try {
-            $sql = "INSERT INTO bs_author(auth_img, auth_name, auth_detail, auth_status)
+            $sql = "INSERT INTO bs_authors(auth_img, auth_name, auth_detail, auth_status)
                     VALUES (:auth_img, :auth_name, :auth_detail, :auth_status)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':auth_img', $newImg, PDO::PARAM_STR);
@@ -84,7 +84,7 @@ class AuthorController extends BaseController
     {
         try {
             $sql = "SELECT * 
-                    FROM bs_author
+                    FROM bs_authors
                     WHERE auth_id = :auth_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':auth_id', $Id, PDO::PARAM_INT);
@@ -99,7 +99,7 @@ class AuthorController extends BaseController
     function updateDetailAuthor($authName, $authDetail, $authStatus, $authId)
     {
         try {
-            $sql = "UPDATE bs_author
+            $sql = "UPDATE bs_authors
                     SET auth_name = :auth_name,
                         auth_detail = :auth_detail,
                         auth_status = :auth_status,
@@ -121,7 +121,7 @@ class AuthorController extends BaseController
     function updateImgAuthor($newImg, $authId)
     {
         try {
-            $sql = "UPDATE bs_author
+            $sql = "UPDATE bs_authors
                     SET auth_img = :auth_img,
                         auth_time_update = NOW()
                     WHERE auth_id = :auth_id";
@@ -139,7 +139,7 @@ class AuthorController extends BaseController
     function deleteAuthor($authId)
     {
         try {
-            $sql = "DELETE FROM bs_author
+            $sql = "DELETE FROM bs_authors
                     WHERE auth_id = :auth_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':auth_id', $authId);
@@ -155,7 +155,7 @@ class AuthorController extends BaseController
     {
         try {
             $sql = "SELECT COUNT(auth_id) AS amount 
-                    FROM bs_product
+                    FROM bs_products
                     WHERE auth_id = :auth_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':auth_id', $Id);

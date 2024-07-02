@@ -23,7 +23,7 @@ class PublisherController extends BaseController
     {
         try {
             $sql = "SELECT pub_id, pub_img, pub_name, pub_status
-                    FROM bs_publisher";
+                    FROM bs_publishers";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@ class PublisherController extends BaseController
     {
         try {
             $sql = "SELECT pub_name
-                    FROM bs_publisher
+                    FROM bs_publishers
                     WHERE pub_name = :pub_name";
 
             if ($pubId !== null) {
@@ -62,7 +62,7 @@ class PublisherController extends BaseController
     function insertPublisher($newImg, $pubName, $pubDetail, $pubStatus)
     {
         try {
-            $sql = "INSERT INTO bs_publisher(pub_img, pub_name, pub_detail, pub_status)
+            $sql = "INSERT INTO bs_publishers(pub_img, pub_name, pub_detail, pub_status)
                     VALUES (:pub_img, :pub_name, :pub_detail, :pub_status)";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pub_img', $newImg, PDO::PARAM_STR);
@@ -80,7 +80,7 @@ class PublisherController extends BaseController
     function getDetailPublisher($Id)
     {
         try {
-            $sql = "SELECT * FROM bs_publisher WHERE pub_id = :pub_id";
+            $sql = "SELECT * FROM bs_publishers WHERE pub_id = :pub_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pub_id', $Id);
             $stmt->execute();
@@ -94,7 +94,7 @@ class PublisherController extends BaseController
     function updateDetailPublisher($pubName, $pubDetail, $pubStatus, $pubId)
     {
         try {
-            $sql = "UPDATE bs_publisher
+            $sql = "UPDATE bs_publishers
                     SET pub_name = :pub_name,
                         pub_detail = :pub_detail,
                         pub_status = :pub_status,
@@ -116,7 +116,7 @@ class PublisherController extends BaseController
     function updateNewImgPublisher($newImg, $pubId)
     {
         try {
-            $sql = "UPDATE bs_publisher
+            $sql = "UPDATE bs_publishers
                         SET pub_img = :pub_img,
                             pub_time_update = NOW()
                         WHERE pub_id = :pub_id";
@@ -134,7 +134,7 @@ class PublisherController extends BaseController
     function deletePublisher($pubId)
     {
         try {
-            $sql = "DELETE FROM bs_publisher
+            $sql = "DELETE FROM bs_publishers
                     WHERE pub_id = :pub_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pub_id', $pubId, PDO::PARAM_INT);
@@ -150,7 +150,7 @@ class PublisherController extends BaseController
     {
         try {
             $sql = "SELECT COUNT(pub_id) AS amount 
-                    FROM bs_product
+                    FROM bs_products
                     WHERE pub_id = :pub_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pub_id', $Id);
