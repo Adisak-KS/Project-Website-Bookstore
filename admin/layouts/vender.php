@@ -16,7 +16,8 @@
  <!-- Data Table  -->
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> -->
+ <script src="assets/js/vfs_fonts.js"></script>
  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
  <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.min.js"></script>
  <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.min.js"></script>
@@ -47,6 +48,9 @@
      }
  </script>
  <script type="module" src="assets/js/main-CKEditor.js"></script>
+
+<!-- Chart Js  -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
  <!-- My Scripts  -->
  <script src="assets/js/myScripts.js"></script>

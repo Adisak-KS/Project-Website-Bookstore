@@ -188,7 +188,7 @@ $author = $ProductController->getAuthor();
 
                                     </div>
                                     <?php if ($products) { ?>
-                                        <table id="MyTable" class="table table-bordered dt-responsive table-responsive nowrap w-100">
+                                        <table id="MyTable" class="table  table-bordered table-hover dt-responsive table-responsive nowrap w-100">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">รูป</th>

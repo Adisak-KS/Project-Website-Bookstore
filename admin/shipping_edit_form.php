@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formPublisher" action="process/shipping_edit" method="post" enctype="multipart/form-data">
+                    <form id="formShipping" action="process/shipping_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <!-- id="formProductType" -->
                             <div class="col-lg-6">

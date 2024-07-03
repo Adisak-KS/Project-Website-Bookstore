@@ -1,8 +1,8 @@
 <?php
-$titlePage = "ลบผู้แต่ง";
+$titlePage = "ลบข้อมูลช่องทางติดต่อ";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AuthorController.php");
+require_once("../db/controller/ContactController.php");
 require_once("../includes/salt.php");
 require_once("../admin/includes/functions.php");
 
@@ -11,17 +11,16 @@ if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
     $base64Encoded =  $_SESSION["base64Encoded"];
 
-    // ถอดรหัส ID
-    $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
+    // ถอดรหัส Id
+    $ctId = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-    $AuthorController = new AuthorController($conn);
-    $author = $AuthorController->getDetailAuthor($Id);
+    $ContactController = new ContactController($conn);
+    $contact = $ContactController->getDetailContact($ctId);
 
-    $qtyProduct = $AuthorController->amountProductInAuthor($Id);
-
-    checkResultDetail($author);
+    // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
+    checkResultDetail($contact);
 } else {
-    header('Location: product_type_show');
+    header('Location: contact_show');
     exit;
 }
 
@@ -48,36 +47,40 @@ if (isset($_GET['id'])) {
 
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
-        <!-- ============================================================== -->
+        <!-- ============================================================== -->d
 
         <div class="content-page">
             <div class="content">
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formAuthor" action="process/author_edit" method="post" enctype="multipart/form-data">
+                    <form id="formContact" novalidate action="process/contact_del" method="post">
                         <div class="row">
                             <!-- id="formProductType" -->
                             <div class="col-lg-6">
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">
-                                            <i class="fa-solid fa-trash"></i>
-                                            <span>ข้อมูลผู้แต่ง</span>
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>ข้อมูลช่องทางติดต่อ</span>
                                         </h4>
 
                                         <div class="mb-3">
-                                            <label for="id" class="form-label">รหัสผู้แต่ง :</label>
-                                            <p><?php echo  $author['auth_id']; ?></p>
-                                            <input type="hidden" name="auth_id" class="form-control" value="<?php echo $author['auth_id']; ?>">
+                                            <label for="id" class="form-label">รหัสช่องทางติดต่อ :</label>
+                                            <p><?php echo  $contact['ct_id']; ?></p>
+                                            <input type="hidden" name="ct_id" class="form-control" value="<?php echo $contact['ct_id']; ?>">
                                         </div>
                                         <div class="mb-3">
-                                            <label for="auth_name" class="form-label">ชื่อผู้แต่ง :</label><span class="text-danger">*</span>
-                                            <p><?php echo $author['auth_name']; ?></p>
+                                            <label for="shp_name" class="form-label">ชื่อช่องทางติดต่อ :</label>
+                                            <p><?php echo $contact['ct_name']; ?></p>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="auth_detail" class="form-label">รายละเอียดผู้แต่ง :</label><span class="text-danger">*</span>
-                                            <p><?php echo $author['auth_detail']; ?></p>
+                                            <label for="ct_detail" class="form-label">ลิงค์ช่องทางติดต่อ :</label><span class="text-danger">*</span>
+                                            <?php if (empty($contact['ct_detail'])) { ?>
+                                                <p class="text-danger">*ไม่ได้กำหนดลิงค์ช่องทางติดต่อ</p>
+                                            <?php } else { ?>
+                                                <p><?php echo $contact['ct_detail']; ?></p>
+                                            <?php } ?>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -89,34 +92,21 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">
-                                            <i class="fa-solid fa-trash"></i>
-                                            <span>รูปภาพผู้แต่ง</span>
-                                        </h4>
-
-                                        <div class="">
-                                            <img class="rounded mx-auto d-block img-fluid" id="auth_img" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_author/<?php echo $author['auth_img'] ?>">
-                                            <input type="hidden" name="auth_img" value="<?php echo $author['auth_img'] ?>" readonly>
-                                        </div>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h4 class="mb-3 header-title text-danger">
-                                            <i class="fa-solid fa-trash"></i>
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                             <span>สถานะการแสดง</span>
                                         </h4>
 
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="auth_status" id="1" value="1" <?php if ($author['auth_status'] == 1) {
-                                                                                                                                    echo 'checked';
-                                                                                                                                } ?> disabled>
+                                            <input class="form-check-input" type="radio" name="ct_status" id="1" value="1" <?php if ($contact['ct_status'] == 1) {
+                                                                                                                                echo 'checked';
+                                                                                                                            } ?> disabled>
                                             <label class="form-check-label" for="1">แสดง</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="auth_status" id="0" value="0" <?php if ($author['auth_status'] != 1) {
-                                                                                                                                    echo 'checked';
-                                                                                                                                } ?> disabled>
+                                            <input class="form-check-input" type="radio" name="ct_status" id="0" value="0" <?php if ($contact['ct_status'] != 1) {
+                                                                                                                                echo 'checked';
+                                                                                                                            } ?> disabled>
                                             <label class="form-check-label" for="0">ไม่แสดง</label>
                                         </div>
 
@@ -127,29 +117,23 @@ if (isset($_GET['id'])) {
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $author['auth_time_update'] ?></span></h4>
-                                        <?php if ($qtyProduct['amount'] > 0) { ?>
-                                            <p class="text-danger">มีสินค้าของผู้แต่งนี้ <?php echo number_format($qtyProduct['amount']) ?> รายการ กรุณาลบ หรือเปลี่ยนแปลงผู้แต่ง สินค้าก่อน</p>
-                                        <?php } else { ?>
-                                            <p class="text-danger">มีสินค้าของผู้แต่งนี้ <?php echo number_format($qtyProduct['amount']) ?> รายการ</p>
-                                        <?php } ?>
+                                        <h4 class="mb-3 header-title text-danger">จัดการข้อมูลล่าสุดเมื่อ : <span class="text-dark"> <?php echo $contact['ct_time'] ?></span></h4>
                                         <div>
-                                            <a href="author_show" class="btn btn-secondary me-2">
+                                            <a href="contact_show" class="btn btn-secondary me-2">
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <?php if ($qtyProduct['amount'] > 0) { ?>
-                                                <button type="button" class="btn btn-danger btn-delete" disabled>
+                                            <?php if (empty($contact['ct_detail'])) { ?>
+                                                <button type="button" class="btn btn-danger" disabled>
                                                     <i class="fa-solid fa-trash"></i>
                                                     <span>ลบข้อมูล</span>
                                                 </button>
                                             <?php } else { ?>
-                                                <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $author["auth_id"]; ?>" data-img="<?php echo $author["auth_img"]; ?>">
+                                                <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $contact["ct_id"]; ?>">
                                                     <i class="fa-solid fa-trash"></i>
                                                     <span>ลบข้อมูล</span>
                                                 </button>
                                             <?php } ?>
-
                                         </div>
 
                                     </div> <!-- end card-body-->
@@ -181,13 +165,12 @@ if (isset($_GET['id'])) {
                 $(".btn-delete").click(function(e) {
                     e.preventDefault();
                     let id = $(this).data('id');
-                    let img = $(this).data('img');
 
-                    deleteConfirm(id, img);
+                    deleteConfirm(id);
                 });
             });
 
-            function deleteConfirm(id, img) {
+            function deleteConfirm(id) {
                 Swal.fire({
                     icon: "warning",
                     title: 'คุณแน่ใจหรือไม่?',
@@ -198,15 +181,14 @@ if (isset($_GET['id'])) {
                     cancelButtonText: 'ยกเลิก',
                     preConfirm: function() {
                         return $.ajax({
-                                url: 'process/author_del.php',
+                                url: 'process/contact_del.php',
                                 type: 'POST',
                                 data: {
                                     id: id,
-                                    img: img
                                 },
                             })
                             .done(function() {
-                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า author_show
+                                // การลบสำเร็จ ทำการ redirect ไปยังหน้า contact_show
                                 return true;
                             })
                             .fail(function() {
@@ -216,14 +198,14 @@ if (isset($_GET['id'])) {
                                     text: 'เกิดข้อผิดพลาดที่ ajax !',
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        document.location.href = 'author_del_form?id=<?php echo $base64Encoded; ?>';
+                                        document.location.href = 'contact_del_form?id=<?php echo $base64Encoded; ?>';
                                     }
                                 });
                             });
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        document.location.href = 'author_show';
+                        document.location.href = 'contact_show';
                     }
                 });
             }

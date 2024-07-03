@@ -31,6 +31,22 @@
             }
         }
 
+        function getDetailSettingWebsite($stId){
+            try{
+                $sql = "SELECT * 
+                        FROM bs_settings_website 
+                        WHERE st_id = :stId";
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':stId', $stId, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $result;
+            }catch(PDOException $e){
+                echo "<hr>Error in getDetailSettingWebsite : " . $e->getMessage();
+                return false;
+            }
+        }
+
         // Use Website Sitting 
         function useSettingsWebsite()
         {

@@ -689,19 +689,28 @@ function validateFormShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $loca
         messageError("ชื่อขนส่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if(empty($shpPrice)){
+    if (empty($shpPrice)) {
         messageError("กรุณาระบุ ราคาขนส่ง", $locationError);
-    }elseif(!is_numeric($shpPrice) || $shpPrice < 0){
+    } elseif (!is_numeric($shpPrice) || $shpPrice < 0) {
         messageError("ราคาขนส่ง ต้องเป็นตัวเลข และมากกว่า 0", $locationError);
     }
 
-    if(empty($shpDetail)){
+    if (empty($shpDetail)) {
         messageError("กรุณาระบุ รายละเอียด", $locationError);
     }
 
-    if(!isset($shpStatus)){
+    if (!isset($shpStatus)) {
         messageError("กรุณาระบุ สถานะการแสดง", $locationError);
-    }elseif($shpStatus != 1 && $shpStatus != 0){
+    } elseif ($shpStatus != 1 && $shpStatus != 0) {
         messageError("สถานะการแสดงผิดพลาด", $locationError);
+    }
+}
+
+function valiDateFormContact($ctDetail, $ctStatus, $locationError)
+{
+    if (empty($ctDetail)) {
+        messageError("กรุณาระบุ ลิงค์ช่องทางติดต่อ", $locationError);
+    } elseif (!filter_var($ctDetail, FILTER_VALIDATE_URL)) {
+        messageError("กรุณาระบุลิงค์ช่องทางติดต่อที่ถูกต้อง", $locationError);
     }
 }

@@ -16,14 +16,85 @@ new DataTable('#MyTable', {
 })
 
 // ============================== 2. Data Table Export File ==============================
-new DataTable('#MyTableExport', {
-    layout: {
-        topStart: {
-            buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+pdfMake.fonts = {
+    THSarabun: {
+        normal: 'THSarabun.ttf',
+        bold: 'THSarabun-Bold.ttf',
+        italics: 'THSarabun-Italic.ttf',
+        bolditalics: 'THSarabun-BoldItalic.ttf'
+    }
+};
+$(document).ready(function () {
+    new DataTable('#MyTableExport', {
+        layout: {
+            topStart: {
+                buttons: [
+                    'copy',
+                    {
+                        extend: 'csv',
+                        charset: 'UTF-8',
+                        bom: true,
+                        fieldSeparator: ',',
+                        text: 'CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3]
+                        }
+                    },
+                    'excel',
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        pageSize: 'A4',
+                        customize: function (doc) {
+                            doc.content[1].layout = {
+                                hLineWidth: function (i, node) {
+                                    return 1; // เส้นขอบแนวนอน
+                                },
+                                vLineWidth: function (i, node) {
+                                    return 1; // เส้นขอบแนวตั้ง
+                                },
+                                hLineColor: function (i, node) {
+                                    return '#AAA'; // สีขอบแนวนอน
+                                },
+                                vLineColor: function (i, node) {
+                                    return '#AAA'; // สีขอบแนวตั้ง
+                                }
+                            };
+
+                            doc.defaultStyle = {
+                                font: 'THSarabun',
+                                fontSize: 16
+                            };
+                            doc.styles.tableHeader.fontSize = 16;
+
+                            doc.content[1].table.widths = ['*', '*', '*', '*'];
+
+                            const rowCount = doc.content[1].table.body.length;
+                            for (let i = 1; i < rowCount; i++) {
+                                doc.content[1].table.body[i][0] = { text: doc.content[1].table.body[i][0], alignment: 'center' };
+                                doc.content[1].table.body[i][1] = { text: doc.content[1].table.body[i][1], alignment: 'center' };
+                                doc.content[1].table.body[i][2] = { text: doc.content[1].table.body[i][2], alignment: 'center' };
+                                doc.content[1].table.body[i][3] = { text: doc.content[1].table.body[i][3], alignment: 'center' };
+                            }
+
+                            const now = new Date();
+                            const dateString = now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+                            doc.content.splice(1, 0, {
+                                alignment: 'right',
+                                margin: [0, 0, 20, 0],
+                                text: 'Exported on : ' + dateString
+                            });
+                        }
+                    },
+                    'print'
+                ],
+            },
         },
         responsive: true
-    }
+    });
 });
+
+
 
 // ============================== 3. Show / Hiden Password (Class .password-toggle) ==============================
 document.addEventListener('DOMContentLoaded', function () {
@@ -195,7 +266,7 @@ $(document).ready(function () {
                 equalTo: "#newPassword",
                 maxlength: 255,
             },
-           
+
         },
         messages: {
             fname: {
@@ -663,17 +734,17 @@ $(document).ready(function () {
                 required: true,
                 maxlength: 100,
             },
-            pmt_name:{
+            pmt_name: {
                 required: true,
                 maxlength: 100,
             },
-            pmt_number:{
+            pmt_number: {
                 required: true,
                 digits: true,
                 minlength: 10,
                 maxlength: 10,
             },
-            pmt_detail:{
+            pmt_detail: {
                 required: true,
                 maxlength: 255,
             },
@@ -695,19 +766,19 @@ $(document).ready(function () {
                 required: "กรุณาระบุ ชื่อธนาคาร",
                 maxlength: "ชื่อธนาคาร มีตัวอักษรได้ไม่เกิน 100 ตัวอักษร",
             },
-            pmt_name:{
+            pmt_name: {
                 required: "กรุณาระบุ ชื่อบัญชีธนาคาร",
                 maxlength: "ชื่อบัญชีธนาคาร มีตัวอักษรได้ไม่เกิน 100 ตัวอักษร",
             },
-            pmt_number:{
+            pmt_number: {
                 required: "กรุณาระบุ หมายเลขบัญชีธนาคาร",
                 digits: "หมายเลขบัญชีธนาคาร ต้องเป็นตัวเลขจำนวนเต็ม",
                 minlength: "หมายเลขบัญชีธนาคาร ต้องมี 10 หมายเลข",
-                maxlength:  "หมายเลขบัญชีธนาคาร ต้องมี 10 หมายเลข",
+                maxlength: "หมายเลขบัญชีธนาคาร ต้องมี 10 หมายเลข",
             },
-            pmt_detail:{
+            pmt_detail: {
                 required: "กรุณาระบุ รายละเอียดช่องทางชำระเงิน",
-                maxlength:  "มีตัวอักษรได้ไม่เกิน 255 ตัวอักษร",
+                maxlength: "มีตัวอักษรได้ไม่เกิน 255 ตัวอักษร",
             },
             pmt_status: {
                 required: "กรุณาระบุ สถานะการแสดง",
@@ -738,6 +809,177 @@ $(document).ready(function () {
     });
 });
 
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formShipping").validate({
+        rules: {
+            shp_name: {
+                required: true,
+                maxlength: 100,
+            },
+            shp_price: {
+                required: true,
+                number: true,
+                min: 0,
+                max: 99999,
+            },
+            shp_detail: {
+                required: true,
+                maxlength: 255,
+            },
+            shp_status: {
+                required: true,
+                digits: true,
+                min: 0,
+                max: 1,
+            },
+            shp_newLogo: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+        },
+        messages: {
+            shp_name: {
+                required: "กรุณาระบุ ชื่อขนส่ง",
+                maxlength: "ชื่อขนส่ง มีตัวอักษรได้ไม่เกิน 100 ตัวอักษร",
+            },
+            shp_price: {
+                required: "กรุณาระบุ ราคาขนส่ง",
+                number: "ต้องเป็นตัวเลข เท่านั้น",
+                min: "ราคา ต่ำสุดคือ 0 บาท",
+                max: "ราคา สูงสุดคือ 99999 บาท",
+            },
+            shp_detail: {
+                required: "กรุณาระบุ รายละเอียดขนส่ง",
+                maxlength: "รายละเอียดขนส่ง มีได้ไม่เกิน 255 ตัวอักษร",
+            },
+            shp_status: {
+                required: "กรุณาระบุ สถานะการแสดง",
+                digits: "ต้องเป็นตัวเลข เท่านั้น",
+                min: "ค่าต่ำสุด คือ 0",
+                max: "ค่าสูงสุด คือ 1",
+            },
+            shp_newLogo: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $.validator.addMethod("after", function (value, element, params) {
+        var start_time = $(params).val();
+        var end_time = value;
+
+        if (!start_time || !end_time) {
+            return true;
+        }
+
+        return Date.parse(end_time) >= Date.parse(start_time);
+    });
+
+    $("#formSearchView").validate({
+        rules: {
+            time_start: {
+                after: "#time_end"
+            },
+            time_end: {
+                after: "#time_start"
+            },
+            prd_name: {
+                maxlength: 100
+            },
+            pty_name: {
+                maxlength: 100
+            }
+        },
+        messages: {
+            time_start: {
+                after: "วันสิ้นสุด ต้องมากกว่า วันเริ่ม"
+            },
+            time_end: {
+                after: "วันสิ้นสุด ต้องมากกว่า วันเริ่ม"
+            },
+            productName: {
+                maxlength: "ชื่อสินค้า มีได้ไม่เกิน 100 ตัวอักษร"
+            },
+            pty_name: {
+                maxlength: "ชื่อประเภทสินค้า มีได้ไม่เกิน 100 ตัวอักษร"
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+
+    $("#formContact").validate({
+        rules: {
+            ct_detail: {
+                required: true,
+                url: true
+            },
+            ct_status: {
+                required: true,
+                digits: true,
+                min: 0,
+                max: 1,
+            },
+        },
+        messages: {
+            ct_detail: {
+                required: "กรุณาระบุลิงค์ช่องทางติดต่อ",
+                url: "กรุณาระบุ URL ที่ถูกต้อง เช่น https://www.facebook.com/"
+            },
+            ct_status: {
+                required: "กรุณาระบุ สถานะการแสดง",
+                digits: "ต้องเป็นตัวเลข เท่านั้น",
+                min: "ค่าต่ำสุด คือ 0",
+                max: "ค่าสูงสุด คือ 1",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
 
 
 

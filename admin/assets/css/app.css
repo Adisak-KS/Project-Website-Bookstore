@@ -30,8 +30,8 @@ File: Main Css File
   --ct-table-striped-bg: rgba(222, 226, 230, 0.3);
   --ct-table-active-color: var(--ct-table-color);
   --ct-table-active-bg: #dee2e6;
-  --ct-table-hover-color: var(--ct-table-color);
-  --ct-table-hover-bg: #f8f9fa;
+  --ct--color: var(--ct-table-color);
+  --ct--bg: #f8f9fa;
   --ct-table-border-color: var(--ct-border-color);
   --ct-table-group-separator-color: var(--ct-border-color);
   --ct-table-caption-color: var(--ct-text-muted);
@@ -244,8 +244,8 @@ body[data-layout-color=dark] {
   --ct-table-striped-bg: #3a4250;
   --ct-table-active-color: var(--ct-table-color);
   --ct-table-active-bg: #3a4250;
-  --ct-table-hover-color: var(--ct-table-color);
-  --ct-table-hover-bg: rgba(58, 66, 80, 0.5);
+  --ct--color: var(--ct-table-color);
+  --ct--bg: rgba(58, 66, 80, 0.5);
   --ct-table-border-color: var(--ct-border-color);
   --ct-table-group-separator-color: #3a4250;
   --ct-table-caption-color: var(--ct-text-muted);
@@ -2388,8 +2388,8 @@ progress {
   --ct-table-striped-bg: var(--ct-table-striped-bg);
   --ct-table-active-color: var(--ct-table-color);
   --ct-table-active-bg: var(--ct-table-active-bg);
-  --ct-table-hover-color: var(--ct-table-color);
-  --ct-table-hover-bg: var(--ct-table-hover-bg);
+  --ct--color: var(--ct-table-color);
+  --ct--bg: var(--ct--bg);
   width: 100%;
   margin-bottom: 1.5rem;
   color: var(--ct-table-color);
@@ -2420,10 +2420,10 @@ progress {
   padding: 0.5rem 0.5rem;
 }
 
-.table-bordered > :not(caption) > * {
+. table-bordered table-hover > :not(caption) > * {
   border-width: 1px 0;
 }
-.table-bordered > :not(caption) > * > * {
+. table-bordered table-hover > :not(caption) > * > * {
   border-width: 0 1px;
 }
 
@@ -2444,9 +2444,9 @@ progress {
   color: var(--ct-table-active-color);
 }
 
-.table-hover > tbody > tr:hover > * {
-  --ct-table-accent-bg: var(--ct-table-hover-bg);
-  color: var(--ct-table-hover-color);
+. > tbody > tr:hover > * {
+  --ct-table-accent-bg: var(--ct--bg);
+  color: var(--ct--color);
 }
 
 .table-primary {
@@ -2455,8 +2455,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #8c959f;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #8c959f;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #d2deeb;
 }
@@ -2467,8 +2467,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #8b8f93;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #8b8f93;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #d1d2d5;
 }
@@ -2479,8 +2479,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #829791;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #829791;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #c0e1d1;
 }
@@ -2491,8 +2491,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #86969d;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #86969d;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #c7dfe7;
 }
@@ -2503,8 +2503,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #99978e;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #99978e;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #eae1cc;
 }
@@ -2515,8 +2515,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #9a8c8f;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #9a8c8f;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #ebcece;
 }
@@ -2527,8 +2527,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: #343a40;
   --ct-table-active-color: #fff;
-  --ct-table-hover-bg: #96999c;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #96999c;
+  --ct--color: #fff;
   color: #343a40;
   border-color: #e4e4e5;
 }
@@ -2539,8 +2539,8 @@ progress {
   --ct-table-striped-color: #fff;
   --ct-table-active-bg: white;
   --ct-table-active-color: #343a40;
-  --ct-table-hover-bg: #999da3;
-  --ct-table-hover-color: #fff;
+  --ct--bg: #999da3;
+  --ct--color: #fff;
   color: #fff;
   border-color: #474e59;
 }
@@ -16886,8 +16886,8 @@ th {
   color: #6c757d;
 }
 
-table.table-hover thead tr:hover > *,
-table.table-hover tbody tr:hover > * {
+table. thead tr:hover > *,
+table. tbody tr:hover > * {
   --ct-table-accent-bg: #f1f3fa;
 }
 table tr.table-active {
@@ -16911,8 +16911,8 @@ body[data-layout-color=dark] table .table-light {
 body[data-layout-color=dark] table .table-dark {
   --ct-table-bg: #3a4250;
 }
-body[data-layout-color=dark] table.table-hover thead tr:hover > *,
-body[data-layout-color=dark] table.table-hover tbody tr:hover > * {
+body[data-layout-color=dark] table. thead tr:hover > *,
+body[data-layout-color=dark] table. tbody tr:hover > * {
   --ct-table-accent-bg: rgba(64, 73, 84, 0.8);
 }
 body[data-layout-color=dark] table tr.table-active {
@@ -19639,7 +19639,7 @@ body[data-layout-color=dark] .irs--square .irs-max {
   margin-bottom: 0;
 }
 
-#calendar .table-bordered td, #calendar .table-bordered th {
+#calendar . table-bordered table-hover td, #calendar . table-bordered table-hover th {
   border: 1px solid var(--ct-table-border-color);
 }
 
@@ -21216,7 +21216,7 @@ body[data-layout-color=dark] .responsive-table-plugin .btn-default {
 .tablesaw-enhanced .tablesaw-bar .btn:focus,
 .tablesaw-enhanced .tablesaw-bar .btn:active {
   color: #71b6f9 !important;
-  background-color: var(--ct-table-hover-bg);
+  background-color: var(--ct--bg);
   outline: none !important;
   box-shadow: none !important;
   background-image: none;

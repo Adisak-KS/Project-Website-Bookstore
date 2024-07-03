@@ -23,7 +23,7 @@ class ShippingController extends BaseController
     {
         try {
             $sql = "SELECT shp_id, shp_logo, shp_name, shp_price, shp_status 
-                        FROM bs_shipping";
+                    FROM bs_shipping";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
