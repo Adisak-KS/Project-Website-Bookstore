@@ -54,7 +54,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formContact" novalidate action="process/contact_edit" method="post">
+                    <form id="formSettingWebsite" novalidate action="process/setting_website_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <!-- id="formProductType" -->
                             <div class="col-lg-6">
@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
                                         </div>
                                         <?php if ($settingWebsite['st_id'] == 1) { ?>
                                             <div class="mb-3">
-                                                <label for="ct_detail" class="form-label">รายละเอียด :</label><span class="text-danger">*</span>
+                                                <label for="ct_detail" class="form-label">ชื่อเว็บไซต์ :</label><span class="text-danger">*</span>
                                                 <input type="text" name="st_detail" class="form-control" value="<?php echo $settingWebsite['st_detail']; ?>" placeholder="กรุณาระบุ รายละเอียด">
                                             </div>
                                         <?php } ?>
@@ -87,26 +87,49 @@ if (isset($_GET['id'])) {
                             </div>
                             <!-- end col -->
                             <div class="col-lg-6">
-                                <?php if ($settingWebsite['st_detail'] != 1) { ?>
+                                <?php if ($settingWebsite['st_id'] == 2) { ?>
                                     <div class="card">
                                         <div class="card-body">
                                             <h4 class="mb-3 header-title text-warning">
                                                 <i class="fa-solid fa-pen-to-square"></i>
-                                                <span>รูปภาพโปรโมชั่น</span>
+                                                <span>Favicon</span>
                                             </h4>
 
                                             <div class="">
-                                                <img class="rounded mx-auto d-block img-fluid" id="pro_img" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_web_setting/<?php echo $settingWebsite['st_detail'] ?>">
-                                                <input type="hidden" name="pro_img" value="<?php echo $settingWebsite['st_detail'] ?>" readonly>
+                                                <img class="rounded-cycle mx-auto d-block img-fluid" id="st_favicon" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_web_setting/<?php echo $settingWebsite['st_detail'] ?>">
+                                                <input type="hidden" name="st_favicon" value="<?php echo $settingWebsite['st_detail'] ?>" readonly>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="formFile" class="form-label mt-4">รูปภาพใหม่ :</label><span class="text-danger"> (ขนาดไฟล์ไม่เกิน 2 MB)</span>
-                                                <input class="form-control" name="pro_newImg" id="pro_newImg" type="file" accept="image/png,image/jpg,image/jpeg">
+                                                <input class="form-control" name="st_newFavicon" id="st_newFavicon" type="file" accept="image/png,image/jpg,image/jpeg,image/x-icon">
                                             </div>
 
                                         </div> <!-- end card-body-->
                                     </div> <!-- end card-->
                                 <?php } ?>
+
+                                <?php if ($settingWebsite['st_id'] == 3) { ?>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="mb-3 header-title text-warning">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>Logo</span>
+                                            </h4>
+
+                                            <div class="">
+                                                <img class="rounded-cycle mx-auto d-block img-fluid" id="st_logo" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_web_setting/<?php echo $settingWebsite['st_detail'] ?>">
+                                                <input type="hidden" name="st_logo" value="<?php echo $settingWebsite['st_detail'] ?>" readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="formFile" class="form-label mt-4">รูปภาพใหม่ :</label><span class="text-danger"> (ขนาดไฟล์ไม่เกิน 2 MB)</span>
+                                                <input class="form-control" name="st_newLogo" id="st_newLogo" type="file" accept="image/png,image/jpg,image/jpeg">
+                                            </div>
+
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card-->
+                                <?php } ?>
+
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
@@ -169,6 +192,81 @@ if (isset($_GET['id'])) {
         <?php require_once('layouts/nav_rightbar.php') ?>
 
         <?php require_once('layouts/vender.php') ?>
+
+        <!-- preview New Profile, check file type, file size  -->
+        <script>
+            document.getElementById('st_newFavicon').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/x-icon'];
+                const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+                if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('st_favicon').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset the input
+                    event.target.value = '';
+                    // Reset to the original image
+                    document.getElementById('st_favicon').src = '../uploads/img_web_setting/<?php echo $settingWebsite["st_detail"]; ?>';
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'คำเตือน',
+                            text: 'ต้องเป็นไฟล์ .png .jpg .jpeg เท่านั้น',
+                        });
+                    }
+
+                    // Show an alert if the file is not valid
+                    if (allowedTypes.includes(file.type) && file.size > maxSize) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'คำเตือน',
+                            text: 'ขนาดไฟล์เกิน 2 MB',
+                        });
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            document.getElementById('st_newLogo').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+
+                if (file && allowedTypes.includes(file.type) && file.size <= maxSize) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('st_logo').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset the input
+                    event.target.value = '';
+                    // Reset to the original image
+                    document.getElementById('st_favicon').src = '../uploads/img_web_setting/<?php echo $settingWebsite["st_detail"]; ?>';
+                    if (!allowedTypes.includes(file.type)) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'คำเตือน',
+                            text: 'ต้องเป็นไฟล์ .png .jpg .jpeg เท่านั้น',
+                        });
+                    }
+
+                    // Show an alert if the file is not valid
+                    if (allowedTypes.includes(file.type) && file.size > maxSize) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'คำเตือน',
+                            text: 'ขนาดไฟล์เกิน 2 MB',
+                        });
+                    }
+                }
+            });
+        </script>
 </body>
 
 </html>

@@ -15,8 +15,8 @@ if (isset($_POST['btn-edit'])) {
     $authNewImg = $_FILES['auth_newImg']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../author_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../author_show.php";
+    $locationError = "Location: ../author_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../authorshow";
 
     valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError);
 

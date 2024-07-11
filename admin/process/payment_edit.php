@@ -25,7 +25,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../payment_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../payment_show.php";
+    $locationSuccess = "Location: ../paymentshow";
 
     echo "id : " . $pmtId . "<br>";
     echo "pmtBank : " . $pmtBank . "<br>";

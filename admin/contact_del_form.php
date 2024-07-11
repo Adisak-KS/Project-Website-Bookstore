@@ -74,14 +74,52 @@ if (isset($_GET['id'])) {
                                             <label for="shp_name" class="form-label">ชื่อช่องทางติดต่อ :</label>
                                             <p><?php echo $contact['ct_name']; ?></p>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="ct_detail" class="form-label">ลิงค์ช่องทางติดต่อ :</label><span class="text-danger">*</span>
-                                            <?php if (empty($contact['ct_detail'])) { ?>
-                                                <p class="text-danger">*ไม่ได้กำหนดลิงค์ช่องทางติดต่อ</p>
-                                            <?php } else { ?>
-                                                <p><?php echo $contact['ct_detail']; ?></p>
-                                            <?php } ?>
-                                        </div>
+                                        <?php if ($contact['ct_id'] == 1 || $contact['ct_id'] == 2 || $contact['ct_id'] == 3) { ?>
+                                            <div class="mb-3">
+                                                <label for="ct_detail" class="form-label">ลิงค์ช่องทางติดต่อ :</label><span class="text-danger">*</span>
+                                                <?php if (empty($contact['ct_detail'])) { ?>
+                                                    <p class="text-danger">*ไม่ได้ระบุ ลิงค์ช่องทางติดต่อ</p>
+                                                <?php } else { ?>
+                                                    <p><?php echo $contact['ct_detail']; ?></p>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="ct_detail" class="form-label">ข้อความแสดงแทนลิงค์ :</label><span class="text-danger">*</span>
+                                                <?php if (empty($contact['ct_name_link'])) { ?>
+                                                    <p class="text-danger">*ไม่ได้ระบุ ข้อความแสดงแทนลิงค์</p>
+                                                <?php } else { ?>
+                                                    <p><?php echo $contact['ct_name_link']; ?></p>
+                                                <?php } ?>
+                                            </div>
+
+                                        <?php } elseif ($contact['ct_id'] == 4) { ?>
+                                            <div class="mb-3">
+                                                <label for="ct_detail" class="form-label">อีเมล :</label><span class="text-danger">*</span>
+                                                <?php if (empty($contact['ct_detail'])) { ?>
+                                                    <p class="text-danger">*ไม่ได้ระบุ อีเมล</p>
+                                                <?php } else { ?>
+                                                    <p><?php echo $contact['ct_detail']; ?></p>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } elseif ($contact['ct_id'] == 5) { ?>
+                                            <div class="mb-3">
+                                                <label for="ct_detail" class="form-label">เบอร์โทร :</label><span class="text-danger">*</span>
+                                                <?php if (empty($contact['ct_detail'])) { ?>
+                                                    <p class="text-danger">*ไม่ได้ระบุ เบอร์โทร</p>
+                                                <?php } else { ?>
+                                                    <p><?php echo $contact['ct_detail']; ?></p>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } elseif ($contact['ct_id'] == 6) { ?>
+                                            <div class="mb-3">
+                                                <label for="ct_detail" class="form-label">ที่อยู่ :</label><span class="text-danger">*</span>
+                                                <?php if (empty($contact['ct_detail'])) { ?>
+                                                    <p class="text-danger">*ไม่ได้ระบุ ที่อยู่</p>
+                                                <?php } else { ?>
+                                                    <p><?php echo $contact['ct_detail']; ?></p>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
 
@@ -89,6 +127,24 @@ if (isset($_GET['id'])) {
                             </div>
                             <!-- end col -->
                             <div class="col-lg-6">
+                                <?php if ($contact['ct_id'] == 7) { ?>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="mb-3 header-title text-warning">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                                <span>ตำแหน่งสถานที่</span>
+                                            </h4>
+                                            <?php if (empty($contact['ct_detail'])) { ?>
+                                                <p class="text-danger">*ไม่ได้ระบุ ตำแหน่งสถานที่</p>
+                                            <?php } else { ?>
+                                                <div class="ratio ratio-16x9">
+                                                    <?php echo $contact['ct_detail'] ?>
+                                                </div>
+                                            <?php } ?>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card-->
+                                <?php } ?>
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">

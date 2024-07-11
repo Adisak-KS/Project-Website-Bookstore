@@ -29,10 +29,9 @@ if (!$useLoginEmployee || empty($empId)) {
                 <?php } ?>
                 <span class="pro-user-name ms-1">
                     <?php echo "@" . $useLoginEmployee['emp_username'] ?>
-                    <small><i class="fa-solid fa-chevron-down"></i></small>
                 </span>
             </a>
-            <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
+            <div class="dropdown-menu dropdown-menu-end profile-dropdown">
                 <!-- item-->
                 <div class="dropdown-header noti-title">
                     <h6 class="text-overflow m-0">ยินดีต้อนรับ !</h6>
@@ -43,13 +42,6 @@ if (!$useLoginEmployee || empty($empId)) {
                     <i class="fa-solid fa-user-gear"></i>
                     <span>บัญชีของฉัน</span>
                 </a>
-
-                <!-- item-->
-                <a href="auth-lock-screen.html" class="dropdown-item notify-item">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>ล็อคหน้าจอ</span>
-                </a>
-
                 <div class="dropdown-divider"></div>
 
                 <!-- item-->

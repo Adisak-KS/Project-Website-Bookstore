@@ -18,8 +18,8 @@ if (isset($_POST['btn-edit'])) {
     $proNewImg = $_FILES['pro_newImg']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../promotion_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../promotion_show.php";
+    $locationError = "Location: ../promotion_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../promotion_show";
 
     validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus, $locationError);
 

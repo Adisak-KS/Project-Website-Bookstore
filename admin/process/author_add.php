@@ -10,8 +10,8 @@ if (isset($_POST['btn-add'])) {
     $authDetail = $_POST['auth_detail'];
     $authStatus = $_POST['auth_status'];
 
-    $locationError = "Location: ../author_show.php";
-    $locationSuccess = "Location: ../author_show.php";
+    $locationError = "Location: ../author_show";
+    $locationSuccess = "Location: ../author_show";
 
 
     valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError);

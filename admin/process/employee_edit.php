@@ -17,8 +17,8 @@ if (isset($_POST['btn-edit'])) {
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../employee_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../employee_show.php";
+    $locationError = "Location: ../employee_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../employeeshow";
 
 
     $authority = $newEatId;

@@ -8,8 +8,8 @@ if (isset($_POST["id"])) {
     $profile = $_POST["profile"];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "refresh:1; url=../owner_del_form.php?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../owner_show.php";
+    $locationError = "refresh:1; url=../owner_del_form?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../ownershow";
 
     $deleteEmployee = $BaseController->deleteEmployees($Id);
 

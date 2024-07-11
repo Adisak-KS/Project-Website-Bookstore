@@ -15,8 +15,8 @@ if (isset($_POST['btn-add'])) {
     $confirmPassword = $_POST['confirmPassword'];
     $email = $_POST['email'];
 
-    $locationError = "Location: ../member_show.php";
-    $locationSuccess = "Location: ../member_show.php";
+    $locationError = "Location: ../membershow";
+    $locationSuccess = "Location: ../membershow";
 
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormAddMember($fname, $lname, $username, $password, $confirmPassword, $email, $locationError);

@@ -16,8 +16,8 @@ if (isset($_POST['btn-edit'])) {
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../member_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../member_show.php";
+    $locationError = "Location: ../member_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../membershow";
 
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormUpdateMember($fname, $lname, $status, $locationError);

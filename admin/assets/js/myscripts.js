@@ -939,12 +939,37 @@ $(document).ready(function () {
 
 // ============================== 5. Jquery Validation Form (Product Type) ==============================
 $(document).ready(function () {
+    $.validator.addMethod("googleMapEmbed", function (value, element) {
+        return this.optional(element) || /^<iframe.*?src="https:\/\/www\.google\.com\/maps\/embed\?.*?".*?><\/iframe>$/.test(value);
+    }, "Please enter a valid Google Maps embed code.");
 
     $("#formContact").validate({
+
         rules: {
             ct_detail: {
                 required: true,
                 url: true
+            },
+            ct_name_link: {
+                required: true,
+                maxlength: 100,
+            },
+            ct_email: {
+                required: true,
+                email: true,
+                maxlength: 100,
+            },
+            ct_phone_number: {
+                required: true,
+                pattern: "^[0-9]{10}$", // ตรวจสอบว่ามีเฉพาะตัวเลขและความยาว 10 หลัก
+            },
+            ct_address: {
+                required: true,
+                maxlength: 255
+            },
+            ct_location: {
+                required: true,
+                googleMapEmbed: true
             },
             ct_status: {
                 required: true,
@@ -958,12 +983,117 @@ $(document).ready(function () {
                 required: "กรุณาระบุลิงค์ช่องทางติดต่อ",
                 url: "กรุณาระบุ URL ที่ถูกต้อง เช่น https://www.facebook.com/"
             },
+            ct_name_link: {
+                required: "กรุณาระบุ ข้อความแสดงแทนลิงค์",
+                maxlength: "ข้อความแสดงแทนลิงค์ มีได้ไม่เกิน 100 ตัวอักษร",
+            },
+            ct_email: {
+                required: "กรุณาระบุ อีเมล",
+                email: "รูปแบบอีเมลไม่ถูกต้อง",
+                maxlength: "อีเมล มีได้ไม่เกิน 100 ตัวอักษร",
+            },
+            ct_phone_number: {
+                required: "กรุณาระบุ เบอร์โทรศัพท์",
+                pattern: "เบอร์โทรศัพท์ต้องเป็นตัวเลข 10 หลัก",
+            },
+            ct_address: {
+                required: "กรุณาระบุ ที่อยู่",
+                maxlength: "ที่อยู่ มีได้ไม่เกิน 255 ตัวอักษร",
+            },
+            ct_location: {
+                required: "กรุณาระบุ ตำแหน่งสถานที่",
+                googleMapEmbed: "ตำแหน่งสถานที่ ต้องเป็น Embed จาก Google Map โดยไปที่ Google Map > ค้นหาสถานที่ > แชร์ (share) > ฝังแผนที่ (Embed a map) > คัดลอก HTML (Copy HTML)"
+            },
             ct_status: {
                 required: "กรุณาระบุ สถานะการแสดง",
                 digits: "ต้องเป็นตัวเลข เท่านั้น",
                 min: "ค่าต่ำสุด คือ 0",
                 max: "ค่าสูงสุด คือ 1",
             },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formProductStockLow").validate({
+
+        rules: {
+            prd_number_low: {
+                required: true,
+                number: true,
+                digits: true,
+                min: 0,
+                max: 9999999
+            },
+        },
+        messages: {
+            prd_number_low: {
+                required: "กรุณาระบุ จำนวนสินค้า",
+                number: "ต้องเป็นตัวเลข เท่านั้น",
+                digits: "ต้องเป็นตัวเลขจำนวนเต็ม เท่านั้น",
+                min: "ค่าต่ำสุดคือ 0",
+                max: "ค่าสูงสุดคือ 9,999,999",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formBanner").validate({
+
+        rules: {
+            bn_name: {
+                required: true,
+                maxlength: 100,
+            },
+            bn_link: {
+                url: true,
+            },
+            bn_img: {
+                required: true,
+                accept: "image/png,image/jpg,image/jpeg",
+            }
+        },
+        messages: {
+            bn_name: {
+                required: "กรุณาระบุ ชื่อแบนเนอร์",
+                maxlength: "ชื่อแบนเนอร์ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            bn_link: {
+                url: "ลิงค์ URL ไม่ถูกต้อง",
+            },
+            bn_img: {
+                required: "กรุณาระบุ รูปภาพแบนเนอร์",
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

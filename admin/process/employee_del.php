@@ -8,8 +8,8 @@ if (isset($_POST["id"])) {
     $profile = $_POST["profile"];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "refresh:1; url=../employee_del_form.php?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../employee_show.php";
+    $locationError = "refresh:1; url=../employee_del_form?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../employeeshow";
 
 
     validateFormDeleteEmployees($Id, $locationError);

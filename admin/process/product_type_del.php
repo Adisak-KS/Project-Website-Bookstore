@@ -10,8 +10,8 @@ if (isset($_POST["id"])) {
     $ptyCover = $_POST["img"];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "refresh:1; url=../product_type_del_form.php?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../product_type_show.php";
+    $locationError = "refresh:1; url=../product_type_del_form?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../product_typeshow";
 
     $deleteProductType = $ProductTypeController->deleteProductType($Id);
 

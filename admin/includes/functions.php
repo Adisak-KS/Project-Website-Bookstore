@@ -714,3 +714,53 @@ function valiDateFormContact($ctDetail, $ctStatus, $locationError)
         messageError("กรุณาระบุลิงค์ช่องทางติดต่อที่ถูกต้อง", $locationError);
     }
 }
+
+function  valiDateFormAddBanner($bnName, $bnLink, $bnImg,  $bnStatus, $locationError)
+{
+    if (empty($bnName)) {
+        messageError("กรุณาระบุ ชื่อแบนเนอร์", $locationError);
+    } elseif (mb_strlen($bnName, 'UTF-8') > 100) {
+        messageError("ชื่อแบนเนอร์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!empty($bnLink) && !filter_var($bnLink, FILTER_VALIDATE_URL)) {
+        messageError("ลิงค์ URL แบนเนอร์ ไม่ถูกต้อง", $locationError);
+    }
+
+    if (empty($bnImg)) {
+        messageError("กรุณาระบุ รูปภาพ", $locationError);
+    } elseif (!empty($bnImg)) {
+        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+        $fileExtension = pathinfo($bnImg, PATHINFO_EXTENSION);
+
+        // Check if file extension is allowed
+        if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+            messageError("กรุณาระบุไฟล์ภาพที่เป็นรูปแบบ png, jpg หรือ jpeg เท่านั้น", $locationError);
+        }
+    }
+
+    if (!isset($bnStatus)) {
+        messageError("กรุณาระบุสถานะ 1 หรือ 0", $locationError);
+    } elseif ($bnStatus != 0 && $bnStatus != 1) {
+        messageError("สถานะต้องเป็นเลข 1 หรือ 0 เท่านั้น", $locationError);
+    }
+}
+
+function valiDateFormUpdateBanner($bnName, $bnLink, $bnStatus, $locationError)
+{
+    if (empty($bnName)) {
+        messageError("กรุณาระบุ ชื่อแบนเนอร์", $locationError);
+    } elseif (mb_strlen($bnName, 'UTF-8') > 100) {
+        messageError("ชื่อแบนเนอร์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!empty($bnLink) && !filter_var($bnLink, FILTER_VALIDATE_URL)) {
+        messageError("ลิงค์ URL แบนเนอร์ ไม่ถูกต้อง", $locationError);
+    }
+
+    if (!isset($bnStatus)) {
+        messageError("กรุณาระบุสถานะ 1 หรือ 0", $locationError);
+    } elseif ($bnStatus != 0 && $bnStatus != 1) {
+        messageError("สถานะต้องเป็นเลข 1 หรือ 0 เท่านั้น", $locationError);
+    }
+}

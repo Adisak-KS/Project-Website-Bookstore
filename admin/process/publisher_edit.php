@@ -15,8 +15,8 @@ if (isset($_POST['btn-edit'])) {
     $pubNewImg = $_FILES['pub_newImg']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../publisher_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../publisher_show.php";
+    $locationError = "Location: ../publisher_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../publishershow";
 
     valiDateFormPublischer($pubName, $pubDetail, $pubStatus, $locationError);
 

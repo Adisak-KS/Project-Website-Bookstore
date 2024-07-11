@@ -162,11 +162,6 @@ $settings = $SettingWebsiteController->getSettingsWebsite();
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>
                                                             </a>
-
-                                                            <a href="setting_website_del_form?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
-                                                                <i class="fa-solid fa-trash me-1"></i>
-                                                                <span>ลบข้อมูล</span>
-                                                            </a>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>

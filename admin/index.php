@@ -1,5 +1,16 @@
 <?php
 $titlePage = "หน้าแรก";
+require_once("../db/connectdb.php");
+require_once("../db/controller/SettingWebsiteController.php");
+require_once("../db/controller/ProductController.php");
+
+$SettingWebsiteController = new SettingWebsiteController($conn);
+$ProductController = new ProductController($conn);
+
+$QueryProductNumber = $SettingWebsiteController->getProductNumberLow();
+$prdNumberLow = $QueryProductNumber;
+
+$productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,148 +45,129 @@ $titlePage = "หน้าแรก";
                     <div class="row">
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
-                                        </div>
-                                    </div>
+                            <a href="order_show">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="header-title mt-0 mb-3">รอตรวจสอบชำระเงิน<?php echo $useLoginEmployee['authority'] ?></h4>
 
-                                    <h4 class="header-title mt-0 mb-4">Total Revenue</h4>
-
-                                    <div class="widget-chart-1">
-                                        <div class="widget-chart-box-1 float-start" dir="ltr">
-                                            <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 " data-bgColor="#F9B9B9" value="58" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
-                                        </div>
-
-                                        <div class="widget-detail-1 text-end">
-                                            <h2 class="fw-normal pt-2 mb-1"> 256 </h2>
-                                            <p class="text-muted mb-1">Revenue today</p>
+                                        <div class="widget-box-2">
+                                            <div class="widget-detail-2 text-center">
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+                                                <?php if ($productsLowNumber) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="progress progress-bar-alt-pink progress-sm">
+                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                    <span class="visually-hidden">77% Complete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
+                            </a>
+                        </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
-                                        </div>
-                                    </div>
+                            <a href="#">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="header-title mt-0 mb-3">รอการจัดส่ง</h4>
 
-                                    <h4 class="header-title mt-0 mb-4">Total Revenue</h4>
-
-                                    <div class="widget-chart-1">
-                                        <div class="widget-chart-box-1 float-start" dir="ltr">
-                                            <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 " data-bgColor="#F9B9B9" value="58" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
-                                        </div>
-
-                                        <div class="widget-detail-1 text-end">
-                                            <h2 class="fw-normal pt-2 mb-1"> 256 </h2>
-                                            <p class="text-muted mb-1">Revenue today</p>
+                                        <div class="widget-box-2">
+                                            <div class="widget-detail-2 text-center">
+                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
+                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+                                            </div>
+                                            <div class="progress progress-bar-alt-pink progress-sm">
+                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                    <span class="visually-hidden">77% Complete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
+                            </a>
+                        </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
-                                        </div>
-                                    </div>
+                            <a href="#">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="header-title mt-0 mb-3">หาหนังสือ</h4>
 
-                                    <h4 class="header-title mt-0 mb-4">Total Revenue</h4>
-
-                                    <div class="widget-chart-1">
-                                        <div class="widget-chart-box-1 float-start" dir="ltr">
-                                            <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 " data-bgColor="#F9B9B9" value="58" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
-                                        </div>
-
-                                        <div class="widget-detail-1 text-end">
-                                            <h2 class="fw-normal pt-2 mb-1"> 256 </h2>
-                                            <p class="text-muted mb-1">Revenue today</p>
+                                        <div class="widget-box-2">
+                                            <div class="widget-detail-2 text-center">
+                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
+                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+                                            </div>
+                                            <div class="progress progress-bar-alt-pink progress-sm">
+                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                    <span class="visually-hidden">77% Complete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
+                            </a>
+                        </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="dropdown float-end">
-                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="mdi mdi-dots-vertical"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Another action</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Something else</a>
-                                            <!-- item-->
-                                            <a href="javascript:void(0);" class="dropdown-item">Separated link</a>
-                                        </div>
-                                    </div>
+                            <a href="#">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="header-title mt-0 mb-3">ความคิดเห็น</h4>
 
-                                    <h4 class="header-title mt-0 mb-4">Total Revenue</h4>
-
-                                    <div class="widget-chart-1">
-                                        <div class="widget-chart-box-1 float-start" dir="ltr">
-                                            <input data-plugin="knob" data-width="70" data-height="70" data-fgColor="#f05050 " data-bgColor="#F9B9B9" value="58" data-skin="tron" data-angleOffset="180" data-readOnly=true data-thickness=".15" />
-                                        </div>
-
-                                        <div class="widget-detail-1 text-end">
-                                            <h2 class="fw-normal pt-2 mb-1"> 256 </h2>
-                                            <p class="text-muted mb-1">Revenue today</p>
+                                        <div class="widget-box-2">
+                                            <div class="widget-detail-2 text-center">
+                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
+                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+                                            </div>
+                                            <div class="progress progress-bar-alt-pink progress-sm">
+                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                    <span class="visually-hidden">77% Complete</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- end col -->
+                            </a>
+                        </div><!-- end col -->
+
+                        <div class="col-xl-3 col-md-6">
+                            <a href="product_stock_show">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="header-title mt-0 mb-3">สินค้าที่น้อยกว่า <?php echo number_format($prdNumberLow) ?> รายการ</h4>
+
+                                        <div class="widget-box-2">
+                                            <div class="widget-detail-2 text-center">
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+
+                                                <?php if ($productsLowNumber) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="progress progress-bar-alt-pink progress-sm">
+                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                        </div><!-- end col -->
+
                     </div>
                     <!-- end row -->
                 </div> <!-- container -->

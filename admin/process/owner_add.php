@@ -11,8 +11,8 @@ if (isset($_POST['btn-add'])) {
     $email = $_POST['email'];
     $eatId = $_POST['eat_id'];
 
-    $locationError = "Location: ../owner_show.php";
-    $locationSuccess = "Location: ../owner_show.php";
+    $locationError = "Location: ../ownershow";
+    $locationSuccess = "Location: ../ownershow";
 
 
     // ตรวจสอบข้อมูลจาก Form

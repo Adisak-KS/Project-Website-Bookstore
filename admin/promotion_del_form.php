@@ -21,7 +21,7 @@ if (isset($_GET['id'])) {
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($promotion);
 } else {
-    header('Location: product_type_show');
+    header('Location: promotion_show');
     exit;
 }
 

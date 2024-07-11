@@ -10,8 +10,8 @@ if (isset($_POST["id"])) {
     $proImg = $_POST["img"];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "refresh:1; url=../promotion_del_form.php?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../promotion_show.php";
+    $locationError = "refresh:1; url=../promotion_del_form?id=$base64Encoded";
+    $locationSuccess = "refresh:1; url=../promotionshow";
 
     $deletePromotion = $PromotionController->deletePromotion($proId);
 

@@ -17,8 +17,8 @@ if (isset($_POST['btn-edit'])) {
     $newProfile = $_FILES['newProfile']['name'];
 
     $base64Encoded = $_SESSION["base64Encoded"];
-    $locationError = "Location: ../owner_edit_form.php?id=$base64Encoded";
-    $locationSuccess = "Location: ../owner_show.php";
+    $locationError = "Location: ../owner_edit_form?id=$base64Encoded";
+    $locationSuccess = "Location: ../ownershow";
 
     $authority = $newEatId;
     // ตรวจสอบข้อมูลจาก Form

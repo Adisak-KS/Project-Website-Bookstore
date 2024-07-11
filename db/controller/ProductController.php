@@ -263,8 +263,9 @@ class ProductController extends BaseController
         }
     }
 
-    function deleteProductImg2($prdId){
-        try{
+    function deleteProductImg2($prdId)
+    {
+        try {
             $sql = "UPDATE bs_products
                     SET prd_img2 = null
                     WHERE prd_id = :prd_id";
@@ -273,7 +274,7 @@ class ProductController extends BaseController
             $stmt->execute();
 
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deleteProductImg2 : " . $e->getMessage();
             return false;
         }
@@ -289,7 +290,7 @@ class ProductController extends BaseController
             $stmt->bindParam(':prd_id', $prdId, PDO::PARAM_INT);
             $stmt->execute();
 
-            
+
             $sql = "DELETE FROM bs_products_views WHERE prd_id = :prd_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':prd_id', $prdId, PDO::PARAM_INT);
@@ -305,5 +306,55 @@ class ProductController extends BaseController
         }
     }
 
+    function getProductLow($prdNumberLow = null)
+    {
+        try {
 
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_quantity,
+                        bs_products.prd_preorder,
+                        bs_products.pty_id,
+                        bs_products.prd_status,
+                        bs_products_type.pty_name
+                    FROM bs_products
+                    JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id";
+
+            if ($prdNumberLow !== null) {
+                $sql .= " WHERE bs_products.prd_quantity <= :prd_number_low";
+            }
+
+            $stmt = $this->db->prepare($sql);
+
+            if ($prdNumberLow !== null) {
+                $stmt->bindParam(':prd_number_low', $prdNumberLow, PDO::PARAM_INT);
+            }
+
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductLow : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getProductLowNumber($prdNumberLow)
+    {
+        try {
+            $sql = "SELECT COUNT(prd_id) AS total_products_low
+                    FROM bs_products
+                    WHERE prd_quantity <= :prd_number_low";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':prd_number_low', $prdNumberLow, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total_products_low'];
+
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductLowNumber : " . $e->getMessage();
+            return false;
+        }
+    }
 }

@@ -4,9 +4,10 @@ $titlePage = "แก้ไขโปรโมชั่น";
 require_once("../db/connectdb.php");
 require_once("../db/controller/PromotionController.php");
 require_once("../includes/salt.php");
+require_once("../admin/includes/functions.php");
 
 if (isset($_GET['id'])) {
-    
+
     $_SESSION["base64Encoded"] = $_GET["id"];
     $base64Encoded =  $_SESSION["base64Encoded"];
 
@@ -19,7 +20,7 @@ if (isset($_GET['id'])) {
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($promotion);
 } else {
-    header('Location: product_type_show');
+    header('Location: promotion_show');
     exit;
 }
 
@@ -53,7 +54,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form  action="process/promotion_edit" method="post" enctype="multipart/form-data">
+                    <form action="process/promotion_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="card">
@@ -116,6 +117,7 @@ if (isset($_GET['id'])) {
 
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
@@ -125,15 +127,15 @@ if (isset($_GET['id'])) {
 
                                         <div class="form-check mb-2 form-check-success">
                                             <input class="form-check-input" type="radio" name="pro_status" id="1" value="1" <?php if ($promotion['pro_status'] == 1) {
-                                                                                                                                    echo 'checked';
-                                                                                                                                } ?>>
+                                                                                                                                echo 'checked';
+                                                                                                                            } ?>>
                                             <label class="form-check-label" for="1">แสดง</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
                                             <input class="form-check-input" type="radio" name="pro_status" id="0" value="0" <?php if ($promotion['pro_status'] != 1) {
-                                                                                                                                    echo 'checked';
-                                                                                                                                } ?>>
+                                                                                                                                echo 'checked';
+                                                                                                                            } ?>>
                                             <label class="form-check-label" for="0">ไม่แสดง</label>
                                         </div>
 
