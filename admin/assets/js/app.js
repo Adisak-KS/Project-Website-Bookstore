@@ -858,4 +858,4 @@ File: Main Js File
 Waves.init();
 
 // Feather Icons
-feather.replace()
+// feather.replace()

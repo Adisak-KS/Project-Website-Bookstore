@@ -75,19 +75,55 @@
                      </div>
                  </div>
                  <div class="col-lg-4 col-12">
-                     <div class="single-footer mrg-sm">
-                         <div class="footer-title mb-20">
-                             <h3>STORE INFORMATION</h3>
+
+                     <?php
+                        $ct_ids_to_check = [4, 5, 6];
+                        $found_contacts = array_filter($contacts, function ($contact) use ($ct_ids_to_check) {
+                            return in_array($contact['ct_id'], $ct_ids_to_check);
+                        });
+                        ?>
+                     <?php if (!empty($found_contacts)) { ?>
+                         <div class="single-footer mrg-sm">
+                             <div class="footer-title mb-20">
+                                 <h3>ข้อมูลร้าน</h3>
+                             </div>
+                             <div class="footer-contact">
+
+                                 <?php
+                                    $details = [
+                                        'address' => '',
+                                        'phone' => '',
+                                        'email' => ''
+                                    ];
+
+                                    foreach ($contacts as $contact) {
+                                        switch ($contact['ct_id']) {
+                                            case 6:
+                                                $details['address'] = $contact['ct_detail'];
+                                                break;
+                                            case 5:
+                                                $details['phone'] = $contact['ct_detail'];
+                                                break;
+                                            case 4:
+                                                $details['email'] = $contact['ct_detail'];
+                                                break;
+                                        }
+                                    }
+
+                                    if ($details['address']) {
+                                        echo '<p class="address">ที่อยู่ : ' . $details['address'] . '</p>';
+                                    }
+                                    if ($details['phone']) {
+                                        echo '<p class="address">ติดต่อ : ' . $details['phone'] . '</p>';
+                                    }
+                                    if ($details['email']) {
+                                        echo '<p class="address">อีเมล : ' . $details['email'] . '</p>';
+                                    }
+                                    ?>
+
+                             </div>
                          </div>
-                         <div class="footer-contact">
-                             <p class="adress">
-                                 <span>My Company</span>
-                                 Your address goes here.
-                             </p>
-                             <p><span>Call us now:</span> 0123456789</p>
-                             <p><span>Email:</span> demo@example.com</p>
-                         </div>
-                     </div>
+                     <?php } ?>
                  </div>
              </div>
          </div>

@@ -2,6 +2,11 @@
 $titlePage = "ออกจากระบบ";
 session_start();
 
+if (empty($_SESSION['emp_id'])) {
+    header('Location: login_form');
+    exit;
+}
+
 // ลบ session ทั้งหมด
 session_unset();
 // ทำลาย session
@@ -26,15 +31,27 @@ session_destroy();
 
                             <div class="text-center w-75 m-auto">
                                 <div class="auth-logo">
-                                    <a href="index.html" class="logo logo-dark text-center">
+                                    <a href="" class="logo logo-dark text-center">
                                         <span class="logo-lg">
-                                            <img src="assets/images/logo-dark.png" alt="" height="22">
-                                        </span>
-                                    </a>
+                                            <?php
+                                            $logo = false;
+                                            foreach ($settingsWebsite as $setting) {
+                                                if ($setting['st_id'] == 3) {
+                                                    $logoDetail = $setting['st_detail'];
+                                                    echo '
+                                                        <img src="../uploads/img_web_setting/' . $logoDetail . '" alt="" style="height:40px" class="mx-auto" >
+                                                    ';
+                                                    $logo = true;
+                                                    break;
+                                                }
+                                            }
 
-                                    <a href="index.html" class="logo logo-light text-center">
-                                        <span class="logo-lg">
-                                            <img src="assets/images/logo-light.png" alt="" height="22">
+                                            if (!$logo) {
+                                                echo '
+                                                    <img src="assets/images/logo-dark.png" alt="" height="22">
+                                                ';
+                                            }
+                                            ?>
                                         </span>
                                     </a>
                                 </div>

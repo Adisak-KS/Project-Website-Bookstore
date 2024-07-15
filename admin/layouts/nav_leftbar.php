@@ -69,6 +69,7 @@
                 <?php
                 $authority = $useLoginEmployee['authority'];
 
+                // Super Admin 
                 if (in_array(1, str_split($authority))) {
                     echo '
                     <li class="menu-title mt-2">จัดการบุคล</li>
@@ -181,7 +182,7 @@
 
                     <li>
                         <a href="banner_show">
-                            <i class="fa-solid fa-globe"></i>
+                            <i class="fa-solid fa-images"></i>
                             <span>แบนเนอร์ / โปรโมท</span>
                         </a>
                     </li>
@@ -199,6 +200,7 @@
                     </li>
                     ';
                 }
+                // Owner
                 if (in_array(2, str_split($authority))) {
                     echo '
                     <li class="menu-title mt-2">จัดการบุคล</li>
@@ -241,6 +243,7 @@
                     </li>
                     ';
                 }
+                // Admin
                 if (in_array(3, str_split($authority))) {
                     echo '
                     <li class="menu-title mt-2">จัดการบุคล</li>
@@ -350,6 +353,7 @@
                     </li>
                     ';
                 }
+                // Accounting
                 if (in_array(4, str_split($authority))) {
                     echo '
                     <li class="menu-title mt-2">จัดการการชำระเงิน</li>
@@ -386,6 +390,7 @@
 
                     ';
                 }
+                // Sale
                 if (in_array(5, str_split($authority))) {
                     echo '
                     <li class="menu-title mt-2">จัดการสินค้า</li>
@@ -426,28 +431,32 @@
                     </li>
                     ';
                 }
+                // Employee
                 if (in_array(6, str_split($authority))) {
                     echo '
                      <li class="menu-title mt-2">ตั้งค่า</li>
 
-                <li>
-                    <a href="contact_show">
-                        <i class="fa-solid fa-globe"></i>
-                        <span>ช่องทางติดต่อ</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="setting_website_show">
-                        <i class="fa-solid fa-gears"></i>
-                        <span>ตั้งค่าเว็บไซต์</span>
-                    </a>
-                </li>
+                     <li>
+                        <a href="banner_show">
+                            <i class="fa-solid fa-images"></i>
+                            <span>แบนเนอร์ / โปรโมท</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="contact_show">
+                            <i class="fa-solid fa-globe"></i>
+                            <span>ช่องทางติดต่อ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="setting_website_show">
+                            <i class="fa-solid fa-gears"></i>
+                            <span>ตั้งค่าเว็บไซต์</span>
+                        </a>
+                    </li>
                     ';
                 }
-
-
-
-
 
                 ?>
                 <!-- 

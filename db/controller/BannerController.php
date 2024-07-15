@@ -22,7 +22,10 @@ class BannerController extends BaseController
     function getBanner()
     {
         try {
-            $sql = "SELECT * FROM bs_banners";
+            $sql = "SELECT * FROM bs_banners
+                    WHERE bn_number_list IS NOT NULL
+                    ORDER BY bn_number_list ASC;
+                    ";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -97,8 +100,9 @@ class BannerController extends BaseController
         }
     }
 
-    function updateDetailBanner($bnName, $bnLink, $bnStatus, $bnId){
-        try{
+    function updateDetailBanner($bnName, $bnLink, $bnStatus, $bnId)
+    {
+        try {
             $sql = "UPDATE bs_banners
                     SET bn_name = :bn_name,
                         bn_link = :bn_link,
@@ -109,16 +113,17 @@ class BannerController extends BaseController
             $stmt->bindParam(':bn_link', $bnLink, PDO::PARAM_STR);
             $stmt->bindParam(':bn_status', $bnStatus, PDO::PARAM_INT);
             $stmt->bindParam(':bn_id', $bnId, PDO::PARAM_INT);
-           $stmt->execute();
-           return true;
-        }catch(PDOException $e){
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
             echo "<hr>Error in updateDetailBanner : " . $e->getMessage();
             return false;
         }
     }
 
-    function updateImgBanner($newImg, $bnId){
-        try{
+    function updateImgBanner($newImg, $bnId)
+    {
+        try {
             $sql = "UPDATE bs_banners
                     SET bn_img = :bn_img
                     WHERE bn_id = :bn_id";
@@ -127,23 +132,53 @@ class BannerController extends BaseController
             $stmt->bindParam(':bn_id', $bnId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in updateImgBanner : " . $e->getMessage();
             return false;
         }
     }
 
-    function deleteBanner($bnId){
-        try{
-            $sql ="DELETE FROM bs_banners
+    function deleteBanner($bnId)
+    {
+        try {
+            $sql = "DELETE FROM bs_banners
                     WHERE bn_id = :bn_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':bn_id', $bnId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deleteBanner : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function updateSortTableList($bnNumberList, $bnId) {
+        try {
+            $sql = "UPDATE bs_banners
+                    SET bn_number_list = :bn_number_list
+                    WHERE bn_id = :bn_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':bn_number_list', $bnNumberList, PDO::PARAM_INT);
+            $stmt->bindParam(':bn_id', $bnId, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in SortTableList : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getSlideBanner(){
+        try{
+            $sql = "SELECT * FROM bs_banners
+                    WHERE bn_status = 1
+                    ORDER BY bn_number_list ASC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "<hr>Error in showSlideBanner : " . $e->getMessage();
             return false;
         }
     }

@@ -15,24 +15,25 @@ $settingsWebsite = $SettingWebsiteController->useSettingsWebsite();
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <?php
-    // ชื่อเว็บไซต์ที่ Tab (st_id = 1)
-    $websiteName = "ชื่อเว็บไซต์"; // ค่าเริ่มต้นถ้าไม่พบข้อมูล
-    $faviconUrl = "uploads/img_web_setting/default_favicon.ico"; // URL ของ favicon ค่าเริ่มต้น
+// ชื่อเว็บไซต์ที่ Tab (st_id = 1)
+$websiteName = "ชื่อเว็บไซต์"; // ค่าเริ่มต้นถ้าไม่พบข้อมูล
+$faviconUrl = "uploads/img_web_setting/default_favicon.ico"; // URL ของ favicon ค่าเริ่มต้น
 
-    // ค้นหาข้อมูลจาก $settingsWebsite เพียงครั้งเดียว
-    foreach ($settingsWebsite as $setting) {
-        if ($setting['st_id'] == 1) {
-            $websiteName = $setting['st_detail'];
-        } elseif ($setting['st_id'] == 2) {
-            $faviconUrl = "../uploads/img_web_setting/" . $setting['st_detail'];
-        }
+// ค้นหาข้อมูลจาก $settingsWebsite เพียงครั้งเดียว
+foreach ($settingsWebsite as $setting) {
+    if ($setting['st_id'] == 1) {
+        $websiteName = $setting['st_detail'];
+    } elseif ($setting['st_id'] == 2) {
+        $faviconUrl = "uploads/img_web_setting/" . $setting['st_detail'];
     }
+}
 
-    // แสดงผลใน <title>
-    echo "<title>$titlePage | $websiteName</title>";
-    // แสดง favicon
-    echo '<link rel="shortcut icon" href="' . $faviconUrl . '" type="image/x-icon">';
-    ?>
+// แสดงผลใน <title>
+echo "<title>$titlePage | $websiteName</title>";
+// แสดง favicon
+echo '<link rel="shortcut icon" href="' . $faviconUrl . '" type="image/x-icon">';
+?>
+
 
 <!-- all css here -->
 

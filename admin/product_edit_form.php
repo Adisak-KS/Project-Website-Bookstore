@@ -305,6 +305,17 @@ if (isset($_GET['id'])) {
 
         <?php require_once('layouts/vender.php') ?>
 
+        <!-- CKEditor -->
+        <script type="importmap">
+            {
+                "imports": {
+                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
+                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.0/"
+                }
+            }
+        </script>
+        <script type="module" src="assets/js/main-CKEditor.js"></script>
+
         <!-- preview New Profile, check file type, file size  -->
         <script>
             const handleFileChange = (inputId, imgId, containerId, previewId, originalSrc) => {

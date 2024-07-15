@@ -15,7 +15,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../product_type_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../product_typeshow";
+    $locationSuccess = "Location: ../product_type_show";
 
     valiDateFormUpdateProductType($ptyName, $ptyDetail, $ptyStatus,  $locationError);
 

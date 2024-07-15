@@ -16,7 +16,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../publisher_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../publishershow";
+    $locationSuccess = "Location: ../publisher_show";
 
     valiDateFormPublischer($pubName, $pubDetail, $pubStatus, $locationError);
 

@@ -66,8 +66,7 @@ class ContactController extends BaseController
             $stmt->bindParam(':ct_status', $ctStatus, PDO::PARAM_INT);
 
             if ($ctNameLink !== null) {
-                 $stmt->bindParam(':ct_name_link', $ctNameLink, PDO::PARAM_STR);
-            
+                $stmt->bindParam(':ct_name_link', $ctNameLink, PDO::PARAM_STR);
             }
             $stmt->bindParam(':ct_id', $ctId, PDO::PARAM_INT);
             $stmt->execute();
@@ -91,6 +90,21 @@ class ContactController extends BaseController
             return true;
         } catch (PDOException $e) {
             echo "<hr>Error in deleteDetailContact : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function useContact()
+    {
+        try {
+            $sql = "SELECT ct_id, ct_name, ct_detail, ct_name_link
+                    FROM bs_contacts
+                    WHERE ct_status = 1 AND ct_detail IS NOT NULL AND ct_detail != '' ";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in useContact : " . $e->getMessage();
             return false;
         }
     }

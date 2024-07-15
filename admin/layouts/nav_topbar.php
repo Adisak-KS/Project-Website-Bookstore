@@ -71,7 +71,7 @@ if (!$useLoginEmployee || empty($empId)) {
                 echo '
                             <a href="index" class="d-flex justify-content-center mt-2">
                                 <span class="logo-lg">
-                                    <img class="img-fluid" style="max-height:30px" src="../uploads/img_web_setting/' . $logoDetail . '" alt="">
+                                    <img class="img-fluid" style="max-height:40px" src="../uploads/img_web_setting/' . $logoDetail . '" alt="">
                                 </span> 
                             </a>
                         ';
@@ -82,7 +82,7 @@ if (!$useLoginEmployee || empty($empId)) {
 
         if (!$logo) {
             echo '
-                        <a href="index" class="logo logo-dark text-center">
+                    <a href="index" class="logo logo-dark text-center">
                             <span class="logo-sm">
                                 <img src="../uploads/img_web_setting/default_admin_logo-sm.png" alt="" height="22">
                             </span>
@@ -90,7 +90,7 @@ if (!$useLoginEmployee || empty($empId)) {
                                 <img src="../uploads/img_web_setting/default_admin_logo-dark.png" alt="" height="16">
                             </span> 
                         </a>
-                     ';
+                     ';      
         }
         ?>
     </div>

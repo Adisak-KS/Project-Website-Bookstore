@@ -116,28 +116,25 @@ $banners = $BannerController->getBanner();
                                     <hr>
 
                                     <?php if ($banners) { ?>
+                                        <p class="text-danger">*สามารถลากวางเพื่อกำหนดการแสดงก่อน-หลังได้</p>
                                         <ul class="sortable-list list-unstyled taskList" id="upcoming">
                                             <?php foreach ($banners as $row) { ?>
-
-                                                <li>
+                                                <li data-id="<?php echo $row['bn_id']; ?>">
                                                     <div class="kanban-box">
-                                                        <!-- <div class="checkbox-wrapper float-start">
-                                                    <div class="form-check form-check-success ">
-                                                        <input class="form-check-input" type="checkbox" id="singleCheckbox2" value="option2" aria-label="Single checkbox Two">
-                                                        <label></label>
-                                                    </div>
-                                                </div> -->
-
                                                         <div class="">
-
                                                             <div class="d-flex justify-content-between align-items-center">
                                                                 <ul class="list-inline d-flex justify-content-center align-items-center">
                                                                     <li class="list-inline-item">
                                                                         <img src="../uploads/img_banner/<?php echo $row['bn_img']; ?>" alt="img" class="avatar-sm rounded" style="width: 100px; height: 60px; object-fit: cover;">
-
                                                                     </li>
                                                                     <li class="list-inline-item mx-3">
-                                                                        <h5 class="mt-0 text-dark"><?php echo $row['bn_name']; ?></h5>
+                                                                        <h5 class="mt-0 text-dark">
+                                                                            <?php
+                                                                            $name = $row['bn_name'];
+                                                                            echo (mb_strlen($name, 'UTF-8') > 15) ? mb_substr($name, 0, 15, 'UTF-8') . '...' : $name;
+                                                                            ?>
+                                                                        </h5>
+
                                                                         <?php if ($row['bn_status'] == 1) { ?>
                                                                             <span class="badge bg-success float-start">แสดง</span>
                                                                         <?php } else { ?>
@@ -145,16 +142,13 @@ $banners = $BannerController->getBanner();
                                                                         <?php } ?>
                                                                     </li>
                                                                 </ul>
-
                                                                 <ul class="list-inline align-self-end">
-
                                                                     <?php
                                                                     $originalId = $row["bn_id"];
-                                                                    require_once("../includes/salt.php");   // รหัส Salt 
-                                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                                    require_once("../includes/salt.php");
+                                                                    $saltedId = $salt1 . $originalId . $salt2;
+                                                                    $base64Encoded = base64_encode($saltedId);
                                                                     ?>
-
                                                                     <li class="list-inline-item">
                                                                         <a href="banner_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                             <i class="fa-solid fa-pen-to-square me-1"></i>
@@ -178,11 +172,12 @@ $banners = $BannerController->getBanner();
                                         <?php require_once("./includes/no_information.php") ?>
                                     <?php } ?>
 
-                                    <!-- <div class="text-center pt-2">
-                                        <a data-bs-toggle="modal" data-bs-target="#custom-modal" class="btn btn-primary waves-effect waves-light" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="200" data-overlayColor="#36404a">
-                                            <i class="mdi mdi-plus"></i> Add New
-                                        </a>
-                                    </div> -->
+                                    <div class="text-center pt-2">
+                                        <button type="button" id="saveOrder" class="btn btn-warning">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i>
+                                            บันทึกการแก้ไขลำดับ
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -210,21 +205,50 @@ $banners = $BannerController->getBanner();
     <?php require_once('layouts/nav_rightbar.php') ?>
 
     <?php require_once('layouts/vender.php') ?>
+
+    <!-- List slide show  -->
     <script>
-        "use strict";
-        ! function(e) {
-            function o() {
-                this.$body = e("body")
-            }
-            e("#upcoming, #inprogress, #completed").sortable({
-                connectWith: ".taskList",
-                placeholder: "task-placeholder",
-                forcePlaceholderSize: !0,
-                update: function(o, t) {
-                    e("#todo").sortable("toArray"), e("#inprogress").sortable("toArray"), e("#completed").sortable("toArray")
-                }
-            }).disableSelection(), o.prototype.init = function() {}, e.KanbanBoard = new o, e.KanbanBoard.Constructor = o
-        }(window.jQuery), window.jQuery.KanbanBoard.init();
+        $(function() {
+            $(".sortable-list").sortable();
+
+            $("#saveOrder").click(function() {
+                const order = []; // ใช้ const สำหรับอาร์เรย์ที่ไม่เปลี่ยนแปลงอ้างอิง
+
+                $(".sortable-list li").each(function(index) {
+                    const id = $(this).data('id'); // ใช้ const สำหรับค่าที่ไม่เปลี่ยนแปลง
+                    if (id !== undefined) {
+                        order.push({
+                            id: id,
+                            bn_number_list: order.length + 1 // นับลำดับตามที่แสดงใน UI
+                        });
+                    }
+                });
+
+                console.log(order); // ตรวจสอบอาร์เรย์ order
+
+                $.ajax({
+                    url: 'process/banner_number_list_edit.php',
+                    method: 'POST',
+                    data: {
+                        order: order
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: 'ลำดับถูกบันทึกเรียบร้อยแล้ว'
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: xhr.responseText
+                        });
+                    }
+                });
+            });
+        });
     </script>
 
     <script>

@@ -93,7 +93,7 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="">
-                                            <img class="rounded mx-auto d-block img-fluid" id="bn_img" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_banner/<?php echo $banner['bn_img'] ?>">
+                                            <img class="rounded mx-auto d-block img-fluid" id="bn_img" style="width:300px; height:150px; object-fit: cover;" src="../uploads/img_banner/<?php echo $banner['bn_img'] ?>">
                                             <input type="hidden" name="bn_img" value="<?php echo $banner['bn_img'] ?>" readonly>
                                         </div>
                                         <div class="mb-3">

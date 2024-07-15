@@ -8,8 +8,8 @@
  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.2/feather.min.js" integrity="sha512-zMm7+ZQ8AZr1r3W8Z8lDATkH05QG5Gm2xc6MlsCdBz9l6oE8Y7IXByMgSm/rdRQrhuHt99HAYfMljBOEZ68q5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
  <!-- knob plugin -->
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js" integrity="sha512-NhRZzPdzMOMf005Xmd4JonwPftz4Pe99mRVcFeRDcdCtfjv46zPIi/7ZKScbpHD/V0HB1Eb+ZWigMqw94VUVaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+ <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js" integrity="sha512-NhRZzPdzMOMf005Xmd4JonwPftz4Pe99mRVcFeRDcdCtfjv46zPIi/7ZKScbpHD/V0HB1Eb+ZWigMqw94VUVaw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.2/feather.min.js" integrity="sha512-zMm7+ZQ8AZr1r3W8Z8lDATkH05QG5Gm2xc6MlsCdBz9l6oE8Y7IXByMgSm/rdRQrhuHt99HAYfMljBOEZ68q5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
  <!-- App js -->
  <script src="assets/js/app.min.js"></script>
 
@@ -39,7 +39,7 @@
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
- <script type="importmap">
+ <!-- <script type="importmap">
      {
         "imports": {
             "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
@@ -47,13 +47,12 @@
         }
      }
  </script>
- <script type="module" src="assets/js/main-CKEditor.js"></script>
+ <script type="module" src="assets/js/main-CKEditor.js"></script> -->
+ <!-- Chart Js  -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Chart Js  -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js" integrity="sha512-Ww1y9OuQ2kehgVWSD/3nhgfrb424O3802QYP/A5gPXoM4+rRjiKrjHdGxQKrMGQykmsJ/86oGdHszfcVgUr4hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/custombox/4.0.3/custombox.min.js" integrity="sha512-gVIaVnvXgOhn93qR/PhWTnwwftSFUcIgZ0KdkuvrFiN4fDct6oQv/6KcoWoi00TKL/b9S3AI8WNTb+3dlpEq3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js" integrity="sha512-Ww1y9OuQ2kehgVWSD/3nhgfrb424O3802QYP/A5gPXoM4+rRjiKrjHdGxQKrMGQykmsJ/86oGdHszfcVgUr4hA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/custombox/4.0.3/custombox.min.js" integrity="sha512-gVIaVnvXgOhn93qR/PhWTnwwftSFUcIgZ0KdkuvrFiN4fDct6oQv/6KcoWoi00TKL/b9S3AI8WNTb+3dlpEq3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
  <!-- My Scripts  -->

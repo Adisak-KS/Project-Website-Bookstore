@@ -1,3 +1,13 @@
+<?php
+require_once("db/connectdb.php");
+require_once("db/controller/ContactController.php");
+
+$ContactController = new ContactController($conn);
+
+$contacts = $ContactController->useContact();
+?>
+
+
 <header>
     <!-- header-top-area-start -->
     <div class="header-top-area">
@@ -6,33 +16,48 @@
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="language-area">
                         <ul>
-                            <li>
-                                <a href="#">
-                                    <i class="fa-brands fa-facebook"></i>
-                                    Bookstore
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa-brands fa-youtube"></i>
-                                    Bookstore
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fa-brands fa-twitter"></i>
-                                    English
-                                </a>
-                            </li>
+                            <?php
+                            foreach ($contacts as $contact) {
+                                $ctDetail = $contact['ct_detail'];
+                                $ctNameLink = $contact['ct_name_link'];
+                                $icon = '';
+
+                                if ($contact['ct_id'] == 1) {
+                                    $icon = 'fa-facebook';
+                                } elseif ($contact['ct_id'] == 2) {
+                                    $icon = 'fa-youtube';
+                                } elseif ($contact['ct_id'] == 3) {
+                                    $icon = 'fa-twitter';
+                                }
+
+                                if ($icon) {
+                                    echo '
+                                        <li>
+                                            <a href="' . $ctDetail . '" target="_blank">
+                                                <i class="fa-brands ' . $icon . ' me-1"></i>
+                                                ' . $ctNameLink . '
+                                            </a>
+                                        </li>';
+                                }
+                            }
+                            ?>
                         </ul>
+
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="account-area text-end">
                         <ul>
                             <!-- <li><a href="my-account.html">My Account</a></li> -->
-                            <li><a href="register_form">สมัครสมาชิก</a></li>
-                            <li><a href="login_form">เข้าสู่ระบบ</a></li>
+                            <?php if (empty($_SESSION['mem_id'])) { ?>
+                                <li><a href="register_form">สมัครสมาชิก</a></li>
+                                <li><a href="login_form">เข้าสู่ระบบ</a></li>
+                            <?php } else { ?>
+                                <li class="text-white"><small>ยินดีต้อนรับ : ชื่อ นามสกุล</small></li>
+                                <li><a href="my-account.html">บัญชีของฉัน</a></li>
+                                <li><a href="logout">ออกจากระบบ</a></li>
+                            <?php } ?>
+
                         </ul>
                     </div>
                 </div>
@@ -47,21 +72,21 @@
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-12">
                     <div class="logo-area text-start logo-xs-mrg">
-                    <?php
-$logo = false;
-foreach ($settingsWebsite as $setting) {
-    if ($setting['st_id'] == 3) {
-        $logoDetail = $setting['st_detail'];
-        echo '
-            <a href="index">
-                <img src="uploads/img_web_setting/' . $logoDetail . '" alt="logo"  style="height:80px">
-            </a>
-        ';
-        $logo = true;
-        break;
-    }
-}
-?>
+                        <?php
+                        $logo = false;
+                        foreach ($settingsWebsite as $setting) {
+                            if ($setting['st_id'] == 3) {
+                                $logoDetail = $setting['st_detail'];
+                                echo '
+                                        <a href="">
+                                            <img src="uploads/img_web_setting/' . $logoDetail . '" alt="logo"  style="height:80px">
+                                        </a>
+                                    ';
+                                $logo = true;
+                                break;
+                            }
+                        }
+                        ?>
 
                     </div>
                 </div>
@@ -77,12 +102,20 @@ foreach ($settingsWebsite as $setting) {
 
                 <div class="col-lg-3 col-md-3 col-12">
                     <div class="my-cart">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a>
+                        <ul class="list-unstyled d-flex">
+                            <li class="me-3">
+                                <a href="#"><i class="fa fa-shopping-cart"></i></a>
                                 <span>2</span>
-
                             </li>
+                            <?php if (!empty($_SESSION['mem_id'])) { ?>
+                                <li>
+                                    <a href="#">
+                                        <img src="./uploads/img_member/default.png" style="width: 50px;" alt="">
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
+
                     </div>
                 </div>
             </div>
