@@ -152,23 +152,24 @@ class ProductTypeController extends BaseController
         }
     }
 
-    function deleteProductType($Id){
-        try{
+    function deleteProductType($Id)
+    {
+        try {
             $sql = "DELETE FROM bs_products_type
                     WHERE pty_id = :pty_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_id', $Id);
             $stmt->execute();
             return true;
-
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deleteProductType : " . $e->getMessage();
             return false;
         }
     }
 
-    function amountProductInProductType($Id){
-        try{
+    function amountProductInProductType($Id)
+    {
+        try {
             $sql = "SELECT COUNT(prd_id) AS amount 
                     FROM bs_products
                     WHERE pty_id = :pty_id";
@@ -176,8 +177,36 @@ class ProductTypeController extends BaseController
             $stmt->bindParam(':pty_id', $Id);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in amountProduct : " . $e->getMessage();
+        }
+    }
+
+    function getProductsType10()
+    {
+        try {
+            $sql = "SELECT
+                        bs_products_type.pty_id,
+                        bs_products_type.pty_name,
+                        COUNT(bs_products.prd_id) AS product_count
+                    FROM bs_products_type
+                    INNER JOIN bs_products ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    WHERE bs_products.prd_preorder = 1
+                        AND bs_products.prd_status = 1
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                    GROUP BY bs_products_type.pty_id
+                    ORDER BY product_count DESC
+                    LIMIT 10";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsType10 : " . $e->getMessage();
+            return false;
         }
     }
 }

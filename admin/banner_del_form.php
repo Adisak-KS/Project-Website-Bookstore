@@ -4,7 +4,7 @@ $titlePage = "ลบแบนเนอร์";
 require_once("../db/connectdb.php");
 require_once("../db/controller/BannerController.php");
 require_once("../includes/salt.php");
-require_once("../admin/includes/functions.php");
+require_once("../includes/functions.php");
 
 if (isset($_GET['id'])) {
 

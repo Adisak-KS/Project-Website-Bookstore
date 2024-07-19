@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 
 if (isset($_POST["id"])) {
@@ -9,7 +9,7 @@ if (isset($_POST["id"])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "refresh:1; url=../owner_del_form?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../ownershow";
+    $locationSuccess = "refresh:1; url=../owner_show";
 
     $deleteEmployee = $BaseController->deleteEmployees($Id);
 

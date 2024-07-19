@@ -165,4 +165,32 @@ class AuthorController extends BaseController
             echo "<hr>Error in amountProductInAuthor : " . $e->getMessage();
         }
     }
+
+    function getAuthors10()
+    {
+        try {
+            $sql = "SELECT
+                        bs_authors.auth_id,
+                        bs_authors.auth_name,
+                        COUNT(bs_products.prd_id) AS product_count
+                    FROM bs_authors
+                    INNER JOIN bs_products ON bs_products.auth_id = bs_authors.auth_id
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    WHERE bs_products.prd_preorder = 1 
+                        AND bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                    GROUP BY bs_authors.auth_id
+                    ORDER BY product_count DESC
+                    LIMIT 10";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in ggetAuthors10 : " . $e->getMessage();
+            return false;
+        }
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/AuthorController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 $AuthorController = new AuthorController($conn);
 
@@ -16,7 +16,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../author_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../authorshow";
+    $locationSuccess = "Location: ../author_show";
 
     valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError);
 

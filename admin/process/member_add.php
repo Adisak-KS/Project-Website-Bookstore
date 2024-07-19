@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 require_once(__DIR__ . '/../../db/controller/MemberController.php');
 
 $MemberController = new MemberController($conn);
@@ -15,8 +15,8 @@ if (isset($_POST['btn-add'])) {
     $confirmPassword = $_POST['confirmPassword'];
     $email = $_POST['email'];
 
-    $locationError = "Location: ../membershow";
-    $locationSuccess = "Location: ../membershow";
+    $locationError = "Location: ../member_show";
+    $locationSuccess = "Location: ../member_show";
 
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormAddMember($fname, $lname, $username, $password, $confirmPassword, $email, $locationError);

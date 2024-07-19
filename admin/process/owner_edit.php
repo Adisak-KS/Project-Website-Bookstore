@@ -1,7 +1,8 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/OwnerController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+// require_once(__DIR__ . '/../../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 
 $OwnerController = new OwnerController($conn);
@@ -18,7 +19,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../owner_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../ownershow";
+    $locationSuccess = "Location: ../owner_show";
 
     $authority = $newEatId;
     // ตรวจสอบข้อมูลจาก Form

@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/ShippingController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 $ShippingController = new ShippingController($conn);
 

@@ -49,7 +49,7 @@
             }
         }
 
-        function updateDetailSettingWebsite($stDetail = null, $stStatus, $stId)
+        function updateDetailSettingWebsite($stStatus, $stId, $stDetail = null)
         {
             try {
                 $sql = "UPDATE bs_settings_website

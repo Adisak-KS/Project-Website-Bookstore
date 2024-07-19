@@ -374,7 +374,7 @@ class ProductController extends BaseController
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -409,7 +409,7 @@ class ProductController extends BaseController
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id
+                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -444,7 +444,7 @@ class ProductController extends BaseController
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id
+                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -481,7 +481,7 @@ class ProductController extends BaseController
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
                     LEFT JOIN bs_products_views ON bs_products.prd_id = bs_products_views.prd_id
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
@@ -496,6 +496,260 @@ class ProductController extends BaseController
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "<hr>Error in getMostViewedProducts : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getProductDetail($prdId)
+    {
+        try {
+            $sql = "SELECT
+                        bs_products.*,
+                        bs_products_type.pty_id,
+                        bs_products_type.pty_name,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1 
+                        AND bs_products.prd_id = :prd_id
+                    GROUP BY bs_products.prd_id;
+                    ";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':prd_id', $prdId, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductDetail : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getProductsSameType($ptyId, $prdId)
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.pty_id = :pty_id 
+                        AND bs_products.prd_id != :prd_id
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()
+                    LIMIT 8";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pty_id', $ptyId, PDO::PARAM_INT);
+            $stmt->bindParam(':prd_id', $prdId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsSameType : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getProductAdvertising($prdPreorder, $prdId)
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.prd_preorder = :prd_preorder 
+                        AND bs_products.prd_id != :prd_id
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()
+                    LIMIT 3";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
+            $stmt->bindParam(':prd_id', $prdId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsSameType : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getProductsAll()
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        bs_products.prd_detail,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.prd_preorder = 1 
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()";
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsAll : " . $e->getMessage();
+            return false;
+        }
+    }
+    function getProductsAllFocusType($ptyId)
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        bs_products.prd_detail,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.prd_preorder = 1
+                        AND bs_products.pty_id = :pty_id
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pty_id', $ptyId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsAllFocusType : " . $e->getMessage();
+            return false;
+        }
+    }
+    function getProductsAllFocusPublisher($pubId)
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        bs_products.prd_detail,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.prd_preorder = 1
+                        AND bs_products.pub_id = :pub_id
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':pub_id', $pubId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsAllFocusPublishe : " . $e->getMessage();
+            return false;
+        }
+    }
+    function getProductsAllFocusAuthor($authId)
+    {
+        try {
+
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        bs_products.prd_detail,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND bs_products.prd_preorder = 1
+                        AND bs_products.auth_id = :auth_id
+                    GROUP BY bs_products.prd_id
+                    ORDER BY RAND()";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':auth_id', $authId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getProductsAllFocusAuthor : " . $e->getMessage();
             return false;
         }
     }

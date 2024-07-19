@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/AuthorController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 $AuthorController = new AuthorController($conn);
 
@@ -11,7 +11,7 @@ if (isset($_POST["id"])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "refresh:1; url=../author_del_form?id=$base64Encoded";
-    $locationSuccess = "refresh:1; url=../authorshow";
+    $locationSuccess = "refresh:1; url=../author_show";
 
     $deleteAuthor = $AuthorController->deleteAuthor($authId);
 

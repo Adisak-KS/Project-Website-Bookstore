@@ -116,7 +116,12 @@ $banners = $BannerController->getBanner();
                                     <hr>
 
                                     <?php if ($banners) { ?>
-                                        <p class="text-danger">*สามารถลากวางเพื่อกำหนดการแสดงก่อน-หลังได้</p>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <p class="text-danger mb-0 me-2" style="flex: 1 1 auto;">*สามารถลากวางเพื่อกำหนดการแสดงก่อน-หลังได้</p>
+                                            <i class="fa-solid fa-arrow-up-1-9 fa-lg text-danger"></i>
+                                        </div>
+
+
                                         <ul class="sortable-list list-unstyled taskList" id="upcoming">
                                             <?php foreach ($banners as $row) { ?>
                                                 <li data-id="<?php echo $row['bn_id']; ?>">

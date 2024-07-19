@@ -1,8 +1,8 @@
  <?php
-    // My Function
-    require_once("includes/functions.php");
+  
     require_once(__DIR__ . '/../../db/connectdb.php');
     require_once(__DIR__ . '/../../db/controller/SettingWebsiteController.php');
+    require_once(__DIR__ . '/../../includes/functions.php');
 
     $SettingWebsiteController = new SettingWebsiteController($conn);
     $settingsWebsite = $SettingWebsiteController->useSettingsWebsite();

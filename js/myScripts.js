@@ -1111,5 +1111,24 @@ $(document).ready(function () {
     });
 });
 
-
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+function copyURL(event) {
+    event.preventDefault(); // ป้องกันไม่ให้หน้ารีเฟรช
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(function() {
+        Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: 'คัดลอก URL สินค้าเรียบร้อยแล้ว',
+            confirmButtonText: 'ตกลง'
+        });
+    }, function(err) {
+        Swal.fire({
+            icon: 'error',
+            title: 'ข้อผิดพลาด',
+            text: 'ไม่สามารถคัดลอก URL: ' + err,
+            confirmButtonText: 'ตกลง'
+        });
+    });
+}
 

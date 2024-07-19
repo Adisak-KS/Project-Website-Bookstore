@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 require_once(__DIR__ . '/../../db/controller/SettingWebsiteController.php');
 
 $SettingWebsiteController = new SettingWebsiteController($conn);

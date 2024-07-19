@@ -4337,6 +4337,7 @@ nav.menu .cr-dropdown ul {
 
 .left-menu ul li {
   border-bottom: 1px solid #e5e5e5;
+  
 }
 
 .left-menu ul li:last-child {
@@ -4362,7 +4363,7 @@ nav.menu .cr-dropdown ul {
 }
 
 .left-menu ul li a:before {
-  content: "";
+  /* content: ''; */
   display: inline-block;
   font-family: "FontAwesome";
   font-size: 16px;
@@ -4708,11 +4709,13 @@ nav.menu .cr-dropdown ul {
 
 .flexslider {
   margin: 0;
+  
 }
 
 .flex-control-thumbs img {
   border: 1px solid transparent;
   transition: 0.3s;
+  height: 100px;
 }
 
 .flex-control-thumbs .flex-active {
@@ -5144,6 +5147,13 @@ nav.menu .cr-dropdown ul {
 .product-addto-links a:hover,
 .product-add-form form a:hover {
   background: #f07c29 none repeat scroll 0 0;
+}
+
+.product-add-form form a.btnDisabled {
+  pointer-events: none; 
+  opacity: 0.6;       
+  cursor: default;     
+  text-decoration: none;
 }
 
 .product-addto-links-text p {

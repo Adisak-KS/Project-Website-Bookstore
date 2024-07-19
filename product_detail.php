@@ -2,11 +2,36 @@
 $titlePage = "รายละเอียดสินค้า";
 
 require_once("db/connectdb.php");
-require_once("db/controller/BannerController.php");
 require_once("db/controller/ProductController.php");
+require_once("includes/salt.php");
+require_once("includes/functions.php");
 
-$BannerController = new BannerController($conn);
-$ProductController = new ProductController($conn);
+if (isset($_GET['id'])) {
+
+    $_SESSION["base64Encoded"] = $_GET["id"];
+    $base64Encoded =  $_SESSION["base64Encoded"];
+
+    // ถอดรหัส Id
+    $prdId = decodeBase64ID($base64Encoded, $salt1, $salt2);
+
+    $ProductController = new ProductController($conn);
+    $productDetail = $ProductController->getProductDetail($prdId);
+
+    // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
+    checkResultDetail($productDetail);
+
+    $ptyId = $productDetail['pty_id'];
+    $prdPreorder = $productDetail['prd_preorder'];
+
+    //คุณอาจจะชอบสิ่งนี้
+    $productsSameType = $ProductController->getProductsSameType($ptyId, $prdId);
+
+    // สินค้าแนะนำ
+    $productAdvertising = $ProductController->getProductAdvertising($prdPreorder, $prdId);
+} else {
+    header('Location: index');
+    exit;
+}
 
 ?>
 <!doctype html>
@@ -52,63 +77,98 @@ $ProductController = new ProductController($conn);
                             <div class="col-lg-5 col-md-6 col-12">
                                 <div class="flexslider">
                                     <ul class="slides">
-                                        <li data-thumb="img/thum-2/1.jpg">
-                                            <img src="img/flex/1.jpg" alt="woman" />
+                                        <li data-thumb="uploads/img_product/<?php echo $productDetail['prd_img1'] ?>">
+                                            <img src="uploads/img_product/<?php echo $productDetail['prd_img1'] ?>" alt="woman" style="height: 414px; object-fit: cover;" />
                                         </li>
-                                        <li data-thumb="img/thum-2/4.jpg">
-                                            <img src="img/flex/5.jpg" alt="woman" />
-                                        </li>
-                                        <li data-thumb="img/thum-2/2.jpg">
-                                            <img src="img/flex/2.jpg" alt="woman" />
-                                        </li>
-                                        <li data-thumb="img/thum-2/5.jpg">
-                                            <img src="img/flex/5.jpg" alt="woman" />
-                                        </li>
+                                        <?php if (!empty($productDetail['prd_img2'])) { ?>
+                                            <li data-thumb="uploads/img_product/<?php echo $productDetail['prd_img2'] ?>">
+                                                <img src="uploads/img_product/<?php echo $productDetail['prd_img2'] ?>" alt="woman" style="height: 414px; object-fit: cover;" />
+                                            </li>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6 col-12">
                                 <div class="product-info-main">
                                     <div class="page-title">
-                                        <h1>Savvy Shoulder Tote</h1>
+                                        <h1><?php echo $productDetail['prd_name'] ?></h1>
                                     </div>
                                     <div class="product-info-stock-sku">
-                                        <span>In stock</span>
+                                        <?php if (empty($productDetail['prd_quantity'])) { ?>
+                                            <span class="badge rounded-pill text-bg-danger"><i class="fa-solid fa-xmark me-1"></i></i>สินค้าหมด</span>
+                                        <?php } else { ?>
+                                            <span class="badge rounded-pill text-bg-success"><i class="fa-solid fa-check me-1"></i>มีสินค้า</span>
+                                        <?php } ?>
+
+                                        <?php if ($productDetail['prd_preorder'] == 0) { ?>
+                                            <span class="badge rounded-pill text-bg-warning"><i class="fa-solid fa-clock-rotate-left me-1"></i>สินค้าพรีออเดอร์</span>
+                                        <?php } ?>
+
                                         <div class="product-attribute">
-                                            <span>SKU</span>
-                                            <span class="value">24-WB05</span>
+                                            <span>รหัสสินค้า : </span>
+                                            <span class="value"><?php echo $productDetail['prd_id'] ?></span>
                                         </div>
                                     </div>
                                     <div class="product-reviews-summary">
                                         <div class="rating-summary">
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
-                                            <a href="#"><i class="fa fa-star"></i></a>
+                                            <?php
+                                            $review_count = $productDetail['review_count']; // จำนวนคนรีวิว
+                                            $total_rating = $productDetail['total_rating']; // คะแนน
+                                            $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
+
+                                            // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
+                                            for ($i = 0; $i < 5; $i++) {
+                                                if ($i < $average_rating) {
+                                                    echo '<span><i class="fa-solid fa-star" style="color: #f07c29;"></i></span>';
+                                                } else {
+                                                    echo '<span><i class="fa-solid fa-star"></i></span>';
+                                                }
+                                            }
+                                            ?>
                                         </div>
                                         <div class="reviews-actions">
-                                            <a href="#">(3 รีวิว)</a>
+                                            <?php if (empty($productDetail['reviews_count'])) { ?>
+                                                <p>(ยังไม่มีการรีวิว)</p>
+                                            <?php } else { ?>
+                                                <p><?php echo "(" . number_format($productDetail['reviews_count']) . " รีวิว)" ?></p>
+                                            <?php } ?>
+
                                         </div>
                                     </div>
+                                    <?php if ($productDetail['prd_coin'] > 0) { ?>
+                                        <p class="text-warning"><i class="fa-brands fa-gg-circle mt-3 me-1"></i>คุณจะได้รับ <?php echo number_format($productDetail['prd_coin']) ?> เหรียญ</p>
+                                    <?php } ?>
                                     <div class="product-info-price">
                                         <div class="price-final">
-                                            <span>$34.00</span>
-                                            <span class="old-price"><small>$40.00</small></span>
+
+                                            <?php
+                                            $price = $productDetail['prd_price'];
+                                            $prdPercentDiscount = $productDetail['prd_percent_discount']; // ส่วนลด(%)
+                                            $priceSale = $price - ($price * ($prdPercentDiscount / 100));
+                                            ?>
+                                            <span><?php echo "฿" . number_format($priceSale, 2) ?></span>
+                                            <span class="old-price"><small><?php echo "฿" . number_format($productDetail['prd_price'], 2) ?></small></span> <?php if ($productDetail['prd_percent_discount'] > 0) {
+                                                                                                                                                                echo '<sup class="text-danger"><small>-' . $productDetail['prd_percent_discount'] . '%</small></sup>';
+                                                                                                                                                            } ?>
+
                                         </div>
                                     </div>
                                     <div class="product-add-form">
-                                        <form action="#">
+                                        <form action="">
                                             <div class="quality-button">
-                                                <input class="qty" type="number" min="1" value="1">
+                                                <input class="qty" type="number" min="1" max="<?php echo $productDetail['prd_quantity']  ?>" value="1">
                                             </div>
-                                            <a href="#"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+                                            <?php if ($productDetail['prd_quantity'] > 0) { ?>
+                                                <a href="#"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+                                            <?php } else { ?>
+                                                <a href="" onclick="return false" class="btnDisabled"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+                                            <?php } ?>
                                         </form>
                                     </div>
                                     <div class="product-social-links">
                                         <div class="product-addto-links">
                                             <a href="#"><i class="fa-solid fa-heart"></i></a>
-                                            <a href="#"><i class="fa-solid fa-share-nodes"></i></a>
+                                            <a href="#" title="แชร์สินค้า" onclick="copyURL(event)"><i class="fa-solid fa-share-nodes"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -120,19 +180,21 @@ $ProductController = new ProductController($conn);
                     <div class="product-info-area mt-80">
                         <!-- Nav tabs -->
                         <ul class="nav">
-                            <li><a class="active" href="#Details" data-bs-toggle="tab">รายละเอียด</a></li>
+                            <li><a class="active" href="#Details" data-bs-toggle="tab">รายละเอียดสินค้า</a></li>
                             <li><a href="#Reviews" data-bs-toggle="tab">รีวิวสินค้า</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="Details">
                                 <div class="valu">
-                                    <p>The sporty Joust Duffle Bag can't be beat - not in the gym, not on the luggage carousel, not anywhere. Big enough to haul a basketball or soccer ball and some sneakers with plenty of room to spare, it's ideal for athletes with places to go.</p>
-                                    <ul>
-                                        <li><i class="fa fa-circle"></i>Dual top handles.</li>
-                                        <li><i class="fa fa-circle"></i>Adjustable shoulder strap.</li>
-                                        <li><i class="fa fa-circle"></i>Full-length zipper.</li>
-                                        <li><i class="fa fa-circle"></i>L 29" x W 13" x H 11".</li>
+                                    <ul class="mb-2">
+                                        <li><i class="fa-solid fa-circle"></i></i>ประเภทสินค้า : <?php echo $productDetail['pty_name']; ?></li>
+                                        <li><i class="fa-solid fa-circle"></i></i>รหัส ISBN : <?php echo $productDetail['prd_isbn']; ?></li>
+                                        <li><i class="fa-solid fa-circle"></i></i>จำนวนหน้า : <?php echo $productDetail['prd_number_pages'] . " หน้า" ?></li>
                                     </ul>
+                                    <div class="mx-2 mt-3">
+                                        <?php echo $productDetail['prd_detail']; ?>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="Reviews">
@@ -256,364 +318,236 @@ $ProductController = new ProductController($conn);
                     </div>
                     <!-- product-info-area-end -->
                     <!-- new-book-area-start -->
-                    <div class="new-book-area mt-60">
-                        <div class="section-title text-center mb-30">
-                            <h3>คุณอาจจะชอบสิ่งนี้</h3>
+                    <?php if ($productsSameType) { ?>
+                        <div class="new-book-area mt-60">
+                            <div class="section-title text-center mb-30">
+                                <h3>คุณอาจจะชอบสิ่งนี้</h3>
+                            </div>
+                            <div class="tab-active-2 owl-carousel">
+                                <!-- single-product-start -->
+                                <?php foreach ($productsSameType as $pstProduct) { ?>
+                                    <?php
+                                    $originalId = $pstProduct["prd_id"];
+                                    require_once("includes/salt.php");   // รหัส Salt 
+                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                    ?>
+                                    <div class="product-wrapper">
+                                        <div class="product-img">
+                                            <a href="#" onclick="return false">
+                                                <img src="uploads/img_product/<?php echo $pstProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                            </a>
+                                            <div class="quick-view">
+                                                <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </a>
+                                            </div>
+                                            <div class="product-flag">
+                                                <ul>
+                                                    <li><span class="sale">ยอดนิยม</span> <br></li>
+                                                    <?php if ($pstProduct['prd_preorder'] == 1) { ?>
+                                                        <li><span class="sale">พรีออเดอร์</span></li>
+                                                    <?php } ?>
+                                                    <?php if ($pstProduct['prd_percent_discount']) { ?>
+                                                        <li><span class="discount-percentage"><?php echo "-" . $pstProduct['prd_percent_discount'] . "%" ?></span></li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-details text-center">
+                                            <div class="product-rating">
+                                                <ul>
+                                                    <?php
+                                                    $review_count = $pstProduct['review_count']; // จำนวนคนรีวิว
+                                                    $total_rating = $pstProduct['total_rating']; // คะแนน
+                                                    $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
+
+                                                    // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
+                                                    for ($i = 0; $i < 5; $i++) {
+                                                        if ($i < $average_rating) {
+                                                            echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
+                                                        } else {
+                                                            echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
+                                                        }
+                                                    }
+                                                    ?>
+
+                                                    <?php if ($review_count > 0) { ?>
+                                                        <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                                    <?php } ?>
+                                                </ul>
+                                            </div>
+                                            <?php
+                                            $prd_name = $pstProduct['prd_name'];
+                                            $max_length = 20;
+
+                                            $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                            ?>
+                                            <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+                                            <div class="product-price">
+                                                <ul>
+                                                    <?php
+                                                    $price = $pstProduct['prd_price'];
+                                                    $prdPercentDiscount = $pstProduct['prd_percent_discount']; // ส่วนลด(%)
+                                                    $priceSale = $price - ($price * ($prdPercentDiscount / 100));
+                                                    ?>
+                                                    <li>
+                                                        <?php echo "฿" . number_format($priceSale, 2) ?>
+                                                        <?php if ($prdPercentDiscount  > 0) { ?>
+                                                            <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                        <?php } ?>
+
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product-link">
+                                            <div class="product-button">
+                                                <a href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด"><i class="fa-solid fa-eye me-1"></i>รายละเอียด</a>
+                                            </div>
+                                            <div class="add-to-link">
+                                                <ul>
+                                                    <li><a href="product_detail?id=<?php echo $base64Encoded ?>" target="_blank" title="รายละเอียด"><i class="fa-solid fa-arrow-up-right-from-square"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                                <!-- single-product-end -->
+                            </div>
                         </div>
-                        <div class="tab-active-2 owl-carousel">
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <div class="product-img">
-                                    <a href="#">
-                                        <img src="img/product/1.jpg" alt="book" class="primary" />
-                                    </a>
-                                    <div class="quick-view">
-                                        <a class="action-view" href="#" data-bs-target="#productModal" data-bs-toggle="modal" title="Quick View">
-                                            <i class="fa fa-search-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div class="product-flag">
-                                        <ul>
-                                            <li><span class="sale">new</span></li>
-                                            <li><span class="discount-percentage">-5%</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-details text-center">
-                                    <div class="product-rating">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h4><a href="#">Joust Duffle Bag</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>$60.00</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" title="Details"><i class="fa fa-external-link"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-end -->
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <div class="product-img">
-                                    <a href="#">
-                                        <img src="img/product/3.jpg" alt="book" class="primary" />
-                                    </a>
-                                    <div class="quick-view">
-                                        <a class="action-view" href="#" data-bs-target="#productModal" data-bs-toggle="modal" title="Quick View">
-                                            <i class="fa fa-search-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div class="product-flag">
-                                        <ul>
-                                            <li><span class="sale">new</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-details text-center">
-                                    <div class="product-rating">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h4><a href="#">Chaz Kangeroo Hoodie</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>$52.00</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" title="Details"><i class="fa fa-external-link"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-end -->
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <div class="product-img">
-                                    <a href="#">
-                                        <img src="img/product/5.jpg" alt="book" class="primary" />
-                                    </a>
-                                    <div class="quick-view">
-                                        <a class="action-view" href="#" data-bs-target="#productModal" data-bs-toggle="modal" title="Quick View">
-                                            <i class="fa fa-search-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div class="product-flag">
-                                        <ul>
-                                            <li><span class="discount-percentage">-5%</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-details text-center">
-                                    <div class="product-rating">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h4><a href="#">Set of Sprite Yoga Straps</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li> <span>Starting at</span>$34.00</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" title="Details"><i class="fa fa-external-link"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-end -->
-                            <!-- single-product-start -->
-                            <div class="product-wrapper">
-                                <div class="product-img">
-                                    <a href="#">
-                                        <img src="img/product/7.jpg" alt="book" class="primary" />
-                                    </a>
-                                    <div class="quick-view">
-                                        <a class="action-view" href="#" data-bs-target="#productModal" data-bs-toggle="modal" title="Quick View">
-                                            <i class="fa fa-search-plus"></i>
-                                        </a>
-                                    </div>
-                                    <div class="product-flag">
-                                        <ul>
-                                            <li><span class="sale">new</span></li>
-                                            <li><span class="discount-percentage">-5%</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-details text-center">
-                                    <div class="product-rating">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h4><a href="#">Strive Shoulder Pack</a></h4>
-                                    <div class="product-price">
-                                        <ul>
-                                            <li>$30.00</li>
-                                            <li class="old-price">$32.00</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="product-link">
-                                    <div class="product-button">
-                                        <a href="#" title="Add to cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                    </div>
-                                    <div class="add-to-link">
-                                        <ul>
-                                            <li><a href="product-details.html" title="Details"><i class="fa fa-external-link"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-end -->
-                        </div>
-                    </div>
+                    <?php } ?>
                     <!-- new-book-area-start -->
                 </div>
                 <div class="col-lg-3 col-md-12 col-12 order-lg-2 order-2">
                     <div class="shop-left">
-                        <div class="left-title mb-20">
-                            <h4>Related Products</h4>
-                        </div>
-                        <div class="random-area mb-30">
-                            <div class="product-active-2 owl-carousel">
-                                <div class="product-total-2">
-                                    <div class="single-most-product bd mb-18">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/20.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
+                        <?php if ($productAdvertising) { ?>
+                            <div class="left-title mb-20">
+                                <h4>สินค้าแนะนำ</h4>
+                            </div>
+                            <div class="random-area mb-30">
+                                <div class="product-active-2 owl-carousel">
+                                    <div class="product-total-2">
+                                        <?php foreach ($productAdvertising as $advProduct) { ?>
+                                            <?php
+                                            $originalId = $advProduct["prd_id"];
+                                            require_once("includes/salt.php");   // รหัส Salt 
+                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            ?>
+                                            <div class="single-most-product bd mb-18">
+                                                <div class="most-product-img">
+                                                    <a href="product_detail?id=<?php echo $base64Encoded; ?>"><img src="uploads/img_product/<?php echo $advProduct['prd_img1'] ?>" alt="book" style="height: 88px; object-fit:cover;" /></a>
+                                                </div>
+                                                <div class="most-product-content">
+                                                    <div class="product-rating">
+                                                        <ul>
+                                                            <?php
+                                                            $review_count = $advProduct['review_count']; // จำนวนคนรีวิว
+                                                            $total_rating = $advProduct['total_rating']; // คะแนน
+                                                            $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
+
+                                                            // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
+                                                            for ($i = 0; $i < 5; $i++) {
+                                                                if ($i < $average_rating) {
+                                                                    echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
+                                                                } else {
+                                                                    echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </ul>
+                                                    </div>
+                                                    <?php
+                                                    $prd_name = $advProduct['prd_name'];
+                                                    $max_length = 20;
+
+                                                    $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                                    ?>
+                                                    <h4><a href="product_detail?id=<?php echo $base64Encoded; ?>"><?php echo $short_name; ?></a></h4>
+                                                    <div class="product-price">
+                                                        <ul>
+                                                            <?php
+                                                            $price = $advProduct['prd_price'];
+                                                            $prdPercentDiscount = $advProduct['prd_percent_discount']; // ส่วนลด(%)
+                                                            $priceSale = $price - ($price * ($prdPercentDiscount / 100));
+                                                            ?>
+                                                            <li><?php echo "฿" . number_format($priceSale, 2) ?></li>
+                                                            <li class="old-price"><?php echo "฿" . number_format($advProduct['prd_price'], 2) ?></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h4><a href="#">Endeavor Daytrip</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$30.00</li>
-                                                    <li class="old-price">$33.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <?php } ?>
                                     </div>
-                                    <div class="single-most-product bd mb-18">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/21.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
+                                    <div class="product-total-2">
+                                        <?php foreach ($productAdvertising as $advProduct) { ?>
+                                            <?php
+                                            $originalId = $advProduct["prd_id"];
+                                            require_once("includes/salt.php");   // รหัส Salt 
+                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            ?>
+                                            <div class="single-most-product bd mb-18">
+                                                <div class="most-product-img">
+                                                    <a href="product_detail?id=<?php echo $base64Encoded; ?>"><img src="uploads/img_product/<?php echo $advProduct['prd_img1'] ?>" alt="book" style="height: 88px; object-fit:cover;" /></a>
+                                                </div>
+                                                <div class="most-product-content">
+                                                    <div class="product-rating">
+                                                        <ul>
+                                                            <?php
+                                                            $review_count = $advProduct['review_count']; // จำนวนคนรีวิว
+                                                            $total_rating = $advProduct['total_rating']; // คะแนน
+                                                            $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
+
+                                                            // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
+                                                            for ($i = 0; $i < 5; $i++) {
+                                                                if ($i < $average_rating) {
+                                                                    echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
+                                                                } else {
+                                                                    echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </ul>
+                                                    </div>
+                                                    <?php
+                                                    $prd_name = $advProduct['prd_name'];
+                                                    $max_length = 20;
+
+                                                    $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                                    ?>
+                                                    <h4><a href="product_detail?id=<?php echo $base64Encoded; ?>"><?php echo $short_name; ?></a></h4>
+                                                    <div class="product-price">
+                                                        <ul>
+                                                            <?php
+                                                            $price = $advProduct['prd_price'];
+                                                            $prdPercentDiscount = $advProduct['prd_percent_discount']; // ส่วนลด(%)
+                                                            $priceSale = $price - ($price * ($prdPercentDiscount / 100));
+                                                            ?>
+                                                            <li><?php echo "฿" . number_format($priceSale, 2) ?></li>
+                                                            <li class="old-price"><?php echo "฿" . number_format($advProduct['prd_price'], 2) ?></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <h4><a href="#">Savvy Shoulder Tote</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$30.00</li>
-                                                    <li class="old-price">$35.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="single-most-product">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/22.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4><a href="#">Compete Track Tote</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$35.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="product-total-2">
-                                    <div class="single-most-product bd mb-18">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/23.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4><a href="#">Voyage Yoga Bag</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$30.00</li>
-                                                    <li class="old-price">$33.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="single-most-product bd mb-18">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/24.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4><a href="#">Impulse Duffle</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$70.00</li>
-                                                    <li class="old-price">$74.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="single-most-product">
-                                        <div class="most-product-img">
-                                            <a href="#"><img src="img/product/22.jpg" alt="book" /></a>
-                                        </div>
-                                        <div class="most-product-content">
-                                            <div class="product-rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                    <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <h4><a href="#">Fusion Backpack</a></h4>
-                                            <div class="product-price">
-                                                <ul>
-                                                    <li>$59.00</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- product-main-area-end -->
-    
+
     <!-- footer-area-start -->
     <?php require_once('layouts/nav_footer.php') ?>
 
     <!-- all js here -->
     <?php require_once("layouts/vendor.php") ?>
-
 </body>
 
 </html>

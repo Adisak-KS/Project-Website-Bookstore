@@ -41,7 +41,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                 <?php foreach ($banners as $banner) { ?>
                     <a href="<?php echo $banner['bn_link'] ?>">
                         <!-- <div class="single-slider pt-100 pb-145 bg-img" style="background-image:url(uploads/img_banner/<?php echo $banner['bn_img']; ?>); height:520px; background-size:cover;"></div> -->
-                        <img src="uploads/img_banner/<?php echo $banner['bn_img']; ?>" style="width:100%; height:520px; background-size:cover;"></img>
+                        <img src="uploads/img_banner/<?php echo $banner['bn_img']; ?>" style="width:100%; height:520px; object-fit: cover;"></img>
                     </a>
                 <?php } ?>
             </div>
@@ -76,7 +76,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <div class="product-wrapper">
                                 <div class="product-img">
                                     <a href="#" onclick="return false;">
-                                        <img src="uploads/img_product/<?php echo $newProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px;" />
+                                        <img src="uploads/img_product/<?php echo $newProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                     </a>
                                     <div class="quick-view">
                                         <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -254,7 +254,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false;">
-                                            <img src="uploads/img_product/<?php echo $recProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px;" />
+                                            <img src="uploads/img_product/<?php echo $recProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -264,7 +264,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">แนะนำ</span> <br></li>
-                                                <?php if ($recProduct['prd_preorder'] == 1) { ?>
+                                                <?php if ($recProduct['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
                                                 <?php if ($recProduct['prd_percent_discount']) { ?>
@@ -396,7 +396,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false">
-                                            <img src="uploads/img_product/<?php echo $popProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px;" />
+                                            <img src="uploads/img_product/<?php echo $popProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -406,7 +406,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">ยอดนิยม</span> <br></li>
-                                                <?php if ($popProduct['prd_preorder'] == 1) { ?>
+                                                <?php if ($popProduct['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
                                                 <?php if ($popProduct['prd_percent_discount']) { ?>
@@ -530,7 +530,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <!-- single-product-start -->
                             <?php foreach ($mostViewedProducts as $mvProduct) { ?>
                                 <?php
-                                $originalId = $popProduct["prd_id"];
+                                $originalId = $mvProduct["prd_id"];
                                 require_once("includes/salt.php");   // รหัส Salt 
                                 $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                 $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
@@ -538,7 +538,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false;">
-                                            <img src="uploads/img_product/<?php echo $mvProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px;" />
+                                            <img src="uploads/img_product/<?php echo $mvProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded; ?>" title="รายละเอียด">
@@ -548,7 +548,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">เข้าชมบ่อย</span> <br></li>
-                                                <?php if ($mvProduct['prd_preorder'] == 1) { ?>
+                                                <?php if ($mvProduct['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
                                                 <?php if ($mvProduct['prd_percent_discount']) { ?>

@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/MemberController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 
 $MemberController = new MemberController($conn);
@@ -17,7 +17,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../member_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../membershow";
+    $locationSuccess = "Location: ../member_show";
 
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormUpdateMember($fname, $lname, $status, $locationError);

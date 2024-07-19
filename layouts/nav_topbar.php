@@ -1,10 +1,20 @@
 <?php
 require_once("db/connectdb.php");
 require_once("db/controller/ContactController.php");
+require_once("db/controller/ProductTypeController.php");
+require_once("db/controller/PublisherController.php");
+require_once("db/controller/AuthorController.php");
 
 $ContactController = new ContactController($conn);
+$ProductTypeController = new ProductTypeController($conn);
+$PublisherController = new PublisherController($conn);
+$AuthorController = new AuthorController($conn);
 
 $contacts = $ContactController->useContact();
+
+$productsType10 = $ProductTypeController->getProductsType10();
+$publishers10 = $PublisherController->getPublishers10();
+$authors10 = $AuthorController->getAuthors10()
 ?>
 
 
@@ -135,29 +145,57 @@ $contacts = $ContactController->useContact();
 
                                 <li><a href="products_show">สินค้าทั้งหมด</a> </li>
 
-                                <li><a href="#">ประเภทสินค้า<i class="fa fa-angle-down"></i></a>
-                                    <div class="sub-menu sub-menu-2">
-                                        <ul>
-                                            <li><a href="blog.html">blog</a></li>
-                                            <li><a href="blog-details.html">blog-details</a></li>
-                                        </ul>
-                                    </div>
+                                <li><a href="javascript:void(0)">ประเภทสินค้า<i class="fa fa-angle-down"></i></a>
+                                    <?php if ($productsType10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($productsType10 as $productType) { ?>
+                                                    <?php
+                                                    $originalId = $productType["pty_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $productType['pty_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
+
                                 <li><a href="#">สำนักพิมพ์<i class="fa fa-angle-down"></i></a>
-                                    <div class="sub-menu sub-menu-2">
-                                        <ul>
-                                            <li><a href="blog.html">blog</a></li>
-                                            <li><a href="blog-details.html">blog-details</a></li>
-                                        </ul>
-                                    </div>
+                                    <?php if ($publishers10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($publishers10 as $publisher) { ?>
+                                                    <?php
+                                                    $originalId = $publisher["pub_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?pubId=<?php echo $base64Encoded ?>"><?php echo $publisher['pub_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
                                 <li><a href="#">ผู้แต่ง<i class="fa fa-angle-down"></i></a>
-                                    <div class="sub-menu sub-menu-2">
-                                        <ul>
-                                            <li><a href="blog.html">blog</a></li>
-                                            <li><a href="blog-details.html">blog-details</a></li>
-                                        </ul>
-                                    </div>
+                                    <?php if ($authors10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($authors10 as $author) { ?>
+                                                    <?php
+                                                    $originalId = $author["auth_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
                                 <li><a href="preorder_show">พรีออเดอร์</a>
                                 </li>

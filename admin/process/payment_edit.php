@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 require_once(__DIR__ . '/../../db/controller/PaymentController.php');
 
 $PaymentController = new PaymentController($conn);
@@ -25,7 +25,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../payment_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../paymentshow";
+    $locationSuccess = "Location: ../payment_show";
 
     echo "id : " . $pmtId . "<br>";
     echo "pmtBank : " . $pmtBank . "<br>";

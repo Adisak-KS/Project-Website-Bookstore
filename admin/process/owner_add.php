@@ -1,6 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 if (isset($_POST['btn-add'])) {
     $fname = $_POST['fname'];
@@ -11,8 +11,8 @@ if (isset($_POST['btn-add'])) {
     $email = $_POST['email'];
     $eatId = $_POST['eat_id'];
 
-    $locationError = "Location: ../ownershow";
-    $locationSuccess = "Location: ../ownershow";
+    $locationError = "Location: ../owner_show";
+    $locationSuccess = "Location: ../owner_show";
 
 
     // ตรวจสอบข้อมูลจาก Form

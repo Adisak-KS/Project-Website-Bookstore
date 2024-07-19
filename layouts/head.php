@@ -3,6 +3,8 @@
 // require_once("includes/functions.php");
 require_once('db/connectdb.php');
 require_once('db/controller/SettingWebsiteController.php');
+require_once('includes/salt.php');
+require_once('includes/functions.php');
 
 $SettingWebsiteController = new SettingWebsiteController($conn);
 $settingsWebsite = $SettingWebsiteController->useSettingsWebsite();
@@ -71,3 +73,4 @@ echo '<link rel="shortcut icon" href="' . $faviconUrl . '" type="image/x-icon">'
 
 <!-- modernizr css -->
 <script src="https://cdn.jsdelivr.net/npm/modernizr@3.8.3/lib/cli.min.js"></script>
+

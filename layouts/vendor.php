@@ -44,5 +44,12 @@
 <!-- plugins js -->
 <script src="js/plugins.js"></script>
 
+ <!-- Sweetalert2  -->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <!-- main js -->
 <script src="js/main.js"></script>
+
+
+ <!-- My Scripts  -->
+ <script src="js/myScripts.js"></script>

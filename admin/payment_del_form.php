@@ -4,7 +4,7 @@ $titlePage = "ลบช่องทางชำระเงิน";
 require_once("../db/connectdb.php");
 require_once("../db/controller/PaymentController.php");
 require_once("../includes/salt.php");
-require_once("../admin/includes/functions.php");
+require_once("../includes/functions.php");
 
 
 

@@ -1,7 +1,8 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/EmployeeController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
+// require_once(__DIR__ . '/../../includes/functions.php');
 
 
 $EmployeeController = new EmployeeController($conn);
@@ -18,7 +19,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../employee_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../employeeshow";
+    $locationSuccess = "Location: ../employee_show";
 
 
     $authority = $newEatId;

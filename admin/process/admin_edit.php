@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/AdminController.php');
-require_once(__DIR__ . '/../includes/functions.php');
+require_once(__DIR__ . '/../../includes/functions.php');
 
 
 $AdminController = new AdminController($conn);
@@ -18,7 +18,7 @@ if (isset($_POST['btn-edit'])) {
 
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../admin_edit_form?id=$base64Encoded";
-    $locationSuccess = "Location: ../adminshow";
+    $locationSuccess = "Location: ../admin_show";
 
     $authority = $newEatId;
     // ตรวจสอบข้อมูลจาก Form
