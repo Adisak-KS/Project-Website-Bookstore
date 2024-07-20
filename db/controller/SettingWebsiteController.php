@@ -113,6 +113,7 @@
             return false;
            }
         }
+       
 
         function updateProductNumberLow($stDetail)
         {
@@ -126,6 +127,36 @@
             return true;
            }catch(PDOException $e){
             echo "<hr>Error in updateProductNumberLow : " . $e->getMessage();
+            return false;
+           }
+        }
+
+        function getProductPercentDiscount()
+        {
+           try{
+            $sql = "SELECT st_detail FROM bs_settings_website WHERE st_id = 5  LIMIT 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetchColumn();
+            return $result;
+           }catch(PDOException $e){
+            echo "<hr>Error in getProductPercentDiscount : " . $e->getMessage();
+            return false;
+           }
+        }
+
+        function updateProductPercentDiscount($stDetail)
+        {
+           try{
+            $sql = "UPDATE bs_settings_website
+                    SET st_detail = :st_detail
+                    WHERE st_id = 5";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':st_detail', $stDetail, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+           }catch(PDOException $e){
+            echo "<hr>Error in updateProductPercentDiscount : " . $e->getMessage();
             return false;
            }
         }

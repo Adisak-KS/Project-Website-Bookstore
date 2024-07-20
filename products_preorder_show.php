@@ -1,13 +1,24 @@
 <?php
-$titlePage = "สินค้าทั้งหมด";
+$titlePage = "สินค้าพรีออเดอร์ทั้งหมด";
 
 require_once("db/connectdb.php");
 require_once("db/controller/ProductController.php");
 require_once('includes/salt.php');
 require_once('includes/functions.php');
 
+require_once("db/controller/ProductTypeController.php");
+require_once("db/controller/PublisherController.php");
+require_once("db/controller/AuthorController.php");
+
 $ProductController = new ProductController($conn);
-$prdPreorder = 1; //สินค้าปกติ
+$ProductTypeController = new ProductTypeController($conn);
+$PublisherController = new PublisherController($conn);
+$AuthorController = new AuthorController($conn);
+$prdPreorder = 0; //สินค้าพรีออเดอร์
+
+$productsPreOrderType10 = $ProductTypeController->getProductsType10($prdPreorder);
+$publishersPreOrder10 = $PublisherController->getPublishers10($prdPreorder);
+$authorsPreOrder10 = $AuthorController->getAuthors10($prdPreorder);
 
 if (isset($_GET['ptyId'])) {
     $base64Encoded = $_GET['ptyId'];
@@ -24,7 +35,6 @@ if (isset($_GET['ptyId'])) {
 } else {
     $allProducts = $ProductController->getProductsAll($prdPreorder);
 }
-
 ?>
 
 <!doctype html>
@@ -51,7 +61,7 @@ if (isset($_GET['ptyId'])) {
                     <div class="breadcrumbs-menu">
                         <ul>
                             <li><a href="index">หน้าแรก</a></li>
-                            <li><a href="javascript:void(0)" class="active">สินค้าทั้งหมด</a></li>
+                            <li><a href="javascript:void(0)" class="active">สินค้าพรีออเดอร์ทั้งหมด</a></li>
                         </ul>
                     </div>
                 </div>
@@ -65,63 +75,63 @@ if (isset($_GET['ptyId'])) {
             <div class="row">
                 <div class="col-lg-3 col-md-12 col-12 order-lg-1 order-2 mt-sm-50 mt-xs-40">
                     <div class="shop-left">
-                        <?php if ($productsType10 || $publishers10 || $authors10) { ?>
+                        <?php if ($productsPreOrderType10 || $publishersPreOrder10 || $authorsPreOrder10) { ?>
                             <div class="section-title-5 mb-30">
                                 <h2>ตัวช่วยค้นหา</h2>
                             </div>
                         <?php } ?>
-                        <?php if ($productsType10) { ?>
+                        <?php if ($productsPreOrderType10) { ?>
                             <div class="left-title mb-20">
                                 <h4>ประเภทสินค้า</h4>
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($productsType10 as $productType) { ?>
+                                    <?php foreach ($productsPreOrderType10 as $productType) { ?>
                                         <?php
                                         $originalId = $productType["pty_id"];
                                         require_once("includes/salt.php");   // รหัส Salt 
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $productType['pty_name']; ?><span><?php echo "(" . number_format($productType['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $productType['pty_name']; ?><span><?php echo "(" . number_format($productType['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
 
                             </div>
                         <?php } ?>
-                        <?php if ($publishers10) { ?>
+                        <?php if ($publishersPreOrder10) { ?>
                             <div class="left-title mb-20">
                                 <h4>สำนักพิมพ์</h4>
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($publishers10 as $publisher) { ?>
+                                    <?php foreach ($publishersPreOrder10 as $publisher) { ?>
                                         <?php
                                         $originalId = $publisher["pub_id"];
                                         require_once("includes/salt.php");   // รหัส Salt 
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_show?pubId=<?php echo $base64Encoded ?>"><?php echo $publisher['pub_name']; ?><span><?php echo "(" . number_format($publisher['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?pubId=<?php echo $base64Encoded ?>"><?php echo $publisher['pub_name']; ?><span><?php echo "(" . number_format($publisher['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
                         <?php } ?>
 
-                        <?php if ($authors10) { ?>
+                        <?php if ($authorsPreOrder10) { ?>
                             <div class="left-title mb-20">
                                 <h4>ผู้แต่ง</h4>
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($authors10 as $author) { ?>
+                                    <?php foreach ($authorsPreOrder10 as $author) { ?>
                                         <?php
                                         $originalId = $author["auth_id"];
                                         require_once("includes/salt.php");   // รหัส Salt 
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name']; ?><span><?php echo "(" . number_format($author['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name']; ?><span><?php echo "(" . number_format($author['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -140,7 +150,7 @@ if (isset($_GET['ptyId'])) {
                                 $ptyId = $Id;
                                 $ptyName = null;
 
-                                foreach ($productsType10 as $productType) {
+                                foreach ($productsPreOrderType10 as $productType) {
                                     if ($productType['pty_id'] == $ptyId) {
                                         $ptyName = $productType['pty_name'];
                                         break;
@@ -161,7 +171,7 @@ if (isset($_GET['ptyId'])) {
                                 $pubId = $Id;
                                 $pubName = null;
 
-                                foreach ($publishers10 as $publisher) {
+                                foreach ($publishersPreOrder10 as $publisher) {
                                     if ($publisher['pub_id'] == $pubId) {
                                         $pubName = $publisher['pub_name'];
                                         break;
@@ -181,7 +191,7 @@ if (isset($_GET['ptyId'])) {
                                 $authId = $Id;
                                 $authName = null;
 
-                                foreach ($authors10 as $author) {
+                                foreach ($authorsPreOrder10 as $author) {
                                     if ($author['auth_id'] == $authId) {
                                         $authName = $author['auth_name'];
                                         break;
@@ -194,7 +204,7 @@ if (isset($_GET['ptyId'])) {
                                     echo "ชื่อผู้แต่ง : ไม่พบข้อมูล";
                                 }
                             } else {
-                                echo "สินค้าทั้งหมด";
+                                echo "สินค้าพรีออเดอร์ทั้งหมด";
                             }
                             ?>
                         </h2>
@@ -327,7 +337,7 @@ if (isset($_GET['ptyId'])) {
                                             <div class="">
                                                 <hr>
                                                 <a href="index" class="me-5">กลับหน้าแรก</a>
-                                                <a href="products_show" class="ms-5">สินค้าทั้งหมด</a>
+                                                <a href="products_preorder_show" class="ms-5">สินค้าพรีออเดอร์ทั้งหมด</a>
                                             </div>
                                         </div>
                                     </div>
@@ -379,7 +389,13 @@ if (isset($_GET['ptyId'])) {
                                                                     <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
                                                                 <?php } ?>
                                                             </ul>
+
                                                         </div>
+                                                        <?php if ($product['prd_preorder'] == 0) { ?>
+                                                            <span class="badge rounded-pill text-bg-warning my-2"><i class="fa-solid fa-clock-rotate-left me-1"></i>สินค้าพรีออเดอร์</span>
+                                                        <?php } ?>
+
+
                                                         <?php
                                                         $prd_name = $product['prd_name'];
                                                         $max_length = 40;
@@ -446,7 +462,7 @@ if (isset($_GET['ptyId'])) {
                                                 <div class="">
                                                     <hr>
                                                     <a href="index" class="me-5">กลับหน้าแรก</a>
-                                                    <a href="products_show" class="ms-5">สินค้าทั้งหมด</a>
+                                                    <a href="products_preorder_show" class="ms-5">สินค้าพรีออเดอร์ทั้งหมด</a>
                                                 </div>
                                             </div>
                                         </div>

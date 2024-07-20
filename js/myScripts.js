@@ -11,9 +11,11 @@
 
 
 // ============================== 1. Data Table Default ==============================
-new DataTable('#MyTable', {
-    responsive: true
-})
+$(document).ready(function() {
+    $('#MyTable').DataTable({
+        responsive: true
+    });
+});
 
 // ============================== 2. Data Table Export File ==============================
 pdfMake.fonts = {
@@ -708,6 +710,41 @@ $(document).ready(function () {
             },
             prd_newImg2: {
                 accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 5. Jquery Validation Form (Product Type) ==============================
+$(document).ready(function () {
+    $("#formSettingPercentDiscount").validate({
+        rules: {
+            prd_percent_discount: {
+                required: true,
+                digits: true,
+                min: 0,
+                max: 100,
+            },
+        },
+        messages: {
+            prd_percent_discount: {
+                required: "กรุณาระบุ ชื่อธนาคาร",
+                digits: "ต้องเป็นตัวเลขจำนวนเต็ม",
+                min: "ค่าต่ำสุดคือ 0",
+                max: "ค่าสูงสุดคือ 100",
             },
         },
         errorElement: 'span',

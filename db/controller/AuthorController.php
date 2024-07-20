@@ -166,8 +166,13 @@ class AuthorController extends BaseController
         }
     }
 
-    function getAuthors10()
+    function getAuthors10($prdPreorder = null)
     {
+        // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
+        if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
+            $prdPreorder = 1; // ค่าเริ่มต้น
+        }
+    
         try {
             $sql = "SELECT
                         bs_authors.auth_id,
@@ -177,20 +182,38 @@ class AuthorController extends BaseController
                     INNER JOIN bs_products ON bs_products.auth_id = bs_authors.auth_id
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
-                    WHERE bs_products.prd_preorder = 1 
-                        AND bs_products.prd_status = 1 
+                    WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
-                        AND bs_authors.auth_status = 1
-                    GROUP BY bs_authors.auth_id
-                    ORDER BY product_count DESC
-                    LIMIT 10";
+                        AND bs_authors.auth_status = 1";
+    
+            // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
+            if ($prdPreorder !== null) {
+                $sql .= " AND bs_products.prd_preorder = :prd_preorder";
+            }
+    
+            $sql .= " GROUP BY bs_authors.auth_id
+                      ORDER BY product_count DESC
+                      LIMIT 10";
+    
+            // Preparing the statement
             $stmt = $this->db->prepare($sql);
+    
+            // Binding parameters
+            if ($prdPreorder !== null) {
+                $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
+            }
+    
+            // Executing the statement
             $stmt->execute();
+    
+            // Fetching results
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "<hr>Error in ggetAuthors10 : " . $e->getMessage();
+            // Displaying error message
+            echo "<hr>Error in getAuthors10 : " . $e->getMessage();
             return false;
         }
     }
+    
 }

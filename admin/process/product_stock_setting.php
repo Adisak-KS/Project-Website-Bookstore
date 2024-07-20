@@ -14,6 +14,7 @@ if (isset($_POST['btn-edit'])) {
 
     if($old_prd_number_low == $stDetail){
         header($locationSuccess);
+        exit;
     }
 
     if ($stDetail === '' || $stDetail === null) {

@@ -3,8 +3,13 @@ $titlePage = "สินค้า";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
+require_once("../db/controller/SettingWebsiteController.php");
 
+$SettingWebsiteController = new SettingWebsiteController($conn);
 $ProductController = new ProductController($conn);
+
+// ส่วนลด
+$productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount();
 
 $products = $ProductController->getProduct();
 $productType = $ProductController->getProductType();
@@ -46,7 +51,14 @@ $author = $ProductController->getAuthor();
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="mt-0 header-title">ข้อมูลสินค้าทั้งหมด</h4>
+                                    <div class="d-flex justify-content-between">
+                                        <h4 class="mt-0 header-title">ข้อมูลสินค้าทั้งหมด</h4>
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditPromotion">
+                                            <i class="fa-regular fa-square-plus me-1"></i>
+                                            <span>ตั้งค่าเมนูส่วนลด</span>
+                                        </button>
+                                    </div>
+
                                     <div class="my-3">
 
                                         <?php if (empty($productType) || empty($publisher) || empty($author)) { ?>
@@ -69,6 +81,7 @@ $author = $ProductController->getAuthor();
                                                 <span>เพิ่มสินค้า</span>
                                             </button>
                                         <?php } ?>
+
 
                                         <hr>
 
@@ -179,6 +192,39 @@ $author = $ProductController->getAuthor();
                                                             <button type="submit" name="btn-add" class="btn btn-success">
                                                                 <i class="fa-solid fa-floppy-disk me-1"></i>
                                                                 <span>บันทึก</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!-- Scrollable modal -->
+                                        <form id="formSettingPercentDiscount" novalidate action="process/product_percent_discount_edit.php" method="post">
+                                            <div class="modal fade" id="modalEditPromotion" tabindex="-1" aria-labelledby="modalEditPromotionLabel" data-bs-backdrop="static" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-scrollable">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">ตั้งค่าการแสดงสินค้าในเมนูส่วนลด</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="old_prd_percent_discount" value="<?php echo $productPercentDiscount ?>" readonly>
+                                                            <div class="mb-3">
+                                                                <label for="prd_percent_discount" class="form-label">ส่วนลดสินค้า :</label><span class="text-danger">*</span>
+                                                                <div class="input-group">
+                                                                    <input type="number" name="prd_percent_discount" class="form-control" placeholder="ระบุ ส่วนลดสินค้า" value="<?php echo $productPercentDiscount ?>">
+                                                                    <span class="input-group-text">%</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                <i class="fa-solid fa-xmark me-1"></i>
+                                                                <span>ยกเลิก</span>
+                                                            </button>
+                                                            <button type="submit" name="btn-edit" class="btn btn-warning">
+                                                                <i class="fa-solid fa-gear me-1"></i>
+                                                                <span>บันทึกการตั้งค่า</span>
                                                             </button>
                                                         </div>
                                                     </div>

@@ -11,10 +11,15 @@ $PublisherController = new PublisherController($conn);
 $AuthorController = new AuthorController($conn);
 
 $contacts = $ContactController->useContact();
+$prdPreorder = 1; //สินค้าปกติ
 
-$productsType10 = $ProductTypeController->getProductsType10();
-$publishers10 = $PublisherController->getPublishers10();
-$authors10 = $AuthorController->getAuthors10()
+$productsType10 = $ProductTypeController->getProductsType10($prdPreorder);
+$publishers10 = $PublisherController->getPublishers10($prdPreorder);
+$authors10 = $AuthorController->getAuthors10($prdPreorder);
+
+
+// ส่วนลด
+$productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount();
 ?>
 
 
@@ -81,7 +86,7 @@ $authors10 = $AuthorController->getAuthors10()
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-12">
-                    <div class="logo-area text-start logo-xs-mrg">
+                    <div class="logo-area text-center logo-xs-mrg">
                         <?php
                         $logo = false;
                         foreach ($settingsWebsite as $setting) {
@@ -114,7 +119,7 @@ $authors10 = $AuthorController->getAuthors10()
                     <div class="my-cart">
                         <ul class="list-unstyled d-flex">
                             <li class="me-3">
-                                <a href="#"><i class="fa fa-shopping-cart"></i></a>
+                                <a href="#"><i class="fa fa-shopping-cart mt-2"></i></a>
                                 <span>2</span>
                             </li>
                             <?php if (!empty($_SESSION['mem_id'])) { ?>
@@ -197,13 +202,13 @@ $authors10 = $AuthorController->getAuthors10()
                                         </div>
                                     <?php } ?>
                                 </li>
-                                <li><a href="preorder_show">พรีออเดอร์</a>
+                                <li><a href="products_preorder_show">พรีออเดอร์</a>
                                 </li>
                             </ul>
                         </nav>
                     </div>
                     <div class="safe-area">
-                        <a href="product_sales">ลดเริ่มต้น 50 %</a>
+                        <a href="products_promotions">ลดเริ่มต้น <?php echo $productPercentDiscount ." %" ?></a>
                     </div>
                     <div class="safe-area">
                         <a href="find_product">ตามหาหนังสือ</a>
