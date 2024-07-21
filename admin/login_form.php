@@ -94,7 +94,7 @@ if (!empty($_SESSION['emp_id'])) {
     <!-- end page -->
 
     <!-- Vendor -->
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 
 </body>
 

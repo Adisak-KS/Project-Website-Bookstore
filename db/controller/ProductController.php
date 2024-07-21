@@ -666,7 +666,7 @@ class ProductController extends BaseController
         if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
             $prdPreorder = 1;
         }
-    
+
         try {
             $sql = "SELECT
                         bs_products.prd_id,
@@ -687,17 +687,17 @@ class ProductController extends BaseController
                         AND bs_publishers.pub_status = 1
                         AND bs_authors.auth_status = 1
                         AND bs_products.pty_id = :pty_id";
-    
+
             // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
             if ($prdPreorder === 0) {
                 $sql .= " AND bs_products.prd_preorder = 0"; // ดึงสินค้าพรีออเดอร์
             } elseif ($prdPreorder === 1) {
                 $sql .= " AND bs_products.prd_preorder = 1"; // ดึงสินค้าปกติ
             }
-    
+
             $sql .= " GROUP BY bs_products.prd_id
                       ORDER BY RAND()";
-    
+
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pty_id', $ptyId, PDO::PARAM_INT);
             $stmt->execute();
@@ -707,7 +707,7 @@ class ProductController extends BaseController
             return false;
         }
     }
-    
+
 
     function getProductsAllFocusPublisher($pubId, $prdPreorder = null)
     {
@@ -846,6 +846,46 @@ class ProductController extends BaseController
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "<hr>Error in getProductsAll : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getSearchResult($search)
+    {
+        try {
+            $sql = "SELECT
+                        bs_products.prd_id,
+                        bs_products.prd_name,
+                        bs_products.prd_img1,
+                        bs_products.prd_price,
+                        bs_products.prd_percent_discount,
+                        bs_products.prd_preorder,
+                        bs_products.prd_detail,
+                        COUNT(bs_products_reviews.prd_id) AS review_count,
+                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                    FROM bs_products
+                    INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
+                    INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
+                    INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    WHERE bs_products.prd_status = 1 
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
+                        AND (bs_products.prd_id LIKE :search 
+                            OR bs_products.prd_name LIKE :search 
+                            OR bs_products.prd_isbn LIKE :search
+                            OR bs_products_type.pty_name LIKE :search
+                            OR bs_publishers.pub_name LIKE :search
+                            OR bs_authors.auth_name LIKE :search)
+                    GROUP BY bs_products.prd_id";
+            $stmt = $this->db->prepare($sql);
+            $search = '%' . $search . '%';
+            $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in getSearchResult : " . $e->getMessage();
             return false;
         }
     }

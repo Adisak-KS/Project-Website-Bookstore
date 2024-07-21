@@ -102,7 +102,7 @@ $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อ�
 
 
 
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 
 </body>
 

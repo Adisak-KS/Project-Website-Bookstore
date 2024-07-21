@@ -48,7 +48,7 @@ $titlePage = "ไม่พบข้อมูล";
         <!-- end container -->
     </div>
     <!-- end page -->
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 </body>
 
 </html>

@@ -208,7 +208,7 @@ if (isset($_GET['id'])) {
         <!-- ========== Right bar ========== -->
         <?php require_once('layouts/nav_rightbar.php') ?>
 
-        <?php require_once('layouts/vender.php') ?>
+        <?php require_once('layouts/vendor.php') ?>
 
         <!-- preview New Profile, check file type, file size  -->
         <script>

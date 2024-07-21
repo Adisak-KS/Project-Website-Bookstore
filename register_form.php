@@ -30,68 +30,66 @@ $titlePage = "เข้าสู่ระบบ";
                 </div>
                 <div class="offset-lg-2 col-lg-8 col-md-12 col-12">
                     <div class="billing-fields">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>ชื่อจริง :</strong><span class="text-danger">*</span></label>
-                                    <input class="form-control" name="mem_fname" type="text" placeholder="กรุณาระบุ ชื่อจริง" maxlength="50">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <labe class="form-label"><strong>นามสกุล :</strong><span class="text-danger">*</span></labe>
-                                    <input class="form-control" name="mem_lname" type="text" placeholder="กรุณาระบุ นามสกุล" maxlength="50">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>ชื่อผู้ใช้งาน :</strong><span class="text-danger">*</span></label>
-                                    <input class="form-control" name="mem_username" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้งาน" maxlength="50">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>อีเมล :</strong><span class="text-danger">*</span></label>
-                                    <input class="form-control" name="mem_email" type="text" placeholder="กรุณาระบุ อีเมล" maxlength="100">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label"><strong>รหัสผ่าน : </strong></label><span class="text-danger">*</span>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" name="mem_password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
-                                        <button class="btn btn-outline-secondary password-toggle" type="button">
-                                            <i class="fas fa-eye-slash"></i>
-                                        </button>
+                        <form id="formRegister" action="#" method="post">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>ชื่อจริง :</strong><span class="text-danger">*</span></label>
+                                        <input class="form-control" name="fname" type="text" placeholder="กรุณาระบุ ชื่อจริง" maxlength="50">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-12">
-                                <div class="mb-3">
-                                    <label for="password" class="form-label"><strong>ยืนยันรหัสผ่าน : </strong></label><span class="text-danger">*</span>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่านอีกครั้ง" maxlength="255">
-                                        <button class="btn btn-outline-secondary password-toggle" type="button">
-                                            <i class="fas fa-eye-slash"></i>
-                                        </button>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>นามสกุล :</strong><span class="text-danger">*</span></label>
+                                        <input class="form-control" name="lname" type="text" placeholder="กรุณาระบุ นามสกุล" maxlength="50">
                                     </div>
                                 </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>ชื่อผู้ใช้งาน :</strong><span class="text-danger">*</span></label>
+                                        <input class="form-control" name="username" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้งาน" maxlength="50">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label class="form-label"><strong>อีเมล :</strong><span class="text-danger">*</span></label>
+                                        <input class="form-control" name="email" type="text" placeholder="กรุณาระบุ อีเมล" maxlength="100">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label"><strong>รหัสผ่าน : </strong></label><span class="text-danger">*</span>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
+                                            <button class="btn btn-outline-secondary password-toggle" type="button">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label"><strong>ยืนยันรหัสผ่าน : </strong></label><span class="text-danger">*</span>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="confirmPassword" placeholder="ระบุ รหัสผ่านอีกครั้ง" maxlength="255">
+                                            <button class="btn btn-outline-secondary password-toggle" type="button">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="single-register">
+                                    <button type="submit" name="btn-add" class="btn btn-primary">
+                                        <i class="fa-solid fa-user-plus me-1"></i>
+                                        ยืนยันการสมัครสมาชิก
+                                    </button>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <p>หากมีบัญชีผู้ใช้แล้ว คุณสามารถเข้าสู่ระบบ <a href="login_form">ที่นี่</a></p>
+                                </div>
                             </div>
-                            <hr>
-                            <div class="single-register">
-                                <button type="submit" name="btn-register">
-                                    <i class="fa-solid fa-user-plus me-1"></i>
-                                    ยืนยันการสมัครสมาชิก
-                                </button>
-                            </div>
-
-                            <div class="d-flex justify-content-between">
-
-                                <p>หากมีบัญชีผู้ใช้แล้ว คุณสามารถเข้าสู่ระบบ<a href="login_form"> ที่นี่</a></p>
-
-                            </div>
-                        </div>
+                        </form>
 
                     </div>
                 </div>

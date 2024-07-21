@@ -209,7 +209,7 @@ $banners = $BannerController->getBanner();
     <!-- ========== Right bar ========== -->
     <?php require_once('layouts/nav_rightbar.php') ?>
 
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 
     <!-- List slide show  -->
     <script>

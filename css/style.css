@@ -598,7 +598,7 @@ body {
   padding-right: 47px;
 }
 
-.header-search form a {
+.header-search form button {
   background: #f07c29 none repeat scroll 0 0;
   color: #fff;
   display: inline-block;
@@ -611,9 +611,10 @@ body {
   top: 0;
   width: 42px;
   border-radius: 0 5px 5px 0px;
+  border: none; 
 }
 
-.header-search form a:hover {
+.header-search form button:hover {
   background: #232323 none repeat scroll 0 0;
 }
 

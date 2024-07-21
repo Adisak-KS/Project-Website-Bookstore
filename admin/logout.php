@@ -84,7 +84,7 @@ session_destroy();
     </div>
     <!-- end page -->
 
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 </body>
 
 </html>

@@ -61,7 +61,7 @@ if ($checkStatus && $checkStatus['emp_status'] == 1) {
         <!-- end container -->
     </div>
     <!-- end page -->
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 </body>
 
 </html>

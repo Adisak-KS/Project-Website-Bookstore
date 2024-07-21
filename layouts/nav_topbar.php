@@ -4,11 +4,14 @@ require_once("db/controller/ContactController.php");
 require_once("db/controller/ProductTypeController.php");
 require_once("db/controller/PublisherController.php");
 require_once("db/controller/AuthorController.php");
+require_once("db/controller/ProductController.php");
 
 $ContactController = new ContactController($conn);
 $ProductTypeController = new ProductTypeController($conn);
 $PublisherController = new PublisherController($conn);
 $AuthorController = new AuthorController($conn);
+
+$ProductController = new ProductController($conn);
 
 $contacts = $ContactController->useContact();
 $prdPreorder = 1; //สินค้าปกติ
@@ -17,6 +20,8 @@ $productsType10 = $ProductTypeController->getProductsType10($prdPreorder);
 $publishers10 = $PublisherController->getPublishers10($prdPreorder);
 $authors10 = $AuthorController->getAuthors10($prdPreorder);
 
+// ตรวจสิบว่ามีสินค้า preOrder ไหม
+$MenuPreorder = $ProductController->getProductsAll($MenuPreorder = 0);
 
 // ส่วนลด
 $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount();
@@ -108,9 +113,11 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
 
                 <div class="col-lg-6 col-md-5 col-12">
                     <div class="header-search">
-                        <form action="#">
-                            <input type="text" placeholder="ค้นหาสินค้า..." />
-                            <a href="#"><i class="fa fa-search"></i></a>
+                        <form action="search_show" method="get">
+                            <input type="text" name="search" placeholder="ค้นหา ชื่อสินค้า, รหัสสินค้า, ISBN, ชื่อประเภทสินค้า, สำนักพิมพ์ หรือ ผู้แต่ง ได้ที่นี่" value="<?php if (isset($_GET['search'])) {
+                                                                                                                                                                                echo $_GET['search'];
+                                                                                                                                                                            } ?>">
+                            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
                     </div>
                 </div>
@@ -202,13 +209,16 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
                                         </div>
                                     <?php } ?>
                                 </li>
-                                <li><a href="products_preorder_show">พรีออเดอร์</a>
-                                </li>
+                                <?php if ($MenuPreorder) { ?>
+                                    <li>
+                                        <a href="products_preorder_show">พรีออเดอร์</a>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </nav>
                     </div>
                     <div class="safe-area">
-                        <a href="products_promotions">ลดเริ่มต้น <?php echo $productPercentDiscount ." %" ?></a>
+                        <a href="products_promotions">ลดเริ่มต้น <?php echo $productPercentDiscount . " %" ?></a>
                     </div>
                     <div class="safe-area">
                         <a href="find_product">ตามหาหนังสือ</a>
@@ -227,94 +237,67 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
                     <div class="mobile-menu">
                         <nav id="mobile-menu-active">
                             <ul id="nav">
-                                <li><a href="index">หน้าแรก</a></li>
+                                <li class="active"><a href="index">หน้าแรก</a></li>
 
-                                <li><a href="product-details.html">Book</a>
-                                    <ul>
-                                        <li><a href="shop.html">Tops & Tees</a></li>
-                                        <li><a href="shop.html">Polo Short Sleeve</a></li>
-                                        <li><a href="shop.html">Graphic T-Shirts</a></li>
-                                        <li><a href="shop.html">Jackets & Coats</a></li>
-                                        <li><a href="shop.html">Fashion Jackets</a></li>
-                                        <li><a href="shop.html">Crochet</a></li>
-                                        <li><a href="shop.html">Sleeveless</a></li>
-                                        <li><a href="shop.html">Stripes</a></li>
-                                        <li><a href="shop.html">Sweaters</a></li>
-                                        <li><a href="shop.html">hoodies</a></li>
-                                        <li><a href="shop.html">Heeled sandals</a></li>
-                                        <li><a href="shop.html">Polo Short Sleeve</a></li>
-                                        <li><a href="shop.html">Flat sandals</a></li>
-                                        <li><a href="shop.html">Short Sleeve</a></li>
-                                        <li><a href="shop.html">Long Sleeve</a></li>
-                                        <li><a href="shop.html">Polo Short Sleeve</a></li>
-                                        <li><a href="shop.html">Sleeveless</a></li>
-                                        <li><a href="shop.html">Graphic T-Shirts</a></li>
-                                        <li><a href="shop.html">Hoodies</a></li>
-                                        <li><a href="shop.html">Jackets</a></li>
-                                    </ul>
+                                <li><a href="products_show">สินค้าทั้งหมด</a> </li>
+
+                                <li><a href="javascript:void(0)">ประเภทสินค้า</i></a>
+                                    <?php if ($productsType10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($productsType10 as $productType) { ?>
+                                                    <?php
+                                                    $originalId = $productType["pty_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $productType['pty_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
-                                <li><a href="product-details.html">Audio books</a>
-                                    <ul>
-                                        <li><a href="shop.html">Tops & Tees</a></li>
-                                        <li><a href="shop.html">Sweaters</a></li>
-                                        <li><a href="shop.html">Hoodies</a></li>
-                                        <li><a href="shop.html">Jackets & Coats</a></li>
-                                        <li><a href="shop.html">Long Sleeve</a></li>
-                                        <li><a href="shop.html">Short Sleeve</a></li>
-                                        <li><a href="shop.html">Polo Short Sleeve</a></li>
-                                        <li><a href="shop.html">Sleeveless</a></li>
-                                        <li><a href="shop.html">Sweaters</a></li>
-                                        <li><a href="shop.html">Hoodies</a></li>
-                                        <li><a href="shop.html">Wedges</a></li>
-                                        <li><a href="shop.html">Vests</a></li>
-                                        <li><a href="shop.html">Polo Short Sleeve</a></li>
-                                        <li><a href="shop.html">Sleeveless</a></li>
-                                        <li><a href="shop.html">Graphic T-Shirts</a></li>
-                                        <li><a href="shop.html">Hoodies</a></li>
-                                    </ul>
+
+                                <li><a href="#">สำนักพิมพ์</i></a>
+                                    <?php if ($publishers10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($publishers10 as $publisher) { ?>
+                                                    <?php
+                                                    $originalId = $publisher["pub_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?pubId=<?php echo $base64Encoded ?>"><?php echo $publisher['pub_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
-                                <li><a href="product-details.html">children’s books</a>
-                                    <ul>
-                                        <li><a href="shop.html">Shirts</a></li>
-                                        <li><a href="shop.html">Florals</a></li>
-                                        <li><a href="shop.html">Crochet</a></li>
-                                        <li><a href="shop.html">Stripes</a></li>
-                                        <li><a href="shop.html">Shorts</a></li>
-                                        <li><a href="shop.html">Dresses</a></li>
-                                        <li><a href="shop.html">Trousers</a></li>
-                                        <li><a href="shop.html">Jeans</a></li>
-                                        <li><a href="shop.html">Heeled sandals</a></li>
-                                        <li><a href="shop.html">Flat sandals</a></li>
-                                        <li><a href="shop.html">Wedges</a></li>
-                                        <li><a href="shop.html">Ankle boots</a></li>
-                                    </ul>
+                                <li><a href="#">ผู้แต่ง</i></a>
+                                    <?php if ($authors10) { ?>
+                                        <div class="sub-menu sub-menu-2">
+                                            <ul>
+                                                <?php foreach ($authors10 as $author) { ?>
+                                                    <?php
+                                                    $originalId = $author["auth_id"];
+                                                    require_once("includes/salt.php");   // รหัส Salt 
+                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    ?>
+                                                    <li><a href="products_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name'] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
                                 </li>
-                                <li><a href="#">blog</a>
-                                    <ul>
-                                        <li><a href="blog.html">Blog</a></li>
-                                        <li><a href="blog-details.html">blog-details</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="product-details.html">Page</a>
-                                    <ul>
-                                        <li><a href="shop.html">shop</a></li>
-                                        <li><a href="shop-list.html">shop list view</a></li>
-                                        <li><a href="product-details.html">product-details</a></li>
-                                        <li><a href="product-details-affiliate.html">product-affiliate</a></li>
-                                        <li><a href="blog.html">blog</a></li>
-                                        <li><a href="blog-details.html">blog-details</a></li>
-                                        <li><a href="contact.html">contact</a></li>
-                                        <li><a href="about.html">about</a></li>
-                                        <li><a href="login.html">login</a></li>
-                                        <li><a href="register.html">register</a></li>
-                                        <li><a href="my-account.html">my-account</a></li>
-                                        <li><a href="cart.html">cart</a></li>
-                                        <li><a href="compare.html">compare</a></li>
-                                        <li><a href="checkout.html">checkout</a></li>
-                                        <li><a href="wishlist.html">wishlist</a></li>
-                                        <li><a href="404.html">404 Page</a></li>
-                                    </ul>
-                                </li>
+                                <?php if ($MenuPreorder) { ?>
+                                    <li>
+                                        <a href="products_preorder_show">พรีออเดอร์</a>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </nav>
                     </div>

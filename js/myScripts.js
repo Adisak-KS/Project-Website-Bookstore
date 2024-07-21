@@ -217,6 +217,108 @@ $(document).ready(function () {
     });
 });
 
+// ============================== 4. Jquery Validation Form (Employee) ==============================
+$(document).ready(function () {
+    $("#formRegister").validate({
+        rules: {
+            fname: {
+                required: true,
+                pattern: /^[a-zA-Zก-๙\s]+$/,
+                maxlength: 50,
+            },
+            lname: {
+                required: true,
+                pattern: /^[a-zA-Zก-๙\s]+$/,
+                maxlength: 50,
+            },
+            username: {
+                required: true,
+                pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/,
+                minlength: 6,
+                maxlength: 50,
+
+            },
+            password: {
+                required: true,
+                nowhitespace: true,
+                pattern: /^[^\u0E00-\u0E7F]+$/,
+                minlength: 8,
+                maxlength: 255,
+            },
+            confirmPassword: {
+                required: true,
+                equalTo: "[name='password']"
+            },
+            email: {
+                required: true,
+                email: true,
+                minlength: 10,
+                maxlength: 100,
+            },
+            newProfile: {
+                accept: "image/png,image/jpg,image/jpeg",
+            },
+            username_email: {
+                required: true,
+            }
+        },
+        messages: {
+            fname: {
+                required: "กรุณาระบุ ชื่อ",
+                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
+                minlength: 50,
+            },
+            lname: {
+                required: "กรุณาระบุ นามสกุล",
+                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
+                minlength: 50,
+            },
+            username: {
+                required: "กรุณาระบุ ชื่อผู้ใช้งาน",
+                pattern: "ต้องเป็น a-z, A-Z, 0-9 และ _ เท่านั้น และตัวแรกต้องเริ่มต้นด้วย a-z, A-Z",
+                minlength: "ต้องมี 6 ตัวอักษรขึ้นไป",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            password: {
+                required: "กรุณาระบุ รหัสผ่าน",
+                nowhitespace: "ห้ามมีเว้นวรรค",
+                pattern: "ห้ามมีภาษาไทย",
+                minlength: "ต้องมี อย่างน้อย 8 ตัวอักษร",
+                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+            confirmPassword: {
+                required: "กรุณาระบุ รหัสผ่าน อีกครั้ง",
+                equalTo: "ยืนยันรหัสผ่าน ไม่ถูกต้อง",
+            },
+            email: {
+                required: "กรุณาระบุ อีเมล",
+                email: "รูปแบบอีเมล ไม่ถูกต้อง",
+                minlength: "ต้องมี อย่างน้อย 10 ตัวอักษร",
+                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+            newProfile: {
+                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
+            },
+            username_email: {
+                required: "กรุณาระบุ ชื่อผู้ใช้งาน หรือ อีเมล",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+
 // ============================== 4. Jquery Validation Form Account(Employee) ==============================
 $(document).ready(function () {
     $("#formEmployeeAccount").validate({

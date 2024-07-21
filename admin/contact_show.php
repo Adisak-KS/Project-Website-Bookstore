@@ -127,7 +127,7 @@ $contacts = $ContactController->getContact();
     <!-- ========== Right bar ========== -->
     <?php require_once('layouts/nav_rightbar.php') ?>
 
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 </body>
 
 </html>

@@ -189,7 +189,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
 
 
 
-    <?php require_once('layouts/vender.php') ?>
+    <?php require_once('layouts/vendor.php') ?>
 
 </body>
 
