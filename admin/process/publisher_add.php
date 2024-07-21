@@ -16,7 +16,7 @@ if (isset($_POST['btn-add'])) {
     $locationError = "Location: ../publisher_show";
     $locationSuccess = "Location: ../publisher_show";
 
-    valiDateFormPublischer($pubName, $pubDetail,  $pubStatus, $locationError);
+    valiDateFormPublisher($pubName, $pubDetail,  $pubStatus, $locationError);
 
     $check = $PublisherController->checkPublisherName($pubName);
     if ($check) {

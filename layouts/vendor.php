@@ -57,4 +57,4 @@
 
 
 <!-- My Scripts  -->
-<script src="js/myScripts.js"></script>
+<script src="js/scripts.js"></script>

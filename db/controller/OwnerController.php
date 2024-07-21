@@ -1,22 +1,26 @@
-<!-- ========================================== Owner ========================================== 
- 
-   1.  __construct
-   2. getOwner
-   3. insertOwner
-   4. getDetailOwner
-   5. updateDetailOwner
-   6. updateAuthorityOwner
-
-============================================================================================ -->
 <?php
+// ========================================== Owner ========================================== 
+/* 
+    1.  __construct
+    2. getOwner
+    3. insertOwner
+    4. getDetailOwner
+    5. updateDetailOwner
+    6. updateAuthorityOwner
+*/
+// ============================================================================================
+
 class OwnerController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         // echo "<br> เรียกใช้ Owner Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getOwner ===================================
     function getOwner()
     {
         try {
@@ -45,6 +49,7 @@ class OwnerController extends BaseController
         }
     }
 
+    // ============================= 3. insertOwner ===================================
     function insertOwner($newProfile, $fname, $lname, $username, $hashedPassword, $email)
     {
         try {
@@ -86,6 +91,7 @@ class OwnerController extends BaseController
         }
     }
 
+    // ============================= 4. getDetailOwner ===================================
     function getDetailOwner($Id)
     {
         try {
@@ -114,6 +120,7 @@ class OwnerController extends BaseController
         }
     }
 
+    // ============================= 5. updateDetailOwner ===================================
     function updateDetailOwner($Id, $fname, $lname, $status)
     {
         try {
@@ -137,37 +144,38 @@ class OwnerController extends BaseController
         }
     }
 
+    // ============================= 6. updateAuthorityOwner ===================================
     function updateAuthorityOwner($Id, $newEatId)
     {
-       try {
-          // ลบทุกสิทธิ์ที่มี emp_id ตรงกับ $Id ที่ส่งมา
-          $sql = " DELETE FROM bs_employees_authority
+        try {
+            // ลบทุกสิทธิ์ที่มี emp_id ตรงกับ $Id ที่ส่งมา
+            $sql = " DELETE FROM bs_employees_authority
                    WHERE emp_id = :emp_id";
-          $stmt = $this->db->prepare($sql);
-          $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
-          $stmt->execute();
- 
-          // insert Authority 
-          $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // insert Authority 
+            $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
                    VALUES (:emp_id, :eat_id)";
-          $stmt = $this->db->prepare($sql);
-          $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
-          $stmt->bindParam(':eat_id', $newEatId, PDO::PARAM_INT);
-          $stmt->execute();
- 
-          // ถ้า $newEatId ที่ส่งมา เป็นเลข 4 หรือ 5 (Accounting, Sale) ให้ insert 6 (Employee) ลงไปด้วย
-          if ($newEatId == 4 || $newEatId == 5) {
-             $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->bindParam(':eat_id', $newEatId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // ถ้า $newEatId ที่ส่งมา เป็นเลข 4 หรือ 5 (Accounting, Sale) ให้ insert 6 (Employee) ลงไปด้วย
+            if ($newEatId == 4 || $newEatId == 5) {
+                $sql = " INSERT INTO bs_employees_authority (emp_id, eat_id) 
                       VALUES (:emp_id, 6)";
-             $stmt = $this->db->prepare($sql);
-             $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
-             $stmt->execute();
-          }
- 
-          return true;
-       } catch (PDOException $e) {
-          echo "<hr>Error in updateAuthorityAdmin : " . $e->getMessage();
-          return false;
-       }
+                $stmt = $this->db->prepare($sql);
+                $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateAuthorityAdmin : " . $e->getMessage();
+            return false;
+        }
     }
 }

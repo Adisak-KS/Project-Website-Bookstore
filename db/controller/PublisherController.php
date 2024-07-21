@@ -1,24 +1,31 @@
-<!-- ================================= Publicher ========================================== 
- 
-   1.  __construct
-   2. getPublisher
-   3. checkPublisherName
-   4. insertPublisher
-   5. getDetailPublisher
-   6. updateDetailPublisher
-   7. updateNewImgPublisher
-   8. deletePublisher
-
-============================================================================================ -->
 <?php
+//  ================================= Publisher ========================================== 
+/* 
+    1.  __construct
+    2. getPublisher
+    3. checkPublisherName
+    4. insertPublisher
+    5. getDetailPublisher
+    6. updateDetailPublisher
+    7. updateNewImgPublisher
+    8. deletePublisher
+    9. amountProductInPublisher
+    10. getPublishers10
+*/
+// ============================================================================================
+
+
 class PublisherController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Product Type Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getPublisher ===================================
     function getPublisher()
     {
         try {
@@ -33,6 +40,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 3. checkPublisherName ===================================
     function checkPublisherName($pubName, $pubId = null)
     {
         try {
@@ -59,6 +67,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 4. insertPublisher ===================================
     function insertPublisher($newImg, $pubName, $pubDetail, $pubStatus)
     {
         try {
@@ -77,6 +86,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 5. getDetailPublisher ===================================
     function getDetailPublisher($Id)
     {
         try {
@@ -91,6 +101,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 6. updateDetailPublisher ===================================
     function updateDetailPublisher($pubName, $pubDetail, $pubStatus, $pubId)
     {
         try {
@@ -113,6 +124,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 7. updateNewImgPublisher ===================================
     function updateNewImgPublisher($newImg, $pubId)
     {
         try {
@@ -131,6 +143,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 8. deletePublisher ===================================
     function deletePublisher($pubId)
     {
         try {
@@ -146,6 +159,7 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 9. amountProductInPublisher ===================================
     function amountProductInPublisher($Id)
     {
         try {
@@ -161,13 +175,14 @@ class PublisherController extends BaseController
         }
     }
 
+    // ============================= 10. getPublishers10 ===================================
     function getPublishers10($prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
         if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
             $prdPreorder = 1; // ค่าเริ่มต้น
         }
-    
+
         try {
             $sql = "SELECT
                         bs_publishers.pub_id,
@@ -181,27 +196,27 @@ class PublisherController extends BaseController
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
                         AND bs_authors.auth_status = 1";
-    
+
             // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
             if ($prdPreorder !== null) {
                 $sql .= " AND bs_products.prd_preorder = :prd_preorder";
             }
-    
+
             $sql .= " GROUP BY bs_publishers.pub_id, bs_publishers.pub_name
                       ORDER BY product_count DESC
                       LIMIT 10";
-    
+
             // Preparing the statement
             $stmt = $this->db->prepare($sql);
-    
+
             // Binding parameters
             if ($prdPreorder !== null) {
                 $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
             }
-    
+
             // Executing the statement
             $stmt->execute();
-    
+
             // Fetching results
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -210,5 +225,4 @@ class PublisherController extends BaseController
             return false;
         }
     }
-    
 }

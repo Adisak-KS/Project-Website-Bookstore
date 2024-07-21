@@ -491,6 +491,7 @@ body {
   transition: 0.3s;
 }
 
+
 .language-area ul li .header-sub {
   background: #fff none repeat scroll 0 0;
   box-shadow: 0 1px 7px -2px rgba(0, 0, 0, 0.3);
@@ -611,7 +612,7 @@ body {
   top: 0;
   width: 42px;
   border-radius: 0 5px 5px 0px;
-  border: none; 
+  border: none;
 }
 
 .header-search form button:hover {

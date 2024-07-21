@@ -1,25 +1,29 @@
-<!-- ========================================== Member ========================================== 
- 
-   1.  __construct
-   2. getMember
-   3. checkUsernameEmailMember
-   4. insertMember
-   5. getDetailMember
-   6. updateDetailMember
-   7. updateNewProfileMember
-   8. updateNewProfileMember
-
-============================================================================================ -->
 
 <?php
+// ========================================== Member ========================================== 
+/* 
+    1.  __construct
+    2. getMember
+    3. checkUsernameEmailMember
+    4. insertMember
+    5. getDetailMember
+    6. updateDetailMember
+    7. updateNewProfileMember
+    8. deleteMember
+*/
+// ============================================================================================
+
 class MemberController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Member Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getMember ===================================
     function getMember()
     {
         try {
@@ -35,6 +39,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 3. checkUsernameEmailMember ===================================
     function checkUsernameEmailMember($username, $email, $id = null)
     {
         try {
@@ -65,6 +70,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 4. insertMember ===================================
     function insertMember($newProfile, $fname, $lname, $username, $password, $email)
     {
         try {
@@ -92,6 +98,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 5. getDetailMember ===================================
     function getDetailMember($Id)
     {
         try {
@@ -107,6 +114,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 6. updateDetailMember ===================================
     function updateDetailMember($Id, $fname, $lname, $status)
     {
         try {
@@ -130,6 +138,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 7. updateNewProfileMember ===================================
     function updateNewProfileMember($Id, $newProfile)
     {
         try {
@@ -147,6 +156,7 @@ class MemberController extends BaseController
         }
     }
 
+    // ============================= 8. deleteMember ===================================
     function deleteMember($Id)
     {
         try {

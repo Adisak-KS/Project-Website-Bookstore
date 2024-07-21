@@ -1,24 +1,28 @@
-<!-- ================================= Promotion ========================================== 
- 
-   1.  __construct
-   2. getPromotion
-   3. checkPublisherName
-   4. insertPublisher
-   5. getDetailPublisher
-   6. updateDetailPublisher
-   7. updateNewImgPublisher
-   8. deletePublisher
 
-============================================================================================ -->
 <?php
+//  ================================= Promotion ========================================== 
+/*
+    1.  __construct
+    2. getPromotion
+    3. checkPublisherName
+    4. insertPromotion
+    5. getDetailPromotion
+    6. updateDetailPromotion
+    7. updateImgPromotion
+    8. deletePromotion
+*/
+// ============================================================================================
+
 class PromotionController extends BaseController
 {
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Promotion Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getPromotions ===================================
     function getPromotions()
     {
         try {
@@ -33,6 +37,7 @@ class PromotionController extends BaseController
         }
     }
 
+    // ============================= 3. checkPromotionName ===================================
     function checkPromotionName($proName, $proId = null)
     {
         try {
@@ -60,9 +65,10 @@ class PromotionController extends BaseController
         }
     }
 
+    // ============================= 4. insertPromotion ===================================
     function insertPromotion($newImg, $proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus)
     {
-        try{
+        try {
             $sql = "INSERT INTO bs_promotions(pro_img, pro_name, pro_percent_discount, pro_time_start, pro_time_end, pro_detail, pro_status)
                     VALUES (:pro_img, :pro_name, :pro_percent_discount, :pro_time_start, :pro_time_end, :pro_detail, :pro_status)";
             $stmt = $this->db->prepare($sql);
@@ -75,28 +81,31 @@ class PromotionController extends BaseController
             $stmt->bindParam(':pro_status', $proStatus, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in insertPromotion : " . $e->getMessage();
             return false;
         }
     }
 
-    function getDetailPromotion($Id){
-        try{
+    // ============================= 5. getDetailPromotion ===================================
+    function getDetailPromotion($Id)
+    {
+        try {
             $sql = "SELECT * FROM bs_promotions WHERE pro_id = :pro_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pro_id', $Id);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in getDetailPromotionn : " . $e->getMessage();
             return false;
         }
     }
 
-    function updateDetailPromotion($proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus, $proId){
-        try{
+    // ============================= 6. updateDetailPromotion ===================================
+    function updateDetailPromotion($proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus, $proId)
+    {
+        try {
             $sql = "UPDATE bs_promotions
                     SET pro_name = :pro_name,
                         pro_percent_discount = :pro_percent_discount,
@@ -116,14 +125,16 @@ class PromotionController extends BaseController
             $stmt->bindParam(':pro_id', $proId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in updateDetailPromotion : " . $e->getMessage();
             return false;
         }
     }
 
-    function updateImgPromotion($newImg, $proId){
-        try{
+    // ============================= 7. updateImgPromotion ===================================
+    function updateImgPromotion($newImg, $proId)
+    {
+        try {
             $sql = "UPDATE bs_promotions
                     SET pro_img = :pro_img,
                         pro_time_update = NOW()
@@ -133,21 +144,23 @@ class PromotionController extends BaseController
             $stmt->bindParam(':pro_id', $proId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in updateImgPromotion : " . $e->getMessage();
             return false;
         }
     }
 
-    function deletePromotion($proId){
-        try{
+    // ============================= 8. deletePromotion ===================================
+    function deletePromotion($proId)
+    {
+        try {
             $sql = "DELETE FROM bs_promotions
                     WHERE pro_id = :pro_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pro_id', $proId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deletePromotion : " . $e->getMessage();
             return false;
         }

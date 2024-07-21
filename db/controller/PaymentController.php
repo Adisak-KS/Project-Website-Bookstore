@@ -1,25 +1,31 @@
-<!-- ================================= Payment =============================================== 
- 
-   1.  __construct
-   2. getPayment
-   3. checkProductTypeName
-   4. insertProductTyp
-   5. getDetailProductType
-   6. updateDetailProductType
-   7. updateNewCoverProductType
-   8. DeleteProductType
-
-============================================================================================ -->
 <?php
+// ========================================== Payment ========================================== 
+/* 
+    1.  __construct
+    2. getPayment
+    3. checkPaymentNumber
+    4. insertPayment
+    5. updatePaymentStatus
+    6. getDetailPayment
+    7. updatePaymentDetail
+    8. updatePaymentNewLogo
+    9. updatePaymentNewQrcode
+    10. deleteQrcode
+    11. deletePayment
+*/
+// ============================================================================================
+
 class PaymentController extends BaseController
 {
 
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Payment Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getPayment ===================================
     function getPayment()
     {
         try {
@@ -36,6 +42,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 3. checkPaymentNumber ===================================
     function checkPaymentNumber($pmtNumber, $pmtId = null)
     {
         try {
@@ -65,6 +72,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 4. insertPayment ===================================
     function insertPayment($pmtBank, $newImg, $pmtName, $pmtNumber, $pmtDetail, $pmtStatus)
     {
         try {
@@ -104,6 +112,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 5. updatePaymentStatus ===================================
     function updatePaymentStatus($pmtStatus, $pmtId)
     {
         try {
@@ -136,6 +145,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 6. getDetailPayment ===================================
     function getDetailPayment($pmtId)
     {
         try {
@@ -152,6 +162,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 7. updatePaymentDetail ===================================
     function updatePaymentDetail($pmtBank, $pmtName, $pmtNumber, $pmtDetail, $pmtId)
     {
         try {
@@ -175,6 +186,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 8. updatePaymentNewLogo ===================================
     function updatePaymentNewLogo($newImg, $pmtId)
     {
         try {
@@ -192,6 +204,7 @@ class PaymentController extends BaseController
         }
     }
 
+    // ============================= 9. updatePaymentNewQrcode ===================================
     function updatePaymentNewQrcode($newImg, $pmtId)
     {
         try {
@@ -209,7 +222,9 @@ class PaymentController extends BaseController
         }
     }
 
-    function deleteQrcode($pmtId){
+    // ============================= 10. deleteQrcode ===================================
+    function deleteQrcode($pmtId)
+    {
         try {
             $sql = "UPDATE bs_payments
                     SET pmt_qrcode = NULL
@@ -218,21 +233,23 @@ class PaymentController extends BaseController
             $stmt->bindParam(':pmt_id', $pmtId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deleteQrcode : " . $e->getMessage();
             return false;
         }
     }
 
-    function deletePayment($pmtId){
-        try{
+    // ============================= 11. deletePayment ===================================
+    function deletePayment($pmtId)
+    {
+        try {
             $sql = "DELETE FROM bs_payments
                     WHERE pmt_id = :pmt_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':pmt_id', $pmtId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deletePayment : " . $e->getMessage();
             return false;
         }

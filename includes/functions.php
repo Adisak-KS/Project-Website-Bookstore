@@ -1,12 +1,37 @@
 <?php
-// ======================== My Function For Admin =====================
+// ======================== My Function For Admin and User =====================
 /*
-    1. messageError
-
-
+    1. Message Error
+    2. Validation Form Add Employee
+    3. Check Default Image
+    4. Decode Base64 ID
+    5. Check Result Detail
+    6. Delete Profile Employees
+    7. Generate Unique Profile Employees
+    8. Validation Form Update Employees
+    9. Validation Form Delete Employees
+    10. Validation Form Add Member
+    11. Validation Form Update Member
+    12. Delete Profile Member
+    13. Generate Unique Image
+    14. Delete Image
+    15. validation Form Add Product Type
+    16. validation Form update Product Type
+    17. validation Form Publisher
+    18. validation Form Author
+    19. validation Form Promotion
+    20. validation from Add Product
+    21. validation from Update Product
+    22. validation from Add Payment
+    23. validation from Shipping
+    24. validation from Contact
+    25. validation Add Banner
+    26. validation Update Banner
+    
 */
 
-// เก็บข้อความ error
+
+// ======================== 1. Message Error  ==========================================================
 
 function messageError($message, $locationError)
 {
@@ -17,8 +42,7 @@ function messageError($message, $locationError)
     exit();
 }
 
-// ==================================================================================
-// Validation Form Add Employee
+// ======================== 2. Validation Form Add Employee  =============================================
 function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirmPassword, $email, $eatId, $locationError)
 {
 
@@ -73,8 +97,7 @@ function valiDateFormAddEmployees($fname, $lname, $username, $password, $confirm
     }
 }
 
-// ==================================================================================
-
+// ======================== 3. Check Default Image  =============================================
 function checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError)
 {
     if (!file_exists($defaultImagePath)) {
@@ -97,7 +120,7 @@ function checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $l
     }
 }
 
-// ==================================================================================
+// ======================== 4. Decode Base64 ID  =============================================
 function decodeBase64ID($base64Encoded, $salt1, $salt2)
 {
     // ถอดรหัส base64 เพื่อให้ได้ข้อมูลเป็นข้อความธรรมดา
@@ -117,8 +140,7 @@ function decodeBase64ID($base64Encoded, $salt1, $salt2)
     return $originalId;
 }
 
-
-// ==================================================================================
+// ======================== 5. Check Result Detail  =============================================
 function checkResultDetail($resultDetail)
 {
     if (!$resultDetail) {
@@ -127,8 +149,7 @@ function checkResultDetail($resultDetail)
     }
 }
 
-
-// ==================================================================================
+// ======================== 6. Delete Profile Employees =============================================
 function deleteProfileEmployees($profile)
 {
     // โฟลเดอร์ที่เก็บไฟล์รูปภาพ
@@ -143,8 +164,7 @@ function deleteProfileEmployees($profile)
     }
 }
 
-
-// ==================================================================================
+// ======================== 7. Generate Unique Profile Employees =====================================
 function generateUniqueProfileEmployees($extension, $folder)
 {
     do {
@@ -153,7 +173,7 @@ function generateUniqueProfileEmployees($extension, $folder)
     return $fileName;
 }
 
-// ==================================================================================
+// ======================== 8. Validation Form Update Employees =====================================
 function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError)
 {
 
@@ -199,7 +219,7 @@ function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locat
     }
 }
 
-// ==================================================================================
+// ======================== 9. Validation Form Delete Employees =====================================
 function validateFormDeleteEmployees($Id, $locationError)
 {
     if (empty($Id) || !filter_var($Id, FILTER_VALIDATE_INT, array("options" => array("min_range" => 1)))) {
@@ -208,7 +228,7 @@ function validateFormDeleteEmployees($Id, $locationError)
     }
 }
 
-// ==================================================================================
+// ======================== 10. Validation Form Add Member =====================================
 function valiDateFormAddMember($fname, $lname, $username, $password, $confirmPassword, $email, $locationError)
 {
 
@@ -257,7 +277,7 @@ function valiDateFormAddMember($fname, $lname, $username, $password, $confirmPas
     }
 }
 
-// ==================================================================================
+// ======================== 11. Validation Form Update Member =====================================
 function valiDateFormUpdateMember($fname, $lname, $status,  $locationError)
 {
 
@@ -281,7 +301,8 @@ function valiDateFormUpdateMember($fname, $lname, $status,  $locationError)
         messageError("สถานะบัญชีต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
     }
 }
-// ==================================================================================
+
+// ======================== 12. Delete Profile Member =====================================
 function deleteProfileMember($profile)
 {
     // โฟลเดอร์ที่เก็บไฟล์รูปภาพ
@@ -295,10 +316,8 @@ function deleteProfileMember($profile)
         }
     }
 }
-// ==================================================================================
 
-
-
+// ======================== 13. Generate Unique Image =====================================
 function generateUniqueImg($fileExtension, $folderUploads)
 {
     do {
@@ -306,6 +325,8 @@ function generateUniqueImg($fileExtension, $folderUploads)
     } while (file_exists($folderUploads . $fileName));
     return $fileName;
 }
+
+// ======================== 14. Delete Image =====================================
 function deleteImg($img, $folderUploads)
 {
 
@@ -318,6 +339,7 @@ function deleteImg($img, $folderUploads)
     }
 }
 
+// ======================== 15. validation Form Add Product Type =====================================
 function valiDateFormAddProductType($ptyName, $ptyDetail, $ptyStatus, $locationError)
 {
 
@@ -327,7 +349,6 @@ function valiDateFormAddProductType($ptyName, $ptyDetail, $ptyStatus, $locationE
     } elseif (mb_strlen($ptyName, 'UTF-8') > 100) {
         messageError("ชื่อประเภทสินค้า ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
-
 
     // Check Product Type Detail
     if (empty($ptyDetail)) {
@@ -343,6 +364,7 @@ function valiDateFormAddProductType($ptyName, $ptyDetail, $ptyStatus, $locationE
     }
 }
 
+// ======================== 16. validation Form update Product Type =====================================
 function valiDateFormUpdateProductType($ptyName, $ptyDetail, $ptyStatus, $locationError)
 {
 
@@ -367,7 +389,8 @@ function valiDateFormUpdateProductType($ptyName, $ptyDetail, $ptyStatus, $locati
     }
 }
 
-function valiDateFormPublischer($pubName, $pubDetail,  $pubStatus, $locationError)
+// ======================== 17. validation Form Publisher =====================================
+function valiDateFormPublisher($pubName, $pubDetail, $pubStatus, $locationError)
 {
     // Check Product Type name
     if (empty($pubName)) {
@@ -390,7 +413,8 @@ function valiDateFormPublischer($pubName, $pubDetail,  $pubStatus, $locationErro
     }
 }
 
-function valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError)
+// ======================== 18. validation Form Author =====================================
+function valiDateFormAuthor($authName, $authDetail, $authStatus, $locationError)
 {
     // Check Author name
     if (empty($authName)) {
@@ -413,6 +437,7 @@ function valiDateFormAuthor($authName, $authDetail,  $authStatus, $locationError
     }
 }
 
+// ======================== 19. validation Form Promotion =====================================
 function  validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $proTimeEnd, $proDetail, $proStatus, $locationError)
 {
     if (empty($proName)) {
@@ -449,8 +474,8 @@ function  validateFormPromotion($proName, $proPercentDiscount, $proTimeStart, $p
         messageError("สถานะการแสดโปรโมชั่นต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
     }
 }
-// ==================================================================================
 
+// ======================== 20. validation from Add Product =====================================
 function validateFormAddProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus, $locationError)
 {
 
@@ -545,7 +570,7 @@ function validateFormAddProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prd
     }
 }
 
-// ==================================================================================
+// ======================== 21. validation from Update Product =====================================
 function validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdDetail, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus, $locationError)
 {
 
@@ -642,7 +667,7 @@ function validateFormUpdateProduct($prdName, $prdISBN, $prdCoin, $prdQuantity, $
     }
 }
 
-// ==================================================================================
+// ======================== 22. validation from Add Payment =====================================
 function validateFormAddPayment($pmtBank, $pmtName, $pmtNumber, $pmtDetail, $pmtStatus, $locationError)
 {
 
@@ -679,7 +704,7 @@ function validateFormAddPayment($pmtBank, $pmtName, $pmtNumber, $pmtDetail, $pmt
     }
 }
 
-// ==================================================================================
+// ======================== 23. validation from Shipping =====================================
 function validateFormShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $locationError)
 {
 
@@ -706,6 +731,7 @@ function validateFormShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $loca
     }
 }
 
+// ======================== 24. validation from Contact =====================================
 function valiDateFormContact($ctDetail, $ctStatus, $locationError)
 {
     if (empty($ctDetail)) {
@@ -715,6 +741,7 @@ function valiDateFormContact($ctDetail, $ctStatus, $locationError)
     }
 }
 
+// ======================== 25. validation Add Banner =====================================
 function  valiDateFormAddBanner($bnName, $bnLink, $bnImg,  $bnStatus, $locationError)
 {
     if (empty($bnName)) {
@@ -746,6 +773,7 @@ function  valiDateFormAddBanner($bnName, $bnLink, $bnImg,  $bnStatus, $locationE
     }
 }
 
+// ======================== 26. validation Update Banner =====================================
 function valiDateFormUpdateBanner($bnName, $bnLink, $bnStatus, $locationError)
 {
     if (empty($bnName)) {

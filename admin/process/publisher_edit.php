@@ -18,7 +18,7 @@ if (isset($_POST['btn-edit'])) {
     $locationError = "Location: ../publisher_edit_form?id=$base64Encoded";
     $locationSuccess = "Location: ../publisher_show";
 
-    valiDateFormPublischer($pubName, $pubDetail, $pubStatus, $locationError);
+    valiDateFormPublisher($pubName, $pubDetail, $pubStatus, $locationError);
 
     $check = $PublisherController->checkPublisherName($pubName, $pubId);
 

@@ -1,25 +1,26 @@
-<!-- ========================================== Admin ========================================== 
- 
+<?php
+
+//  ========================================== Admin ========================================== 
+/*
    1.  __construct
    2. getAdmin
-   3. checkUsernameEmailEmployees
-   4. insertAdmin
-   5. getDetailAdmin
-   6. updateDetailAdmin
-   7. updateAuthorityAdmin
-   8. UpdateNewProfileAdmin
+   3. getDetailAdmin
+   4. updateDetailAdmin
+   5. updateAuthorityAdmin
+*/
+// ============================================================================================
 
-============================================================================================ -->
-
-<?php
 class AdminController extends BaseController
 {
+
+   // ============================= 1. __construct ===================================
    public function __construct($db)
    {
       parent::__construct($db);
       //  echo "<br> เรียกใช้ Admin Controller สำเร็จ <br>";
    }
 
+   // ============================= 2. getAdmin ===================================
    function getAdmin()
    {
       try {
@@ -48,6 +49,7 @@ class AdminController extends BaseController
       }
    }
 
+   // ============================= 3. getDetailAdmin ===================================
    function getDetailAdmin($Id)
    {
       try {
@@ -73,9 +75,11 @@ class AdminController extends BaseController
          return $stmt->fetch(PDO::FETCH_ASSOC);
       } catch (PDOException $e) {
          echo "<hr>Error in getDetailAdmin : " . $e->getMessage();
+         return false;
       }
    }
 
+   // ============================= 4. updateDetailAdmin ===================================
    function updateDetailAdmin($Id, $fname, $lname, $status)
    {
       try {
@@ -99,6 +103,7 @@ class AdminController extends BaseController
       }
    }
 
+   // ============================= 5. updateAuthorityAdmin ===================================
    function updateAuthorityAdmin($Id, $newEatId)
    {
       try {
@@ -132,21 +137,4 @@ class AdminController extends BaseController
          return false;
       }
    }
-
-   function deleteAdmin($Id)
-   {
-      try {
-         $sql = " DELETE  FROM bs_employees
-                  WHERE emp_id = :emp_id";
-         $stmt = $this->db->prepare($sql);
-         $stmt->bindParam(":emp_id", $Id, PDO::PARAM_INT);
-         $stmt->execute();
-         return true;
-      } catch (PDOException $e) {
-         echo "<hr>Error in deleteAdmin : " . $e->getMessage();
-         return false;
-      }
-   }
 }
-
-?>

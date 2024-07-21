@@ -1,24 +1,31 @@
-<!-- ================================= Payment =============================================== 
- 
-   1.  __construct
-   2. getPayment
-   3. checkProductTypeName
-   4. insertProductTyp
-   5. getDetailProductType
-   6. updateDetailProductType
-   7. updateNewCoverProductType
-   8. DeleteProductType
 
-============================================================================================ -->
 <?php
+// ================================= Payment =============================================== 
+/* 
+    1.  __construct
+    2. getBanner
+    3. checkBannerName
+    4. insertBanner
+    5. getDetailBanner
+    6. updateDetailBanner
+    7. updateImgBanner
+    8. deleteBanner
+    9. updateSortTableList
+    10. getSlideBanner
+*/
+// ============================================================================================
+
 class BannerController extends BaseController
 {
+
+    // =============================== 1. __construct ======================================
     public function __construct($db)
     {
         parent::__construct($db);
         // echo "<br> เรียกใช้ Banner Controller สำเร็จ <br>";
     }
 
+    // =============================== 2. getBanner ======================================
     function getBanner()
     {
         try {
@@ -36,6 +43,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 3. checkBannerName ======================================
     function checkBannerName($bnName, $bnId = NULL)
     {
         try {
@@ -66,6 +74,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 4. insertBanner ======================================
     function insertBanner($bnName, $bnLink, $newImg, $bnStatus)
     {
         try {
@@ -84,6 +93,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 5. getDetailBanner ======================================
     function getDetailBanner($bnId)
     {
         try {
@@ -100,6 +110,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 6. updateDetailBanner ======================================
     function updateDetailBanner($bnName, $bnLink, $bnStatus, $bnId)
     {
         try {
@@ -121,6 +132,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 7. updateImgBanner ======================================
     function updateImgBanner($newImg, $bnId)
     {
         try {
@@ -138,6 +150,7 @@ class BannerController extends BaseController
         }
     }
 
+    // =============================== 8. deleteBanner ======================================
     function deleteBanner($bnId)
     {
         try {
@@ -153,7 +166,9 @@ class BannerController extends BaseController
         }
     }
 
-    function updateSortTableList($bnNumberList, $bnId) {
+    // =============================== 9. updateSortTableList ======================================
+    function updateSortTableList($bnNumberList, $bnId)
+    {
         try {
             $sql = "UPDATE bs_banners
                     SET bn_number_list = :bn_number_list
@@ -169,15 +184,17 @@ class BannerController extends BaseController
         }
     }
 
-    function getSlideBanner(){
-        try{
+    // =============================== 10. getSlideBanner ======================================
+    function getSlideBanner()
+    {
+        try {
             $sql = "SELECT * FROM bs_banners
                     WHERE bn_status = 1
                     ORDER BY bn_number_list ASC";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in showSlideBanner : " . $e->getMessage();
             return false;
         }

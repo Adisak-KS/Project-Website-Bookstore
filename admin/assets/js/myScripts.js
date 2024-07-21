@@ -1,14 +1,26 @@
-// ============================== My Scripts ==============================
+// ============================== My Scripts For (Admin) ==============================
 /*
 
 1. Data Table Default
 2. Data Table Export File
-3. Show / Hiden Password (Class .password-toggle)
-3. Jquery Validation Form (Employee)
+3. Show / Hidden Password (Class .password-toggle)
+4. Jquery Validation Form (Employee)
+5. Jquery Validation Form Account(Employee)
+6. confirm Logout(Employee)
+7. Jquery Validation Form (Publisher)
+8. Jquery Validation Form (Product Type)
+9. Jquery Validation Form (Author)
+10. Jquery Validation Form (Promotion)
+11. Jquery Validation Form (Product)
+12. Jquery Validation Form (setting Percent Discount)
+13. Jquery Validation Form (Payment)
+14. Jquery Validation Form (shipping)
+15. Jquery Validation Form (Search Product View)
+16. Jquery Validation Form (Contact)
+17. Jquery Validation Form (Setting Product Stock Low)
+18. Jquery Validation Form (Setting Banner)
 
 */
-
-
 
 // ============================== 1. Data Table Default ==============================
 $(document).ready(function() {
@@ -96,9 +108,7 @@ $(document).ready(function () {
     });
 });
 
-
-
-// ============================== 3. Show / Hiden Password (Class .password-toggle) ==============================
+// ============================== 3. Show / Hidden Password (Class .password-toggle) ==============================
 document.addEventListener('DOMContentLoaded', function () {
     const passwordToggles = document.querySelectorAll('.password-toggle');
 
@@ -217,109 +227,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 4. Jquery Validation Form (Employee) ==============================
-$(document).ready(function () {
-    $("#formRegister").validate({
-        rules: {
-            fname: {
-                required: true,
-                pattern: /^[a-zA-Zก-๙\s]+$/,
-                maxlength: 50,
-            },
-            lname: {
-                required: true,
-                pattern: /^[a-zA-Zก-๙\s]+$/,
-                maxlength: 50,
-            },
-            username: {
-                required: true,
-                pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/,
-                minlength: 6,
-                maxlength: 50,
-
-            },
-            password: {
-                required: true,
-                nowhitespace: true,
-                pattern: /^[^\u0E00-\u0E7F]+$/,
-                minlength: 8,
-                maxlength: 255,
-            },
-            confirmPassword: {
-                required: true,
-                equalTo: "[name='password']"
-            },
-            email: {
-                required: true,
-                email: true,
-                minlength: 10,
-                maxlength: 100,
-            },
-            newProfile: {
-                accept: "image/png,image/jpg,image/jpeg",
-            },
-            username_email: {
-                required: true,
-            }
-        },
-        messages: {
-            fname: {
-                required: "กรุณาระบุ ชื่อ",
-                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
-                minlength: 50,
-            },
-            lname: {
-                required: "กรุณาระบุ นามสกุล",
-                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
-                minlength: 50,
-            },
-            username: {
-                required: "กรุณาระบุ ชื่อผู้ใช้งาน",
-                pattern: "ต้องเป็น a-z, A-Z, 0-9 และ _ เท่านั้น และตัวแรกต้องเริ่มต้นด้วย a-z, A-Z",
-                minlength: "ต้องมี 6 ตัวอักษรขึ้นไป",
-                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
-            },
-            password: {
-                required: "กรุณาระบุ รหัสผ่าน",
-                nowhitespace: "ห้ามมีเว้นวรรค",
-                pattern: "ห้ามมีภาษาไทย",
-                minlength: "ต้องมี อย่างน้อย 8 ตัวอักษร",
-                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
-            },
-            confirmPassword: {
-                required: "กรุณาระบุ รหัสผ่าน อีกครั้ง",
-                equalTo: "ยืนยันรหัสผ่าน ไม่ถูกต้อง",
-            },
-            email: {
-                required: "กรุณาระบุ อีเมล",
-                email: "รูปแบบอีเมล ไม่ถูกต้อง",
-                minlength: "ต้องมี อย่างน้อย 10 ตัวอักษร",
-                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
-            },
-            newProfile: {
-                accept: "ต้องเป็นไฟล์ประเภท .png .jpg หรือ .jpeg เท่านั้น",
-            },
-            username_email: {
-                required: "กรุณาระบุ ชื่อผู้ใช้งาน หรือ อีเมล",
-            },
-        },
-        errorElement: 'span',
-        errorPlacement: function (error, element) {
-            error.addClass('invalid-feedback');
-            element.closest('.mb-3').append(error);
-        },
-        highlight: function (element, errorClass, validClass) {
-            $(element).addClass('is-invalid');
-        },
-        unhighlight: function (element, errorClass, validClass) {
-            $(element).removeClass('is-invalid');
-        },
-        // ปรับแต่งสีของข้อความ error
-        errorClass: 'text-danger'
-    });
-});
-
-// ============================== 4. Jquery Validation Form Account(Employee) ==============================
+// ============================== 5. Jquery Validation Form Account(Employee) ==============================
 $(document).ready(function () {
     $("#formEmployeeAccount").validate({
         rules: {
@@ -437,7 +345,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 4. Jquery Validation Form Account(Employee) ==============================
+// ============================== 6. confirm Logout(Employee) ==============================
 function confirmLogout(event) {
     event.preventDefault(); // ป้องกันการ redirect ทันที
 
@@ -457,7 +365,7 @@ function confirmLogout(event) {
     })
 }
 
-// ============================== 5. Jquery Validation Form (Publishere) ==============================
+// ============================== 7. Jquery Validation Form (Publisher) ==============================
 $(document).ready(function () {
     $("#formPublisher").validate({
         rules: {
@@ -502,7 +410,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 8. Jquery Validation Form (Product Type) ==============================
 $(document).ready(function () {
     $("#formProductType").validate({
         rules: {
@@ -547,7 +455,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 9. Jquery Validation Form (Author) ==============================
 $(document).ready(function () {
     $("#formAuthor").validate({
         rules: {
@@ -592,7 +500,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 10. Jquery Validation Form (Promotion) ==============================
 $(document).ready(function () {
     $("#formPromotion").validate({
         rules: {
@@ -661,7 +569,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 11. Jquery Validation Form (Product) ==============================
 $(document).ready(function () {
     // Custom validation method to check for length of 10 or 13
     $.validator.addMethod("isbnLength", function (value, element) {
@@ -830,7 +738,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 12. Jquery Validation Form (setting Percent Discount) ==============================
 $(document).ready(function () {
     $("#formSettingPercentDiscount").validate({
         rules: {
@@ -865,7 +773,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 13. Jquery Validation Form (Payment) ==============================
 $(document).ready(function () {
     $("#formPayment").validate({
         rules: {
@@ -948,7 +856,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 14. Jquery Validation Form (shipping) ==============================
 $(document).ready(function () {
     $("#formShipping").validate({
         rules: {
@@ -1017,7 +925,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 15. Jquery Validation Form (Search Product View) ==============================
 $(document).ready(function () {
     $.validator.addMethod("after", function (value, element, params) {
         var start_time = $(params).val();
@@ -1076,7 +984,7 @@ $(document).ready(function () {
 });
 
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 16. Jquery Validation Form (Contact) ==============================
 $(document).ready(function () {
     $.validator.addMethod("googleMapEmbed", function (value, element) {
         return this.optional(element) || /^<iframe.*?src="https:\/\/www\.google\.com\/maps\/embed\?.*?".*?><\/iframe>$/.test(value);
@@ -1166,7 +1074,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 17. Jquery Validation Form (Setting Product Stock Low) ==============================
 $(document).ready(function () {
     $("#formProductStockLow").validate({
 
@@ -1204,7 +1112,7 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
+// ============================== 18. Jquery Validation Form (Setting Banner) ==============================
 $(document).ready(function () {
     $("#formBanner").validate({
 
@@ -1250,24 +1158,4 @@ $(document).ready(function () {
     });
 });
 
-// ============================== 5. Jquery Validation Form (Product Type) ==============================
-function copyURL(event) {
-    event.preventDefault(); // ป้องกันไม่ให้หน้ารีเฟรช
-    const url = window.location.href;
-    navigator.clipboard.writeText(url).then(function() {
-        Swal.fire({
-            icon: 'success',
-            title: 'สำเร็จ',
-            text: 'คัดลอก URL สินค้าเรียบร้อยแล้ว',
-            confirmButtonText: 'ตกลง'
-        });
-    }, function(err) {
-        Swal.fire({
-            icon: 'error',
-            title: 'ข้อผิดพลาด',
-            text: 'ไม่สามารถคัดลอก URL: ' + err,
-            confirmButtonText: 'ตกลง'
-        });
-    });
-}
 

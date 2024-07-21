@@ -5,13 +5,15 @@ require_once("db/controller/ProductTypeController.php");
 require_once("db/controller/PublisherController.php");
 require_once("db/controller/AuthorController.php");
 require_once("db/controller/ProductController.php");
+require_once("db/controller/LoginController.php");
 
 $ContactController = new ContactController($conn);
 $ProductTypeController = new ProductTypeController($conn);
 $PublisherController = new PublisherController($conn);
 $AuthorController = new AuthorController($conn);
-
 $ProductController = new ProductController($conn);
+
+$LoginController = new LoginController($conn);
 
 $contacts = $ContactController->useContact();
 $prdPreorder = 1; //สินค้าปกติ
@@ -25,6 +27,12 @@ $MenuPreorder = $ProductController->getProductsAll($MenuPreorder = 0);
 
 // ส่วนลด
 $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount();
+
+if (!empty($_SESSION['mem_id'])) {
+    $memId = $_SESSION['mem_id'];
+    $useLoginEmployee = $LoginController->useLoginMember($memId);
+}
+
 ?>
 
 
@@ -73,9 +81,9 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
                                 <li><a href="register_form">สมัครสมาชิก</a></li>
                                 <li><a href="login_form">เข้าสู่ระบบ</a></li>
                             <?php } else { ?>
-                                <li class="text-white"><small>ยินดีต้อนรับ : ชื่อ นามสกุล</small></li>
-                                <li><a href="my-account.html">บัญชีของฉัน</a></li>
-                                <li><a href="logout">ออกจากระบบ</a></li>
+                                <li><a><?php echo "ยินดีต้อนรับ : " . $useLoginEmployee['mem_fname'] . " " . $useLoginEmployee['mem_lname']; ?></a></li>
+                                <li><a href="account_show">บัญชีของฉัน</a></li>
+                                <li><a href="logout" onclick="confirmLogout(event)">ออกจากระบบ</a></li>
                             <?php } ?>
 
                         </ul>
@@ -130,11 +138,11 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
                                 <span>2</span>
                             </li>
                             <?php if (!empty($_SESSION['mem_id'])) { ?>
-                                <li>
+                                <!-- <li>
                                     <a href="#">
-                                        <img src="./uploads/img_member/default.png" style="width: 50px;" alt="">
+                                        <img src="./uploads/img_member/<?php echo $useLoginEmployee['mem_profile'] ?>" style="width: 50px;" alt="">
                                     </a>
-                                </li>
+                                </li> -->
                             <?php } ?>
                         </ul>
 

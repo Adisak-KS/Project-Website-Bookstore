@@ -1,22 +1,30 @@
-<!-- ========================================== Owner ========================================== 
- 
-   1.  __construct
-   2. getOwner
-   3. insertOwner
-   4. getDetailOwner
-   5. updateDetailOwner
-   6. updateAuthorityOwner
-
-============================================================================================ -->
 <?php
+// ========================================== Employees ========================================== 
+/* 
+    1.  __construct
+    2. getEmployee
+    3. getDetailEmployee
+    4. updateDetailEmployee
+    5. updateAuthorityEmployee
+    6. updateEmployeeDataProfile
+    7. updateEmployeeUsername
+    8. updateEmployeeEmail
+    9. checkEmployeePassword
+    10. updateEmployeePassword
+*/
+// ============================================================================================
+
 class EmployeeController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         // echo "<br> เรียกใช้ Employee Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getEmployee ===================================
     function getEmployee()
     {
         try {
@@ -46,7 +54,7 @@ class EmployeeController extends BaseController
         }
     }
 
-
+    // ============================= 3. getDetailEmployee ===================================
     function getDetailEmployee($Id)
     {
         try {
@@ -74,6 +82,7 @@ class EmployeeController extends BaseController
         }
     }
 
+    // ============================= 4. updateDetailEmployee ===================================
     function updateDetailEmployee($Id, $fname, $lname, $status)
     {
         try {
@@ -97,6 +106,7 @@ class EmployeeController extends BaseController
         }
     }
 
+    // ============================= 5. updateAuthorityEmployee ===================================
     function updateAuthorityEmployee($Id, $newEatId)
     {
         try {
@@ -125,6 +135,7 @@ class EmployeeController extends BaseController
         }
     }
 
+    // ============================= 6. updateEmployeeDataProfile ===================================
     function updateEmployeeDataProfile($fname, $lname, $Id)
     {
 
@@ -144,6 +155,8 @@ class EmployeeController extends BaseController
             return false;
         }
     }
+
+    // ============================= 7. updateEmployeeUsername ===================================
     function updateEmployeeUsername($username, $Id)
     {
 
@@ -161,6 +174,8 @@ class EmployeeController extends BaseController
             return false;
         }
     }
+
+    // ============================= 8. updateEmployeeEmail ===================================
     function updateEmployeeEmail($email, $Id)
     {
 
@@ -179,6 +194,7 @@ class EmployeeController extends BaseController
         }
     }
 
+    // ============================= 9. checkEmployeePassword ===================================
     function checkEmployeePassword($Id)
     {
         try {
@@ -196,7 +212,7 @@ class EmployeeController extends BaseController
         }
     }
 
-
+    // ============================= 10. updateEmployeePassword ===================================
     function updateEmployeePassword($newPassword, $Id)
     {
         try {

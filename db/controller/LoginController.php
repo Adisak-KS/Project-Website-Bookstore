@@ -1,24 +1,26 @@
-<!-- ============================== Login ==========================================================
- 
-   1.  __construct
-   2. checkLoginEmployees
-   3. insertEmployeesTypeDefault
-   4. getEmployeesSuperAdminDefault
-   5. checkUsernameEmailEmployees
-   6. updateNewProfileEmployees
-   7. deleteEmployees
-   8. checkLoginEmployees
-
-================================================================================================ -->
 <?php
+// ========================================== Login ========================================== 
+/* 
+    1.  __construct
+    2. checkLoginEmployee
+    3. checkStatusBlockedEmployee
+    4. useLoginEmployees
+    5. checkLoginMember
+    6. useLoginMember
+*/
+// ============================================================================================
+
 class LoginController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         // echo "<br> เรียกใช้ Login Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. checkLoginEmployees ===================================
     function checkLoginEmployees($usernameEmail, $password)
     {
         try {
@@ -36,6 +38,7 @@ class LoginController extends BaseController
         }
     }
 
+    // ============================= 3. checkStatusBlockedEmployee ===================================
     function checkStatusBlockedEmployees($Id)
     {
         try {
@@ -52,6 +55,7 @@ class LoginController extends BaseController
         }
     }
 
+    // ============================= 4. useLoginEmployees ===================================
     function useLoginEmployees($empId)
     {
         try {
@@ -77,6 +81,45 @@ class LoginController extends BaseController
             return false;
         }
     }
-}
 
-?>
+    // ============================= 5. checkLoginMember ===================================
+    function checkLoginMember($usernameEmail, $password)
+    {
+        try {
+            $sql = "SELECT mem_id, mem_username, mem_password, mem_email, mem_status
+                    FROM bs_members
+                    WHERE mem_username = :mem_username OR mem_email = :mem_email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':mem_username', $usernameEmail);
+            $stmt->bindParam(':mem_email', $usernameEmail);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in checkLoginMember : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    // ============================= 6. useLoginMember ===================================
+    function useLoginMember($memId)
+    {
+        try {
+            $sql = "SELECT 
+                        bs_members.mem_id,
+                        bs_members.mem_profile,
+                        bs_members.mem_fname,
+                        bs_members.mem_lname,
+                        bs_members.mem_username,
+                        bs_members.mem_status
+                    FROM bs_members
+                    WHERE bs_members.mem_id = :mem_id AND  bs_members.mem_status = 1";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':mem_id', $memId);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo "<hr>Error in  useLoginMember : " . $e->getMessage();
+            return false;
+        }
+    }
+}

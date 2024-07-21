@@ -1,30 +1,33 @@
-<!-- ================ Base Controller (Controller เริ่มต้น แลัรวม Function ที่ใช้งานร่วมกัน) ============
- 
-   1.  __construct
-   2. getEmployeesAuthorityTypeDefault
-   3. insertEmployeesTypeDefault
-   4. getEmployeesSuperAdminDefault
-   5. checkUsernameEmailEmployees
-   6. updateNewProfileEmployees
-   7. deleteEmployees
-   8. checkLoginEmployees
 
-============================================================================================ -->
 <?php
+
+//  ================ Base Controller (Controller เริ่มต้น และที่ใช้งานร่วมกัน) ============
+ /*
+    1.  __construct
+    2. getEmployeesAuthorityTypeDefault
+    3. insertEmployeesTypeDefault
+    4. getEmployeesSuperAdminDefault
+    5. checkUsernameEmailEmployees
+    6. insertEmployees
+    7. insertSuperAdminDefault
+    8. updateNewProfileEmployees
+    9. deleteEmployees
+*/
+// ============================================================================================
 
 class BaseController
 {
     protected $db;
 
+
+    // ============================= 1. __construct ===================================
     public function __construct($conn)
     {
         $this->db = $conn;
         // echo "<br> เรียกใช้ Base Controller สำเร็จ <br>";
     }
 
-
-
-    // Check Employees Authority Type Default
+    // ============================= 2. getEmployeesAuthorityTypeDefault ========================
     function getEmployeesAuthorityTypeDefault()
     {
         try {
@@ -40,7 +43,7 @@ class BaseController
         }
     }
 
-    // Insert Employee Authority Type Default
+   // ============================= 3. insertEmployeesTypeDefault ========================
     function insertEmployeesTypeDefault()
     {
         try {
@@ -91,7 +94,7 @@ class BaseController
         }
     }
 
-    // check Super Admin
+    // ============================= 4. getEmployeesSuperAdminDefault ========================
     function getEmployeesSuperAdminDefault()
     {
         try {
@@ -117,10 +120,7 @@ class BaseController
         }
     }
 
-
-
-
-    // check Username and Email  Employees
+   // ============================= 5. checkUsernameEmailEmployees ========================
     function checkUsernameEmailEmployees($username, $email, $id = null)
     {
         try {
@@ -151,6 +151,7 @@ class BaseController
         }
     }
 
+    // ============================= 6. insertEmployees ========================
     function insertEmployees($newProfile, $fname, $lname, $username, $password, $email, $eatId)
     {
         try {
@@ -195,6 +196,7 @@ class BaseController
         }
     }
 
+    // ============================= 7. insertSuperAdminDefault ========================
     function insertSuperAdminDefault()
     {
         try {
@@ -243,7 +245,7 @@ class BaseController
         }
     }
 
-    // update New PRofile Employees
+   // ============================= 8. updateNewProfileEmployees ========================
     function updateNewProfileEmployees($Id, $newProfile)
     {
         try {
@@ -261,6 +263,7 @@ class BaseController
         }
     }
 
+    // ============================= 9. deleteEmployees ========================
     function deleteEmployees($Id)
     {
         try {

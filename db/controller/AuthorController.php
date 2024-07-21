@@ -1,25 +1,30 @@
-<!-- ========================================== Author ========================================== 
- 
-   1.  __construct
-   2. getAuthor
-   3. checkAuthorName
-   4. insertAdmin
-   5. getDetailAuthor
-   6. updateDetailAuthor
-   7. updateImgAuthor
-   8. deleteAuthor
-
-============================================================================================ -->
-
 <?php
+
+// ========================================== Author ========================================== 
+/*
+    1.  __construct
+    2. getAuthor
+    3. checkAuthorName
+    4. insertAuthor
+    5. getDetailAuthor
+    6. updateDetailAuthor
+    7. updateImgAuthor
+    8. deleteAuthor
+    9. amountProductInAuthor
+    10. getAuthors10
+*/
+// ============================================================================================ 
+
 class AuthorController extends BaseController
 {
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Author Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getAuthor ===================================
     function getAuthor()
     {
         try {
@@ -34,6 +39,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 3. checkAuthorName ===================================
     function checkAuthorName($authName, $authId = null)
     {
         try {
@@ -62,6 +68,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 4. insertAuthor ===================================
     function insertAuthor($newImg, $authName, $authDetail, $authStatus)
     {
         try {
@@ -80,6 +87,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 5. getDetailAuthor ===================================
     function getDetailAuthor($Id)
     {
         try {
@@ -96,6 +104,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 6. updateDetailAuthor ===================================
     function updateDetailAuthor($authName, $authDetail, $authStatus, $authId)
     {
         try {
@@ -118,6 +127,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 7. updateImgAuthor ===================================
     function updateImgAuthor($newImg, $authId)
     {
         try {
@@ -136,6 +146,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 8. deleteAuthor ===================================
     function deleteAuthor($authId)
     {
         try {
@@ -151,6 +162,7 @@ class AuthorController extends BaseController
         }
     }
 
+    // ============================= 9. amountProductInAuthor ===================================
     function amountProductInAuthor($Id)
     {
         try {
@@ -163,16 +175,18 @@ class AuthorController extends BaseController
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo "<hr>Error in amountProductInAuthor : " . $e->getMessage();
+            return false;
         }
     }
 
+    // ============================= 10. getAuthors10 ===================================
     function getAuthors10($prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
         if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
             $prdPreorder = 1; // ค่าเริ่มต้น
         }
-    
+
         try {
             $sql = "SELECT
                         bs_authors.auth_id,
@@ -186,27 +200,27 @@ class AuthorController extends BaseController
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
                         AND bs_authors.auth_status = 1";
-    
+
             // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
             if ($prdPreorder !== null) {
                 $sql .= " AND bs_products.prd_preorder = :prd_preorder";
             }
-    
+
             $sql .= " GROUP BY bs_authors.auth_id
                       ORDER BY product_count DESC
                       LIMIT 10";
-    
+
             // Preparing the statement
             $stmt = $this->db->prepare($sql);
-    
+
             // Binding parameters
             if ($prdPreorder !== null) {
                 $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
             }
-    
+
             // Executing the statement
             $stmt->execute();
-    
+
             // Fetching results
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -215,5 +229,4 @@ class AuthorController extends BaseController
             return false;
         }
     }
-    
 }

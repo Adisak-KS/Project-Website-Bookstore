@@ -1,24 +1,28 @@
-<!-- ========================================== Contact ========================================== 
- 
-   1.  __construct
-   2. getMember
-   3. checkUsernameEmailMember
-   4. insertMember
-   5. getDetailMember
-   6. updateDetailMember
-   7. updateNewProfileMember
-   8. updateNewProfileMember
 
-============================================================================================ -->
 <?php
+// ========================================== Contact ========================================== 
+/* 
+    1.  __construct
+    2. getContact
+    3. getDetailContact
+    4. updateDetailContact
+    5. deleteDetailContact
+    6. useContact
+*/
+// ============================================================================================
+
+
 class ContactController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Contact Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getContact ===================================
     function getContact()
     {
         try {
@@ -33,6 +37,7 @@ class ContactController extends BaseController
         }
     }
 
+    // ============================= 3. getDetailContact ===================================
     function getDetailContact($ctId)
     {
         try {
@@ -48,6 +53,7 @@ class ContactController extends BaseController
         }
     }
 
+    // ============================= 4. updateDetailContact ===================================
     function updateDetailContact($ctDetail, $ctNameLink = null, $ctStatus, $ctId)
     {
         try {
@@ -76,6 +82,8 @@ class ContactController extends BaseController
             return false;
         }
     }
+
+    // ============================= 5. deleteDetailContact ===================================
     function deleteDetailContact($ctId)
     {
         try {
@@ -94,6 +102,7 @@ class ContactController extends BaseController
         }
     }
 
+    // ============================= 6. useContact ===================================
     function useContact()
     {
         try {

@@ -1,25 +1,30 @@
-<!-- ================================= Product Type ========================================== 
- 
-   1.  __construct
-   2. getProductType
-   3. checkProductTypeName
-   4. insertProductTyp
-   5. getDetailProductType
-   6. updateDetailProductType
-   7. updateNewCoverProductType
-   8. DeleteProductType
-
-============================================================================================ -->
 <?php
+//  ================================= Product Type ========================================== 
+/*
+    1.  __construct
+    2. getProductType
+    3. checkProductTypeName
+    4. insertProductType
+    5. getDetailProductType
+    6. updateDetailProductType
+    7. updateNewCoverProductType
+    8. DeleteProductType
+    9. amountProductInProductType
+    10. getProductsType10
+*/
+// ============================================================================================
+
 class ProductTypeController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Product Type Controller สำเร็จ <br>";
     }
 
-
+    // ============================= 2. getProductType ===================================
     function getProductType()
     {
         try {
@@ -43,6 +48,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 3. checkProductTypeName ===================================
     function checkProductTypeName($ptyName, $Id = null)
     {
         try {
@@ -69,6 +75,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 4. insertProductType ===================================
     function insertProductType($newCover, $ptyName, $ptyDetail, $ptyStatus)
     {
         try {
@@ -87,6 +94,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 5. getDetailProductType ===================================
     function getDetailProductType($Id)
     {
         try {
@@ -112,6 +120,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 6. updateDetailProductTyp ===================================
     function updateDetailProductType($ptyName, $ptyDetail, $ptyStatus, $Id)
     {
         try {
@@ -134,6 +143,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 7. updateNewCoverProductType ===================================
     function updateNewCoverProductType($newCover, $Id)
     {
         try {
@@ -152,6 +162,7 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 8. deleteProductType ===================================
     function deleteProductType($Id)
     {
         try {
@@ -166,9 +177,8 @@ class ProductTypeController extends BaseController
             return false;
         }
     }
-
-    function amountProductInProductType($Id)
-    {
+    // ============================= 9. amountProductInProductType ===================================
+    function amountProductInProductType($Id){
         try {
             $sql = "SELECT COUNT(prd_id) AS amount 
                     FROM bs_products
@@ -182,15 +192,16 @@ class ProductTypeController extends BaseController
         }
     }
 
+    // ============================= 10. getProductsType10 ===================================
     function getProductsType10($prdPreorder = null)
-{
-    // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
-    if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
-        $prdPreorder = 1; // ค่าเริ่มต้น
-    }
+    {
+        // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
+        if ($prdPreorder !== 0 && $prdPreorder !== 1 && $prdPreorder !== null) {
+            $prdPreorder = 1; // ค่าเริ่มต้น
+        }
 
-    try {
-        $sql = "SELECT
+        try {
+            $sql = "SELECT
                     bs_products_type.pty_id,
                     bs_products_type.pty_name,
                     COUNT(bs_products.prd_id) AS product_count
@@ -203,34 +214,32 @@ class ProductTypeController extends BaseController
                     AND bs_publishers.pub_status = 1
                     AND bs_authors.auth_status = 1";
 
-        // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
-        if ($prdPreorder !== null) {
-            $sql .= " AND bs_products.prd_preorder = :prd_preorder";
-        }
+            // เพิ่มเงื่อนไขสำหรับ prd_preorder ถ้าค่าถูกต้อง
+            if ($prdPreorder !== null) {
+                $sql .= " AND bs_products.prd_preorder = :prd_preorder";
+            }
 
-        $sql .= " GROUP BY bs_products_type.pty_id
+            $sql .= " GROUP BY bs_products_type.pty_id
                   ORDER BY product_count DESC
                   LIMIT 10";
 
-        // Preparing the statement
-        $stmt = $this->db->prepare($sql);
+            // Preparing the statement
+            $stmt = $this->db->prepare($sql);
 
-        // Binding parameters
-        if ($prdPreorder !== null) {
-            $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
+            // Binding parameters
+            if ($prdPreorder !== null) {
+                $stmt->bindParam(':prd_preorder', $prdPreorder, PDO::PARAM_INT);
+            }
+
+            // Executing the statement
+            $stmt->execute();
+
+            // Fetching results
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Displaying error message
+            echo "<hr>Error in getProductsType10 : " . $e->getMessage();
+            return false;
         }
-
-        // Executing the statement
-        $stmt->execute();
-
-        // Fetching results
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        // Displaying error message
-        echo "<hr>Error in getProductsType10 : " . $e->getMessage();
-        return false;
     }
 }
-
-}
-?>

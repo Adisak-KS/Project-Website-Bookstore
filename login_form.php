@@ -1,5 +1,12 @@
 <?php
 $titlePage = "เข้าสู่ระบบ";
+require_once('db/connectdb.php');
+
+
+if (!empty($_SESSION['emp_id'])) {
+    header('Location: index');
+    exit;
+}
 
 ?>
 <!doctype html>
@@ -30,10 +37,10 @@ $titlePage = "เข้าสู่ระบบ";
                 </div>
                 <div class="offset-lg-3 col-lg-6 col-md-12 col-12">
                     <div class="login-form">
-                        <form action="login_check.php" method="post">
+                        <form id="formLogin" action="process/login_check.php" method="post">
                             <div class="mb-3">
                                 <label for="username" class="mb-2"><strong>ชื่อผู้ใช้งาน หรือ อีเมล :</strong> </label><span class="text-danger">*</span>
-                                <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้ หรือ อีเมล">
+                                <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้ หรือ อีเมล" maxlength="100">
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label"><strong>รหัสผ่าน : </strong></label><span class="text-danger">*</span>
@@ -74,3 +81,4 @@ $titlePage = "เข้าสู่ระบบ";
 </body>
 
 </html>
+<?php require_once('includes/sweetalert2.php') ?>

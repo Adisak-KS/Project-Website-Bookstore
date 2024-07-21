@@ -1,25 +1,50 @@
-<!-- ================================= Product =============================================== 
- 
-   1.  __construct
-   2. getProductType
-   3. checkProductTypeName
-   4. insertProductTyp
-   5. getDetailProductType
-   6. updateDetailProductType
-   7. updateNewCoverProductType
-   8. DeleteProductType
-
-============================================================================================ -->
 <?php
+// ========================================== Product ========================================== 
+/* 
+    1.  __construct
+    2. getProduct
+    3. getProductType
+    4. getPublisher
+    5. getAuthor
+    6. checkProductName
+    7. insertProduct
+    8. getDetailProduct
+    9. updateDetailProduct
+    10. updateProductView
+    11. updateProductImg
+    12. updateProductImg2
+    13. deleteProductImg2
+    14. deleteProduct
+    15. getProductLow
+    16. getProductLowNumber
+    17. getProductNew
+    18. getRecommendedProducts
+    19. getPopularProducts
+    20. getMostViewedProducts
+    21. getProductDetail
+    22. getProductsSameType
+    23. getProductAdvertising
+    24. getProductsAll
+    25. getProductsAllFocusType
+    26. getProductsAllFocusPublisher
+    27. getProductsAllFocusAuthor
+    28. getProductsAllPromotions
+    29. getSearchResult
+*/
+// ============================================================================================
+
+
 
 class ProductController extends BaseController
 {
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Product Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getProduct ===================================
     function getProduct()
     {
         try {
@@ -45,6 +70,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 3. getProductType ===================================
     function getProductType()
     {
         try {
@@ -59,6 +85,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 4. getPublisher ===================================
     function getPublisher()
     {
         try {
@@ -73,6 +100,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 5. getAuthor ===================================
     function getAuthor()
     {
         try {
@@ -86,6 +114,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 6. checkProductName ===================================
     function checkProductName($prdName, $prdISBN, $prdId = null)
     {
         try {
@@ -114,6 +143,8 @@ class ProductController extends BaseController
             return false;
         }
     }
+
+    // ============================= 7. insertProduct ===================================
     function insertProduct($prdName, $newImg, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdPrice, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus)
     {
         try {
@@ -155,7 +186,7 @@ class ProductController extends BaseController
         }
     }
 
-
+    // ============================= 8. getDetailProduct ===================================
     function getDetailProduct($Id)
     {
         try {
@@ -171,6 +202,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 9. updateDetailProduct ===================================
     function updateDetailProduct($prdId, $prdName, $prdISBN, $prdCoin, $prdQuantity, $prdNumberPages, $prdPrice, $prdDetail, $prdPercentDiscount, $ptyId, $pubId, $authId, $prdPreorder, $prdStatus)
     {
         try {
@@ -213,6 +245,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 10. updateProductView ===================================
     function updateProductView($prdId, $ptyId)
     {
         try {
@@ -230,6 +263,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 11. updateProductImg1 ===================================
     function updateProductImg1($newImg, $prdId)
     {
         try {
@@ -246,6 +280,8 @@ class ProductController extends BaseController
             return false;
         }
     }
+
+    // ============================= 12. updateProductImg2 ===================================
     function updateProductImg2($newImg, $prdId)
     {
         try {
@@ -263,6 +299,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 13. deleteProductImg2 ===================================
     function deleteProductImg2($prdId)
     {
         try {
@@ -280,6 +317,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 14. deleteProduct ===================================
     function deleteProduct($prdId)
     {
         try {
@@ -306,6 +344,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 15. getProductLow ===================================
     function getProductLow($prdNumberLow = null)
     {
         try {
@@ -340,6 +379,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 16. getProductLowNumber ===================================
     function getProductLowNumber($prdNumberLow)
     {
         try {
@@ -357,6 +397,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 17. getProductNew ===================================
     function getProductNew()
     {
         try {
@@ -392,6 +433,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 18. getRecommendedProducts ===================================
     function getRecommendedProducts()
     {
         try {
@@ -427,6 +469,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 19. getPopularProducts ===================================
     function getPopularProducts()
     {
         try {
@@ -462,6 +505,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 20. getMostViewedProducts ===================================
     function getMostViewedProducts()
     {
         try {
@@ -500,6 +544,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 21. getProductDetail ===================================
     function getProductDetail($prdId)
     {
         try {
@@ -532,6 +577,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 22. getProductsSameType ===================================
     function getProductsSameType($ptyId, $prdId)
     {
         try {
@@ -571,6 +617,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 23. getProductAdvertising ===================================
     function getProductAdvertising($prdPreorder, $prdId)
     {
         try {
@@ -610,7 +657,7 @@ class ProductController extends BaseController
         }
     }
 
-
+    // ============================= 24. getProductsAll ===================================
     function getProductsAll($prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
@@ -660,6 +707,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 25. getProductsAllFocusType ===================================
     function getProductsAllFocusType($ptyId, $prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
@@ -708,7 +756,7 @@ class ProductController extends BaseController
         }
     }
 
-
+    // ============================= 26. getProductsAllFocusPublisher ===================================
     function getProductsAllFocusPublisher($pubId, $prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
@@ -760,6 +808,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 27. getProductsAllFocusAuthor ===================================
     function getProductsAllFocusAuthor($authId, $prdPreorder = null)
     {
         // ตรวจสอบค่าของ $prdPreorder และกำหนดเป็น 1 ถ้าค่าไม่ใช่ 0, 1, หรือ null
@@ -813,7 +862,7 @@ class ProductController extends BaseController
         }
     }
 
-
+    // ============================= 28. getProductsAllPromotions ===================================
     function getProductsAllPromotions($prdPercentDiscount)
     {
         try {
@@ -850,6 +899,7 @@ class ProductController extends BaseController
         }
     }
 
+    // ============================= 29. getSearchResult ===================================
     function getSearchResult($search)
     {
         try {

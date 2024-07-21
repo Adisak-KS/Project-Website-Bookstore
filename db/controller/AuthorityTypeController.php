@@ -1,5 +1,12 @@
 <?php
 
+// ========================================== Authority Type ========================================== 
+/*
+    1.  __construct
+    2. getAuthorityTypeEmployees
+*/
+// ============================================================================================ 
+
 class AuthorityTypeController extends BaseController
 {
     public function __construct($db)

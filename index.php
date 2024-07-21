@@ -23,7 +23,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
     <?php require_once("layouts/head.php"); ?>
 </head>
 
-<body class="home-2">
+<body class="home-1">
     <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -1185,3 +1185,4 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
 </body>
 
 </html>
+<?php require_once('includes/sweetalert2.php') ?>

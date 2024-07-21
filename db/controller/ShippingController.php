@@ -1,24 +1,28 @@
-<!-- ================================= Shipping =============================================== 
- 
-   1.  __construct
-   2. getPayment
-   3. checkProductTypeName
-   4. insertProductTyp
-   5. getDetailProductType
-   6. updateDetailProductType
-   7. updateNewCoverProductType
-   8. DeleteProductType
-
-============================================================================================ -->
 <?php
+//  ================================= Shipping =============================================== 
+/*
+    1.  __construct
+    2. getShipping
+    3. checkShippingName
+    4. insertShipping
+    5. getDetailShipping
+    6. updateDetailShipping
+    7. updateShippingLogo
+    8. deleteShipping
+*/
+// ============================================================================================
+
 class ShippingController extends BaseController
 {
+
+    // ============================= 1. __construct ===================================
     public function __construct($db)
     {
         parent::__construct($db);
         //  echo "<br> เรียกใช้ Shipping Controller สำเร็จ <br>";
     }
 
+    // ============================= 2. getShipping ===================================
     function getShipping()
     {
         try {
@@ -34,6 +38,7 @@ class ShippingController extends BaseController
         }
     }
 
+    // ============================= 3. checkShippingName ===================================
     function checkShippingName($shpName, $shpId = null)
     {
         try {
@@ -63,6 +68,7 @@ class ShippingController extends BaseController
         }
     }
 
+    // ============================= 4. insertShipping ===================================
     function insertShipping($shpName, $newImg, $shpPrice, $shpDetail, $shpStatus)
     {
         try {
@@ -82,6 +88,7 @@ class ShippingController extends BaseController
         }
     }
 
+    // ============================= 5. getDetailShipping ===================================
     function getDetailShipping($shpId)
     {
         try {
@@ -98,6 +105,7 @@ class ShippingController extends BaseController
         }
     }
 
+    // ============================= 6. updateDetailShipping ===================================
     function updateDetailShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $shpId)
     {
         try {
@@ -121,8 +129,10 @@ class ShippingController extends BaseController
         }
     }
 
-    function updateShippingLogo($newImg, $shpId){
-        try{
+    // ============================= 7. updateShippingLogo ===================================
+    function updateShippingLogo($newImg, $shpId)
+    {
+        try {
             $sql = "UPDATE bs_shipping
                     SET shp_logo = :shp_logo
                     WHERE shp_id = :shp_id";
@@ -131,22 +141,23 @@ class ShippingController extends BaseController
             $stmt->bindParam(':shp_id', $shpId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in updateShippingLogo : " . $e->getMessage();
             return false;
         }
     }
 
-    function deleteShipping($shpId){
-        try{
+    // ============================= 8. deleteShipping ===================================
+    function deleteShipping($shpId)
+    {
+        try {
             $sql = "DELETE FROM bs_shipping
                     WHERE shp_id = :shp_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':shp_id', $shpId, PDO::PARAM_INT);
             $stmt->execute();
             return true;
-        }catch(PDOException $e){
+        } catch (PDOException $e) {
             echo "<hr>Error in deleteShipping : " . $e->getMessage();
             return false;
         }
