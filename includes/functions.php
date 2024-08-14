@@ -27,6 +27,7 @@
     24. validation from Contact
     25. validation Add Banner
     26. validation Update Banner
+    27. valiDate Form Update Account Member
     
 */
 
@@ -790,5 +791,165 @@ function valiDateFormUpdateBanner($bnName, $bnLink, $bnStatus, $locationError)
         messageError("กรุณาระบุสถานะ 1 หรือ 0", $locationError);
     } elseif ($bnStatus != 0 && $bnStatus != 1) {
         messageError("สถานะต้องเป็นเลข 1 หรือ 0 เท่านั้น", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Update Account Member =====================================
+function valiDateFormUpdateAccountMember($id, $fname, $lname, $username, $email, $locationError)
+{
+
+    if (empty($id) || !is_numeric($id) || $id < 0) {
+        messageError("ไม่พบรหัสผู้ใช้นี้", $locationError);
+    }
+
+    if (empty($fname)) {
+        messageError("กรุณาระบุ ชื่อจริง", $locationError);
+    } elseif (mb_strlen($fname, "UTF-8") > 50) {
+        messageError("ชื่อจริง ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+    if (empty($lname)) {
+        messageError("กรุณาระบุ นามสกุล", $locationError);
+    } elseif (mb_strlen($lname, "UTF-8") > 50) {
+        messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    if (empty($username)) {
+        messageError("กรุณาระบุ ชื่อผู้ใช้", $locationError);
+    } elseif (mb_strlen($username, 'UTF-8') < 6 || mb_strlen($username, 'UTF-8') > 50) {
+        messageError("ชื่อผู้ใช้ ต้องมี 6-50 ตัวอักษร", $locationError);
+    }
+
+    if (empty($email)) {
+        messageError("กรุณาระบุอีเมล", $locationError);
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        messageError("รูปแบบของอีเมลไม่ถูกต้อง", $locationError);
+    } elseif (mb_strlen($email, 'UTF-8') < 10 || mb_strlen($email, 'UTF-8') > 100) {
+        messageError("อีเมล ต้องมี 10-100 ตัวอักษร", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Update Password Member =====================================
+
+function  validateFormUpdatePassword($id, $password, $newPassword, $confirmPassword, $locationError)
+{
+
+    if (empty($id) || !is_numeric($id) || $id < 0 || $id == null) {
+        messageError("ไม่พบรหัสผู้ใช้นี้", $locationError);
+    }
+
+    // Check Password
+    if (empty($password) || $password == null) {
+        messageError("กรุณาระบุ รหัสผ่านปัจจุบัน", $locationError);
+    } elseif (mb_strlen($password, 'UTF-8') < 8 || mb_strlen($password, 'UTF-8') > 255) {
+        messageError("รหัสผ่านปัจจุบัน ต้องมี 8-255 ตัวอักษร", $locationError);
+    }
+
+    if (empty($newPassword) || $newPassword == null) {
+        messageError("กรุณาระบุ รหัสผ่านใหม่", $locationError);
+    } elseif (mb_strlen($newPassword, 'UTF-8') < 8 || mb_strlen($newPassword, 'UTF-8') > 255) {
+        messageError("รหัสผ่านใหม่ ต้องมี 8-255 ตัวอักษร", $locationError);
+    } elseif ($newPassword == $password) {
+        messageError("รหัสผ่านใหม่ ซ้ำกับรหัสผ่านเดิม", $locationError);
+    }
+
+    // Check Confirm Password
+    if (empty($confirmPassword) || $confirmPassword == null) {
+        messageError("กรุณายืนยัน รหัสผ่านใหม่ อีกครั้ง", $locationError);
+    } elseif ($confirmPassword !== $newPassword) {
+        messageError("ยืนยัน รหัสผ่านใหม่ ไม่ถูกต้อง", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function  validateFormAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $locationError)
+{
+    if (empty($memId) || !is_numeric($memId)) {
+        messageError("ไม่พบรหัสผู้ใช้", $locationError);
+    }
+
+    if (empty($addrType) || !is_numeric($addrType)) {
+        messageError("ไม่พบรหัสประเภทที่อยู่", $locationError);
+    } elseif ($addrType != 1 && $addrType != 2) {
+        messageError("ประเภทที่อยู่ ไม่ถูกต้อง", $locationError);
+    }
+
+    if (empty($addrFname)) {
+        messageError("กรุณาระบุชื่อ", $locationError);
+    } elseif (is_numeric($addrFname)) {
+        messageError("ชื่อ ต้องเป็นข้อความ", $locationError);
+    } elseif (mb_strlen($addrFname, 'UTF-8') > 50) {
+        messageError("ชื่อ ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    if (empty($addrLname)) {
+        messageError("กรุณาระบุ นามสกุล", $locationError);
+    } elseif (is_numeric($addrLname)) {
+        messageError("นามสกุล ต้องเป็นข้อความ", $locationError);
+    } elseif (mb_strlen($addrLname, 'UTF-8') > 50) {
+        messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
+    }
+
+    if(empty($addrPhone)){
+        messageError("กรุณาระบุ เบอร์โทรศัพท์", $locationError);
+    } elseif(!preg_match('/^\d{10}$/', $addrPhone)) {
+        messageError("เบอร์โทรศัพท์ต้องมี 10 หลัก", $locationError);
+    }
+
+    if(empty($province)){
+        messageError("กรุณาระบุ จังหวัด", $locationError);
+    }elseif(mb_strlen($province, 'UTF-8') > 100){
+        messageError("จังหวัด ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if(empty($district)){
+        messageError("กรุณาระบุ อำเภอ", $locationError);
+    }elseif(mb_strlen($district, 'UTF-8') > 100){
+        messageError("อำเภอ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if(empty($subDistrict)){
+        messageError("กรุณาระบุ ตำบล", $locationError);
+    }elseif(mb_strlen($subDistrict, 'UTF-8') > 100){
+        messageError("ตำบล ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if(empty($zipCode)){
+        messageError("กรุณาระบุ รหัสไปรษณีย์", $locationError);
+    }elseif(!is_numeric($zipCode)){
+        messageError("รหัสไปรษณีย์ต้องเป็นตัวเลข", $locationError);
+    }elseif(mb_strlen($zipCode, 'UTF-8') != 5){
+        messageError("รหัสไปรษณีย์ต้องมี 5 หลัก", $locationError);
+    }
+
+    if(empty($addrDetail)){
+        messageError("กรุณาระบุ รายละเอียดที่อยู่", $locationError);
+    }elseif(mb_strlen($addrDetail, 'UTF-8') > 255){
+        messageError("รายละเอียดที่อยู่ ต้องไม่เกิน 255 ตัวอักษร", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function valiDateFormTransferCoinMember($myId, $myCoin, $recipientId, $coin, $password, $locationError)
+{
+    if (empty($myId) || $myId == null || !is_numeric($myId)) {
+        messageError("ไม่พบรหัสสมาชิกของคุณ", $locationError);
+    }
+
+    if (empty($myCoin) || $myCoin == null || !is_numeric($myCoin)) {
+        messageError("ไม่พบเหรียญของคุณ", $locationError);
+    }
+
+    if (empty($recipientId) || $recipientId == null || !is_numeric($recipientId)) {
+        messageError("ไม่พบรหัสสมาชิกของผู้รับ", $locationError);
+    }
+
+    if (empty($coin) || !ctype_digit($coin) || (int)$coin <= 0) {
+        messageError("กรุณาระบุ จำนวนเหรียญที่จะโอน ให้ถูกต้องและต้องมากกว่า 0", $locationError);
+    } elseif ((int)$coin > $myCoin) {
+        messageError("คุณมีเหรียญไม่เพียงพอ", $locationError);
+    }
+
+    if ($password == null) {
+        messageError("กรุณาระบุ รหัสผ่าน", $locationError);
     }
 }

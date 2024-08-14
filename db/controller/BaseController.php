@@ -1,8 +1,10 @@
 
 <?php
+require_once(__DIR__ . '/../../includes/functions.php');
+
 
 //  ================ Base Controller (Controller เริ่มต้น และที่ใช้งานร่วมกัน) ============
- /*
+/*
     1.  __construct
     2. getEmployeesAuthorityTypeDefault
     3. insertEmployeesTypeDefault
@@ -43,7 +45,7 @@ class BaseController
         }
     }
 
-   // ============================= 3. insertEmployeesTypeDefault ========================
+    // ============================= 3. insertEmployeesTypeDefault ========================
     function insertEmployeesTypeDefault()
     {
         try {
@@ -120,7 +122,7 @@ class BaseController
         }
     }
 
-   // ============================= 5. checkUsernameEmailEmployees ========================
+    // ============================= 5. checkUsernameEmailEmployees ========================
     function checkUsernameEmailEmployees($username, $email, $id = null)
     {
         try {
@@ -158,9 +160,8 @@ class BaseController
             // เริ่มต้น transaction
             $this->db->beginTransaction();
 
-
-             // Hashed Password
-             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            // Hashed Password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             // แทรกข้อมูลพนักงานใหม่
             $sql = " INSERT INTO bs_employees (emp_profile, emp_fname, emp_lname, emp_username, emp_password, emp_email)
@@ -207,7 +208,7 @@ class BaseController
                 $fname = "ผู้ดูแลระบบ";
                 $lname = "สูงสุด";
                 $username = "superAdmin";
-                $hashedPassword = password_hash("superAdmin", PASSWORD_DEFAULT);
+                $password = "superAdmin";
                 $email = "Adisak@example.com";
                 $eatId = 1;
 
@@ -220,23 +221,15 @@ class BaseController
                 $maxFileSize = 2 * 1024 * 1024; // 2 MB in bytes
                 $fileExtension = pathinfo($defaultImagePath, PATHINFO_EXTENSION);
 
-                function generateUniqueProfileSuperAdmin($extension, $folder)
-                {
-                    do {
-                        $fileName = 'profile_' . uniqid() . bin2hex(random_bytes(10)) . time() . '.' . $extension;
-                    } while (file_exists($folder . $fileName));
-                    return $fileName;
-                }
-
                 // ส่มชื่อรูปภาพใหม่
-                $newProfile = generateUniqueProfileSuperAdmin($fileExtension, $folderUploads);
+                $newProfile = generateUniqueImg($fileExtension, $folderUploads);
                 $targetFilePath = $folderUploads . $newProfile;
 
                 // Copy default image to new file
                 if (copy($defaultImagePath, $targetFilePath)) {
 
                     // Insert Employees
-                    $insertSuperAdminDefault = $this->insertEmployees($newProfile, $fname, $lname, $username, $hashedPassword, $email, $eatId);
+                    $insertSuperAdminDefault = $this->insertEmployees($newProfile, $fname, $lname, $username, $password, $email, $eatId);
                 }
             }
         } catch (PDOException $e) {
@@ -245,7 +238,7 @@ class BaseController
         }
     }
 
-   // ============================= 8. updateNewProfileEmployees ========================
+    // ============================= 8. updateNewProfileEmployees ========================
     function updateNewProfileEmployees($Id, $newProfile)
     {
         try {

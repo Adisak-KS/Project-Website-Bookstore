@@ -1,32 +1,46 @@
 <div class="myaccount-tab-menu nav" role="tablist">
-    <a href="#my-profile" class="active" data-bs-toggle="tab">
+    <?php
+    // รับ URL ปัจจุบัน
+    $current_page = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), ".php");
+
+    ?>
+
+    <a href="account_show" class="<?php echo ($current_page == 'account_show') ? 'active' : ''; ?>">
         <i class="fa fa-dashboard"></i>
         ข้อมูลส่วนตัว
     </a>
 
-    <a href="account_password_edit_form" data-bs-toggle="tab">
+    <a href="account_password" class="<?php echo ($current_page == 'account_password') ? 'active' : ''; ?>">
         <i class="fa fa-cart-arrow-down"></i>
         จัดการรหัสผ่าน
     </a>
-    <a href="#download" data-bs-toggle="tab">
+
+    <a href="account_address" class="<?php echo ($current_page == 'account_address' || $current_page == 'account_address_edit_form') ? 'active' : ''; ?>">
         <i class="fa fa-cloud-download"></i>
         ที่อยู่
     </a>
-    <a href="#download" data-bs-toggle="tab">
+
+    <a href="account_whitelist" class="<?php echo ($current_page == 'account_whitelist') ? 'active' : ''; ?>">
         <i class="fa fa-cloud-download"></i>
         รายการที่ชอบ
     </a>
-    <a href="#payment-method" data-bs-toggle="tab">
+
+    <a href="account_order_history" class="<?php echo ($current_page == 'account_order_history') ? 'active' : ''; ?>">
         <i class="fa fa-credit-card"></i>
         ประวัติการสั่งซื้อ
     </a>
-    <a href="#address-edit" data-bs-toggle="tab">
+
+    <a href="account_find_books" class="<?php echo ($current_page == 'account_find_books') ? 'active' : ''; ?>">
         <i class="fa fa-map-marker"></i>
         ประวัติรายการหาหนังสือตามสั่ง
     </a>
-    <a href="#account-info" data-bs-toggle="tab"><i class="fa fa-user"></i> Account
-        โอนเหรียญ</a>
-    <a href="login.html">
+
+    <a href="account_transfer_coins" class="<?php echo ($current_page == 'account_coin') ? 'active' : ''; ?>">
+        <i class="fa fa-user"></i>
+        โอนเหรียญ
+    </a>
+
+    <a href="account_transfer_coins_history" class="<?php echo ($current_page == 'account_coin_history') ? 'active' : ''; ?>">
         <i class="fa fa-sign-out"></i>
         ประวัติรายการโอนเหรียญ
     </a>

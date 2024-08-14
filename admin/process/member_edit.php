@@ -46,15 +46,14 @@ if (isset($_POST['btn-edit'])) {
             }
 
             // Random File Name
-            $newProfile = generateUniqueProfileEmployees($fileExtension, $folderUploads);
+            $newProfile = generateUniqueImg($fileExtension, $folderUploads);
             $targetFilePath = $folderUploads . $newProfile;
-
 
             // Move uploaded file to target directory
             if (move_uploaded_file($_FILES["newProfile"]["tmp_name"], $targetFilePath)) {
 
                 // ลบรูปเดิม
-                deleteProfileMember($profile);
+                deleteImg($profile, $folderUploads);
 
                 // Update New Profile
                 $updateNewProfile = $MemberController->updateNewProfileMember($Id, $newProfile);
@@ -64,7 +63,7 @@ if (isset($_POST['btn-edit'])) {
         }
     }
 
-    
+
     if ($updateDetailMember || $updateNewProfile) {
         $_SESSION['success'] = "แก้ไขข้อมูลสมาชิก สำเร็จ";
     }
@@ -72,6 +71,6 @@ if (isset($_POST['btn-edit'])) {
     header($locationSuccess);
     exit;
 } else {
-   header('Location: ../error_not_result');
+    header('Location: ../error_not_result');
     exit;
 }

@@ -31,6 +31,10 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
 if (!empty($_SESSION['mem_id'])) {
     $memId = $_SESSION['mem_id'];
     $useLoginEmployee = $LoginController->useLoginMember($memId);
+
+    if (!$useLoginEmployee) {
+        unset($_SESSION['mem_id']);
+    }
 }
 
 ?>

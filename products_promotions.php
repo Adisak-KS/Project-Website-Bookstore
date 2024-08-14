@@ -67,7 +67,7 @@ if (isset($_GET['ptyId'])) {
                     <div class="breadcrumbs-menu">
                         <ul>
                             <li><a href="index">หน้าแรก</a></li>
-                            <li><a href="javascript:void(0)" class="active">สินค้าลดหนัก</a></li>
+                            <li><a href="javascript:void(0)" class="active">สินค้าลดราคา</a></li>
                         </ul>
                     </div>
                 </div>

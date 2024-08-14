@@ -7562,7 +7562,7 @@ p.lost-password a:hover {
   color: #555555;
   border: 1px solid #ccc;
   padding: 12px 10px;
-  width: 100%;
+  /* width: 100%; */
   font-size: 14px;
   background: #f9f9f9;
 }

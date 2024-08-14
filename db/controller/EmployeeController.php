@@ -202,7 +202,7 @@ class EmployeeController extends BaseController
             FROM bs_employees
             WHERE emp_id = :emp_id";
             $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(":emp_id", $Id);
+            $stmt->bindParam(":emp_id", $Id, PDO::PARAM_INT);
             $stmt->execute();
 
             return $stmt->fetch(PDO::FETCH_ASSOC);

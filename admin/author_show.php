@@ -113,7 +113,7 @@ $authors = $AuthorController->getAuthor();
                                                 <?php foreach ($authors as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
-                                                            <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_author/<?php echo $row['auth_img'] ?>">
+                                                            <img class="rounded-circle" style="object-fit: cover;" width="50px" height="50px" src="../uploads/img_author/<?php echo $row['auth_img'] ?>">
                                                         </td>
                                                         <td class="text-start"><?php echo $row['auth_name']; ?></td>
                                                         <td class="text-center">

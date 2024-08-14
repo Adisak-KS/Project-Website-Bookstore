@@ -11,13 +11,17 @@ if (isset($_POST["id"])) {
     $locationError = "refresh:1; url=../admin_del_form?id=$base64Encoded";
     $locationSuccess = "refresh:1; url=../admin_show";
 
+    $folderUploads = "../../uploads/img_employees/";
+
 
     validateFormDeleteEmployees($Id, $locationError);
 
     $deleteEmployee = $BaseController->deleteEmployees($Id);
     if ($deleteEmployee) {
+
         // ลบรูปเดิม
-        deleteProfileEmployees($profile);
+        deleteImg($profile, $folderUploads);
+        
         $_SESSION["success"] = "ลบข้อมูลผู้ดูแลระบบสำเร็จ";
     }
 

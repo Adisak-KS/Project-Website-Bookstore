@@ -11,18 +11,19 @@ if (isset($_POST["id"])) {
     $locationError = "refresh:1; url=../owner_del_form?id=$base64Encoded";
     $locationSuccess = "refresh:1; url=../owner_show";
 
+    $folderUploads = "../../uploads/img_employees/";
+
     $deleteEmployee = $BaseController->deleteEmployees($Id);
 
     if ($deleteEmployee) {
         // ลบรูปเดิม
-        deleteProfileEmployees($profile);
+        deleteImg($profile, $folderUploads);
         $_SESSION["success"] = "ลบข้อมูลเจ้าของร้าน / ผู้บริหาร สำเร็จ";
     }
 
     header($locationSuccess);
     exit;
-
 } else {
-     header('Location: ../error_not_result');
+    header('Location: ../error_not_result');
     exit;
 }

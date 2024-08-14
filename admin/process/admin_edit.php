@@ -48,7 +48,7 @@ if (isset($_POST['btn-edit'])) {
             }
 
             // Random File Name
-            $newProfile = generateUniqueProfileEmployees($fileExtension, $folderUploads);
+            $newProfile = generateUniqueImg($fileExtension, $folderUploads);
             $targetFilePath = $folderUploads . $newProfile;
 
 
@@ -56,7 +56,7 @@ if (isset($_POST['btn-edit'])) {
             if (move_uploaded_file($_FILES["newProfile"]["tmp_name"], $targetFilePath)) {
 
                 // ลบรูปเดิม
-                deleteProfileEmployees($profile);
+                deleteImg($profile, $folderUploads);
 
                 // Update New Profile
                 $updateNewProfile = $BaseController->updateNewProfileEmployees($Id, $newProfile);
@@ -71,7 +71,7 @@ if (isset($_POST['btn-edit'])) {
         }
     }
 
-    
+
     if ($updateDetailAdmin || $updateNewProfile || $updateAuthorityAdmin) {
         $_SESSION['success'] = "แก้ไขข้อมูลผู้ดูแลระบบ สำเร็จ";
     }
@@ -79,6 +79,6 @@ if (isset($_POST['btn-edit'])) {
     header($locationSuccess);
     exit;
 } else {
-   header('Location: ../error_not_result');
+    header('Location: ../error_not_result');
     exit;
 }

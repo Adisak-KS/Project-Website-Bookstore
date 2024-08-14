@@ -13,11 +13,14 @@ if (isset($_POST["id"])) {
     $locationError = "refresh:1; url=../member_del_form?id=$base64Encoded";
     $locationSuccess = "refresh:1; url=../member_show";
 
+    $folderUploads = "../../uploads/img_member/";
+
     $deleteMember = $MemberController->deleteMember($Id);
 
     if ($deleteMember) {
         // ลบรูปเดิม
-        deleteProfileMember($profile);
+        deleteImg($profile, $folderUploads);
+
         $_SESSION["success"] = "ลบข้อมูลสมาชิก สำเร็จ";
     }
 

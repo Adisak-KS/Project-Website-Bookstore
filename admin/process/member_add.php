@@ -41,13 +41,14 @@ if (isset($_POST['btn-add'])) {
         checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $locationError);
 
         // ส่มชื่อรูปภาพใหม่
-        $newProfile = generateUniqueProfileEmployees($fileExtension, $folderUploads);
+        $newProfile = generateUniqueImg($fileExtension, $folderUploads);
         $targetFilePath = $folderUploads . $newProfile;
+
 
 
         // Copy default image to new file
         if (copy($defaultImagePath, $targetFilePath)) {
-            
+
             // Insert Employees
             $insertMember = $MemberController->insertMember($newProfile, $fname, $lname, $username, $password, $email);
             $_SESSION['success'] = "เพิ่มข้อมูลสมาชิก สำเร็จ";

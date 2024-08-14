@@ -39,7 +39,7 @@ if (!empty($_SESSION['emp_id'])) {
                     <div class="login-form">
                         <form id="formLogin" action="process/login_check.php" method="post">
                             <div class="mb-3">
-                                <label for="username" class="mb-2"><strong>ชื่อผู้ใช้งาน หรือ อีเมล :</strong> </label><span class="text-danger">*</span>
+                                <label for="username" class="form-label"><strong>ชื่อผู้ใช้งาน หรือ อีเมล :</strong> </label><span class="text-danger">*</span>
                                 <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้ หรือ อีเมล" maxlength="100">
                             </div>
                             <div class="mb-3">

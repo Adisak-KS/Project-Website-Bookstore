@@ -141,7 +141,7 @@ $owners = $OwnerController->getOwner();
                                                 <?php foreach ($owners as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
-                                                            <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
+                                                            <img class="rounded-circle" style="object-fit: cover;" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
                                                         </td>
                                                         <td class="text-start"><?php echo $row['emp_fname']; ?></td>
                                                         <td class="text-start"><?php echo $row['emp_lname']; ?></td>

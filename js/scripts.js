@@ -29,14 +29,14 @@ document.addEventListener('DOMContentLoaded', function () {
 function copyURL(event) {
     event.preventDefault(); // ป้องกันไม่ให้หน้ารีเฟรช
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(function() {
+    navigator.clipboard.writeText(url).then(function () {
         Swal.fire({
             icon: 'success',
             title: 'สำเร็จ',
             text: 'คัดลอก URL สินค้าเรียบร้อยแล้ว',
             confirmButtonText: 'ตกลง'
         });
-    }, function(err) {
+    }, function (err) {
         Swal.fire({
             icon: 'error',
             title: 'ข้อผิดพลาด',
@@ -209,3 +209,207 @@ function confirmLogout(event) {
         }
     })
 }
+
+// ============================== 4. Jquery Validation Form (Account Profile) ==============================
+$(document).ready(function () {
+    $("#formUpdateProfile").validate({
+        rules: {
+            fname: {
+                required: true,
+                pattern: /^[a-zA-Zก-๙\s]+$/,
+                maxlength: 50,
+            },
+            lname: {
+                required: true,
+                pattern: /^[a-zA-Zก-๙\s]+$/,
+                maxlength: 50,
+            },
+            username: {
+                required: true,
+                pattern: /^[a-zA-Z][a-zA-Z0-9_]*$/,
+                minlength: 6,
+                maxlength: 50,
+            },
+            email: {
+                required: true,
+                email: true,
+                minlength: 10,
+                maxlength: 100,
+            },
+            newProfile: {
+                accept: "image/png,image/jpeg",
+            },
+        },
+        messages: {
+            fname: {
+                required: "กรุณาระบุ ชื่อ",
+                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            lname: {
+                required: "กรุณาระบุ นามสกุล",
+                pattern: "ต้องเป็นตัวอักษรภาษาไทย หรือ ภาษาอังกฤษ เท่านั้น",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            username: {
+                required: "กรุณาระบุ ชื่อผู้ใช้งาน",
+                pattern: "ต้องเป็น a-z, A-Z, 0-9 และ _ เท่านั้น และตัวแรกต้องเริ่มต้นด้วย a-z, A-Z",
+                minlength: "ต้องมี 6 ตัวอักษรขึ้นไป",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            email: {
+                required: "กรุณาระบุ อีเมล",
+                email: "รูปแบบอีเมล ไม่ถูกต้อง",
+                minlength: "ต้องมี อย่างน้อย 10 ตัวอักษร",
+                maxlength: "ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            newProfile: {
+                accept: "ต้องเป็นไฟล์ประเภท .png หรือ .jpeg เท่านั้น",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 4. Jquery Validation Form (Account Password) ==============================
+$(document).ready(function () {
+    $("#formUpdatePassword").validate({
+        rules: {
+            password: {
+                required: true,
+                nowhitespace: true,
+                pattern: /^[^\u0E00-\u0E7F]+$/,
+                minlength: 8,
+                maxlength: 255,
+            },
+            new_password: {
+                required: true,
+                nowhitespace: true,
+                pattern: /^[^\u0E00-\u0E7F]+$/,
+                minlength: 8,
+                notEqualTo: "#password",
+                maxlength: 255,
+            },
+            confirm_password: {
+                required: true,
+                equalTo: "#new_password",
+            },
+        },
+        messages: {
+            password: {
+                required: "กรุณาระบุ รหัสผ่านปัจจุบัน",
+                nowhitespace: "ห้ามมีเว้นวรรค",
+                pattern: "ห้ามมีภาษาไทย",
+                minlength: "ต้องมี อย่างน้อย 8 ตัวอักษร",
+                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+            new_password: {
+                required: "กรุณาระบุ รหัสผ่านใหม่",
+                nowhitespace: "ห้ามมีเว้นวรรค",
+                pattern: "ห้ามมีภาษาไทย",
+                minlength: "ต้องมี อย่างน้อย 8 ตัวอักษร",
+                notEqualTo: "กรุณาตั้ง รหัสผ่านใหม่",
+                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+            confirm_password: {
+                required: "กรุณาระบุ รหัสผ่านใหม่ อีกครั้ง",
+                equalTo: "ยืนยันรหัสผ่าน ไม่ถูกต้อง",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 4. Jquery Validation Form (Account Address) ==============================
+$(document).ready(function () {
+    $("#formAddress").validate({
+        rules: {
+            addr_fname: {
+                required: true,
+                nowhitespace: true,
+                maxlength: 50,
+            },
+            addr_lname: {
+                required: true,
+                nowhitespace: true,
+                maxlength: 50,
+            },
+            addr_phone: {
+                required: true,
+                nowhitespace: true,
+                digits: true,
+                minlength: 10,
+                maxlength: 10,
+            },
+            zip_code: {
+                required: true,
+            },
+            addr_detail: {
+                required: true,
+                maxlength: 255,
+            },
+        },
+        messages: {
+            addr_fname: {
+                required: "กรุณาระบุ ชื่อ",
+                nowhitespace: "ห้ามมีช่องว่าง",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            addr_lname: {
+                required: "กรุณาระบุ นามสกุล",
+                nowhitespace: "ห้ามมีช่องว่าง",
+                maxlength: "ต้องไม่เกิน 50 ตัวอักษร",
+            },
+            addr_phone: {
+                required: "กรุณาระบุ เบอร์โทรศัพท์",
+                nowhitespace: "ห้ามมีช่องว่าง",
+                digits: "ต้องเป็นตัวเลขจำนวนเต็ม",
+                minlength: "เบอร์โทรศัพท์ ต้องมี 10 หมายเลข",
+                maxlength: "เบอร์โทรศัพท์ ต้องมี 10 หมายเลข",
+            },
+
+            zip_code: {
+                required: "กรุณาระบุ จังหัวด อำเภอ ตำบล รหัสไปรษณีย์",
+            },
+            addr_detail: {
+                required: "กรุณาระบุ รายละเอียด",
+                maxlength: "ต้องไม่เกิน 255 ตัวอักษร",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+

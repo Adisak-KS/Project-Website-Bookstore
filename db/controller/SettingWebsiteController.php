@@ -28,7 +28,7 @@ class SettingWebsiteController extends BaseController
     {
         try {
             $sql = "SELECT * FROM bs_settings_website
-                    WHERE st_id != 4 ";
+                    WHERE st_id != 4 AND st_id != 5";
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
