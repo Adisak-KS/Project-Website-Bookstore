@@ -3,10 +3,17 @@ $titlePage = "หน้าแรก";
 require_once("../db/connectdb.php");
 require_once("../db/controller/SettingWebsiteController.php");
 require_once("../db/controller/ProductController.php");
+require_once("../db/controller/ProductRequestController.php");
 
 $SettingWebsiteController = new SettingWebsiteController($conn);
 $ProductController = new ProductController($conn);
+$ProductRequestController = new ProductRequestController($conn);
 
+
+// หาหนังสือ
+$amountProductRequest = $ProductRequestController->getAmountProductRequest();
+
+// สินค้าในคลัง
 $QueryProductNumber = $SettingWebsiteController->getProductNumberLow();
 $prdNumberLow = $QueryProductNumber;
 
@@ -95,17 +102,22 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                         </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="#">
+                            <a href="product_request_show">
                                 <div class="card">
                                     <div class="card-body text-center">
                                         <h4 class="header-title mt-0 mb-3">หาหนังสือ</h4>
 
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
-                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
-                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
-                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
-                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+                                                <h2 class="fw-normal mb-1 text-center">
+                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                </h2>
+
+                                                <?php if ($amountProductRequest) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($amountProductRequest) ?> รายการ</span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($amountProductRequest) ?> รายการ</span>
+                                                <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
                                                 <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">

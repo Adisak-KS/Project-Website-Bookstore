@@ -1,10 +1,10 @@
 <?php
 require_once('../db/connectdb.php');
-require_once('../db/controller/MemberController.php');
+require_once('../db/controller/MemberAddressController.php');
 require_once('../includes/functions.php');
 
 
-$MemberController = new MemberController($conn);
+$MemberAddressController = new MemberAddressController($conn);
 
 if (isset($_POST['btn-edit'])) {
     $addrId = $_POST['addr_id'];
@@ -39,7 +39,7 @@ if (isset($_POST['btn-edit'])) {
     validateFormAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $locationError);
 
     //แก้ไขที่อยู่สมาชิก
-    $updateMemberAddress = $MemberController->updateMemberAddress($addrId, $memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail);
+    $updateMemberAddress = $MemberAddressController->updateMemberAddress($addrId, $memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail);
 
     if ($updateMemberAddress) {
         $_SESSION['success'] = "แก้ไขที่อยู่ สำเร็จ";
@@ -59,7 +59,7 @@ if (isset($_POST['btn-edit'])) {
     echo "Id ของสมาชิก : " . $memId . "<br>";
     echo "สถานะ : " . $addrStatus . "<br>";
 
-    $updateMemberAddressStatus = $MemberController->updateMemberAddressStatus($addrId, $memId);
+    $updateMemberAddressStatus = $MemberAddressController->updateMemberAddressStatus($addrId, $memId);
 
     if ($updateMemberAddressStatus) {
         $_SESSION['success'] = "ตั้งค่าที่อยู่เริ่มต้นสำเร็จ";

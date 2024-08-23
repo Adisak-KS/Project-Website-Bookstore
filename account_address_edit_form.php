@@ -2,11 +2,11 @@
 $titlePage = "แก้ไขที่อยู่";
 
 require_once("db/connectdb.php");
-require_once("db/controller/MemberController.php");
+require_once("db/controller/MemberAddressController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
 
-$MemberController = new MemberController($conn);
+$MemberAddressController = new MemberAddressController($conn);
 
 if (empty($_SESSION['mem_id'])) {
     $_SESSION['error'] = "กรุณาเข้าสู่ระบบ";
@@ -22,7 +22,7 @@ if (empty($_SESSION['mem_id'])) {
         // ถอดรหัส Id
         $addrId = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-        $detailMemberAddress = $MemberController->getDetailMemberAddress($addrId, $memId);
+        $detailMemberAddress = $MemberAddressController->getDetailMemberAddress($addrId, $memId);
 
         if (!$detailMemberAddress) {
             $_SESSION['error'] = "ไม่พบที่อยู่ที่คุณต้องการ";
@@ -105,86 +105,88 @@ if (empty($_SESSION['mem_id'])) {
                                         <!-- Single Tab Content Start -->
                                         <div class="tab-pane fade show active" role="tabpanel">
                                             <form id="formAddress" action="process/account_address_edit.php" method="post">
-                                                <div class="myaccount-content">
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <h5>แก้ไขที่อยู่</h5>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <input type="hidden" class="form-control" name="mem_id" value="<?php echo $detailMemberAddress['mem_id'] ?>" readonly>
-                                                        <input type="hidden" name="addr_id" value="<?php echo $addrId; ?>" readonly>
-                                                        <div class="col-lg-12 ingle-input-item mb-3">
-                                                            <label for="">ประเภทที่อยู่</label>
-
-                                                            <input class="form-check-input ms-3 me-1" type="radio" name="addr_type" id="1" value="1" <?php if ($detailMemberAddress['addr_type'] != 2) {
-                                                                                                                                                            echo 'checked';
-                                                                                                                                                        } ?>>
-                                                            <label class="form-check-label me-2" for="flexRadioDefault1"> <i class="fa-solid fa-house"></i> บ้าน</label>
-
-                                                            <input class="form-check-input ms-3 me-1" type="radio" name="addr_type" id="2" value="2" <?php if ($detailMemberAddress['addr_type'] == 2) {
-                                                                                                                                                            echo 'checked';
-                                                                                                                                                        } ?>>
-                                                            <label class="form-check-label" for="flexRadioDefault2"><i class="fa-solid fa-building"></i> ที่ทำงาน </label>
+                                                <div class="account-details-form">
+                                                    <div class="myaccount-content">
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <h5>แก้ไขที่อยู่</h5>
                                                         </div>
 
-                                                        <div class="col-lg-4 ingle-input-item mb-3">
-                                                            <label for="fname" class="form-label">ชื่อจริง</label>
-                                                            <input type="text" class="form-control" name="addr_fname" placeholder="กรุณาระบุ ชื่อจริง" value="<?php echo $detailMemberAddress['addr_fname']; ?>" maxlength="50">
-                                                        </div>
-                                                        <div class="col-lg-4 single-input-item mb-3">
-                                                            <label for="lname" class="form-label">นามสกุล</label>
-                                                            <input type="text" class="form-control" name="addr_lname" placeholder="กรุณาระบุ นามสกุล" value="<?php echo $detailMemberAddress['addr_lname']; ?>" maxlength="50">
-                                                        </div>
-                                                        <div class="col-lg-4 single-input-item mb-3">
-                                                            <label for="phone" class="form-label">เบอร์โทร</label>
-                                                            <input type="number" class="form-control" name="addr_phone" placeholder="กรุณาระบุ เบอร์โทรศัพท์" value="<?php echo $detailMemberAddress['addr_phone']; ?>">
-                                                        </div>
+                                                        <div class="row">
+                                                            <input type="hidden" class="form-control" name="mem_id" value="<?php echo $detailMemberAddress['mem_id'] ?>" readonly>
+                                                            <input type="hidden" name="addr_id" value="<?php echo $addrId; ?>" readonly>
+                                                            <div class="col-lg-12 ingle-input-item mb-3">
+                                                                <label for="">ประเภทที่อยู่</label>
 
-                                                        <div class="col-lg-3 single-input-item mb-3">
-                                                            <label for="province" class="form-label">จังหวัด</label>
-                                                            <input type="hidden" id="province_name" name="province_name" value="<?php echo $detailMemberAddress['addr_province'] ?>" readonly>
+                                                                <input class="form-check-input ms-3 me-1" type="radio" name="addr_type" id="1" value="1" <?php if ($detailMemberAddress['addr_type'] != 2) {
+                                                                                                                                                                echo 'checked';
+                                                                                                                                                            } ?>>
+                                                                <label class="form-check-label me-2" for="flexRadioDefault1"> <i class="fa-solid fa-house"></i> บ้าน</label>
 
-                                                            <select class="form-select" id="province" name="province">
-                                                                <option selected>กรุณาระบุ จังหวัด</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-lg-3 single-input-item mb-3">
-                                                            <label for="district" class="form-label">อำเภอ/เขต</label>
-                                                            <input type="hidden" id="district_name" name="district_name" value="<?php echo $detailMemberAddress['addr_district'] ?>" readonly>
+                                                                <input class="form-check-input ms-3 me-1" type="radio" name="addr_type" id="2" value="2" <?php if ($detailMemberAddress['addr_type'] == 2) {
+                                                                                                                                                                echo 'checked';
+                                                                                                                                                            } ?>>
+                                                                <label class="form-check-label" for="flexRadioDefault2"><i class="fa-solid fa-building"></i> ที่ทำงาน </label>
+                                                            </div>
 
-                                                            <select class="form-select" id="district" name="district">
-                                                                <option selected>กรุณาระบุ อำเภอ/เขต</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-lg-3 single-input-item mb-3">
-                                                            <label for="subdistrict" class="form-label">ตำบล/แขวง</label>
-                                                            <input type="hidden" id="subdistrict_name" name="subdistrict_name" value="<?php echo $detailMemberAddress['addr_subdistrict'] ?>" readonly>
+                                                            <div class="col-lg-4 single-input-item mb-3">
+                                                                <label for="fname" class="form-label">ชื่อจริง</label>
+                                                                <input type="text" class="form-control" name="addr_fname" placeholder="กรุณาระบุ ชื่อจริง" value="<?php echo $detailMemberAddress['addr_fname']; ?>" maxlength="50">
+                                                            </div>
+                                                            <div class="col-lg-4 single-input-item mb-3">
+                                                                <label for="lname" class="form-label">นามสกุล</label>
+                                                                <input type="text" class="form-control" name="addr_lname" placeholder="กรุณาระบุ นามสกุล" value="<?php echo $detailMemberAddress['addr_lname']; ?>" maxlength="50">
+                                                            </div>
+                                                            <div class="col-lg-4 single-input-item mb-3">
+                                                                <label for="phone" class="form-label">เบอร์โทร</label>
+                                                                <input type="number" class="form-control" name="addr_phone" placeholder="กรุณาระบุ เบอร์โทรศัพท์" value="<?php echo $detailMemberAddress['addr_phone']; ?>">
+                                                            </div>
 
-                                                            <select class="form-select" id="subdistrict" name="subdistrict">
-                                                                <option selected>กรุณาระบุ ตำบล/แขวง</option>
-                                                            </select>
-                                                        </div>
+                                                            <div class="col-lg-3 single-input-item mb-3">
+                                                                <label for="province" class="form-label">จังหวัด</label>
+                                                                <input type="hidden" id="province_name" name="province_name" value="<?php echo $detailMemberAddress['addr_province'] ?>" readonly>
 
-                                                        <div class="col-lg-3 single-input-item mb-3">
-                                                            <label for="zip_code" class="form-label">รหัสไปรษณีย์</label>
-                                                            <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="กรุณาระบุ รหัสไปราณีย์" readonly>
+                                                                <select class="form-select" id="province" name="province">
+                                                                    <option selected>กรุณาระบุ จังหวัด</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-lg-3 single-input-item mb-3">
+                                                                <label for="district" class="form-label">อำเภอ/เขต</label>
+                                                                <input type="hidden" id="district_name" name="district_name" value="<?php echo $detailMemberAddress['addr_district'] ?>" readonly>
+
+                                                                <select class="form-select" id="district" name="district">
+                                                                    <option selected>กรุณาระบุ อำเภอ/เขต</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-lg-3 single-input-item mb-3">
+                                                                <label for="subdistrict" class="form-label">ตำบล/แขวง</label>
+                                                                <input type="hidden" id="subdistrict_name" name="subdistrict_name" value="<?php echo $detailMemberAddress['addr_subdistrict'] ?>" readonly>
+
+                                                                <select class="form-select" id="subdistrict" name="subdistrict">
+                                                                    <option selected>กรุณาระบุ ตำบล/แขวง</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="col-lg-3 single-input-item mb-3">
+                                                                <label for="zip_code" class="form-label">รหัสไปรษณีย์</label>
+                                                                <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="กรุณาระบุ รหัสไปราณีย์" readonly>
+                                                            </div>
+                                                            <div class="col-lg-12 single-input-item mb-3">
+                                                                <label for="zip_code" class="form-label">รายละเอียดที่อยู่</label>
+                                                                <textarea name="addr_detail" class="form-control" placeholder="ระบุรายละเอียดที่อยู่ เช่น บ้านเลขที่ ถนน ซอย สถานที่ใกล้เคียง"><?php echo $detailMemberAddress['addr_phone']; ?></textarea>
+                                                            </div>
                                                         </div>
+                                                        <hr>
                                                         <div class="col-lg-12 single-input-item mb-3">
-                                                            <label for="zip_code" class="form-label">รายละเอียดที่อยู่</label>
-                                                            <textarea name="addr_detail" class="form-control bg-white" placeholder="ระบุรายละเอียดที่อยู่ เช่น บ้านเลขที่ ถนน ซอย สถานที่ใกล้เคียง"><?php echo $detailMemberAddress['addr_phone']; ?></textarea>
+                                                            <button type="submit" name="btn-edit" class="btn btn-sqr">
+                                                                <i class="fa-solid fa-floppy-disk"></i>
+                                                                บันทึกการแก้ไข
+                                                            </button>
+                                                            <a href="account_address" class="btn">
+                                                                ยกเลิก
+                                                            </a>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12 single-input-item mb-3">
-                                                        <button type="submit" name="btn-edit" class="btn btn-sqr">
-                                                            <i class="fa-solid fa-floppy-disk"></i>
-                                                            บันทึกการแก้ไข
-                                                        </button>
-                                                        <a href="account_address" class="btn">
-                                                            ยกเลิก
-                                                        </a>
                                                     </div>
                                                 </div>
-
                                             </form>
                                         </div>
                                     </div>

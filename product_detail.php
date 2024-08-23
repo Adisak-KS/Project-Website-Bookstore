@@ -3,8 +3,12 @@ $titlePage = "รายละเอียดสินค้า";
 
 require_once("db/connectdb.php");
 require_once("db/controller/ProductController.php");
+require_once("db/controller/WishlistController.php");
+require_once("db/controller/CartController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+
+$CartController = new CartController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -15,6 +19,7 @@ if (isset($_GET['id'])) {
     $prdId = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
     $ProductController = new ProductController($conn);
+
     $productDetail = $ProductController->getProductDetail($prdId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
@@ -28,6 +33,19 @@ if (isset($_GET['id'])) {
 
     // สินค้าแนะนำ
     $productAdvertising = $ProductController->getProductAdvertising($prdPreorder, $prdId);
+
+
+    // ตรวจสอบรายการ wishlist
+    if (isset($_SESSION['mem_id'])) {
+        $WishlistController = new WishlistController($conn);
+        $memId = $_SESSION['mem_id'];
+
+        $myWishlist = $WishlistController->getDetailWishlist($prdId, $memId);
+
+        $myCartQty = $CartController->getCartItemQty($memId, $prdId); // จำนวนสินค้าที่อยู่ในตะกร้า
+    } else {
+        $myCartQty = 0;  // จำนวนสินค้าที่อยู่ในตะกร้า ในกรณีไม่ได้ login
+    }
 } else {
     header('Location: index');
     exit;
@@ -154,20 +172,52 @@ if (isset($_GET['id'])) {
                                         </div>
                                     </div>
                                     <div class="product-add-form">
-                                        <form action="">
-                                            <div class="quality-button">
-                                                <input class="qty" type="number" min="1" max="<?php echo $productDetail['prd_quantity']  ?>" value="1">
-                                            </div>
+                                        <form novalidate action="process/cart_add.php" method="post">
                                             <?php if ($productDetail['prd_quantity'] > 0) { ?>
-                                                <a href="#"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+                                                <div class="quality-button">
+
+                                                    <input type="hidden" name="mem_id" value="<?php echo isset($_SESSION['mem_id']) ? $_SESSION['mem_id'] : null; ?>" readonly>
+                                                    <input type="hidden" name="prd_id" value="<?php echo $productDetail['prd_id'] ?>" readonly>
+                                                    <input type="hidden" name="prd_quantity" value="<?php echo $productDetail['prd_quantity']  ?>" readonly>
+                                                    <input type="hidden" name="my_cart_qty" value="<?php echo  $myCartQty ?>" readonly>
+                                                    <?php
+                                                    $maxQty = $productDetail['prd_quantity'] - $myCartQty;
+                                                    ?>
+                                                    <input type="number" name="crt_qty" class="qty" <?php if ($myCartQty == $productDetail['prd_quantity']) {
+                                                                                                        echo 'readonly';
+                                                                                                    } ?>>
+                                                </div>
+
+                                                <?php if ($myCartQty == $productDetail['prd_quantity']) { ?>
+                                                    <a onclick="return false" class="btnDisabled"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+
+                                                <?php } else { ?>
+                                                    <button type="submit" name="btn-add">
+                                                        <i class="fa-solid fa-cart-shopping me-1"></i>
+                                                        เพิ่มลงรถเข็น
+                                                    </button>
+                                                <?php } ?>
                                             <?php } else { ?>
-                                                <a href="" onclick="return false" class="btnDisabled"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
+                                                <a onclick="return false" class="btnDisabled"><i class="fa-solid fa-cart-shopping me-1"></i>เพิ่มลงรถเข็น</a>
                                             <?php } ?>
                                         </form>
                                     </div>
                                     <div class="product-social-links">
-                                        <div class="product-addto-links">
-                                            <a href="#"><i class="fa-solid fa-heart"></i></a>
+                                        <div class="product-addto-links d-flex">
+                                            <?php if (isset($_SESSION['mem_id']) && $myWishlist) { ?>
+                                                <form action="process/wishlist_add_del.php" method="post">
+                                                    <input type="hidden" name="prd_id" value="<?php echo $prdId; ?>">
+                                                    <input type="hidden" name="action" value="0">
+                                                    <button type="submit" name="btn-wishlist"><i class="fa-solid fa-heart text-danger"></i></button>
+                                                </form>
+                                            <?php } else { ?>
+                                                <form action="process/wishlist_add_del.php" method="post">
+                                                    <input type="hidden" name="prd_id" value="<?php echo $prdId; ?>">
+                                                    <input type="hidden" name="action" value="1">
+                                                    <button type="submit" name="btn-wishlist"><i class="fa-solid fa-heart"></i></button>
+                                                </form>
+                                            <?php } ?>
+
                                             <a href="#" title="แชร์สินค้า" onclick="copyURL(event)"><i class="fa-solid fa-share-nodes"></i></a>
                                         </div>
                                     </div>
@@ -548,6 +598,91 @@ if (isset($_GET['id'])) {
 
     <!-- all js here -->
     <?php require_once("layouts/vendor.php") ?>
+
+
+    <!-- จัดการ input จำนวนสินค้า  -->
+    <script>
+        $(document).ready(function() {
+            const maxQty = <?php echo $maxQty; ?>;
+
+            function validateQty(input) {
+                let value = parseFloat(input.val());
+
+                if (isNaN(value) || value < 1 || !Number.isInteger(value)) {
+                    input.val(1);
+                } else if (value > maxQty) {
+                    input.val(maxQty); 
+                }
+            }
+
+            // ตรวจสอบเมื่อเริ่มต้น
+            validateQty($("input[name='crt_qty']"));
+
+            // เมื่อผู้ใช้กรอกค่าผ่านคีย์บอร์ดหรือมีการเปลี่ยนแปลงค่า
+            $("input[name='crt_qty']").on('input change keyup', function(e) {
+                // ป้องกันการใส่ค่าเลขทศนิยมหรือค่าที่ไม่เหมาะสมผ่านคีย์บอร์ด
+                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
+                    e.preventDefault();
+                }
+                validateQty($(this));
+            });
+        });
+    </script>
+
+    <!-- <script>
+        $(document).ready(function() {
+            const maxQty = <?php echo $maxQty; ?>;
+
+            function validateQty(input) {
+                let value = parseFloat(input.val());
+
+                if (isNaN(value) || value < 1 || !Number.isInteger(value)) {
+                    input.val(1);
+                } else if (value > maxQty) {
+                    input.val(maxQty);
+                }
+            }
+
+            // ตรวจสอบเมื่อเริ่มต้น
+            validateQty($("input[name='crt_qty']"));
+
+            // เมื่อผู้ใช้กดปุ่มเพิ่มหรือลด
+            $("input[name='crt_qty']").on('input change', function() {
+                validateQty($(this));
+            });
+
+            // เพิ่มการป้องกันเมื่อผู้ใช้กดปุ่มลูกศรเพิ่ม/ลด
+            $("input[name='crt_qty']").on('keydown', function(e) {
+                // ป้องกันการใส่ค่าเลขทศนิยมหรือคีย์ที่ไม่ใช่ตัวเลข
+                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
+                    e.preventDefault();
+                }
+
+                setTimeout(() => {
+                    validateQty($(this));
+                }, 0);
+            });
+
+            // เมื่อผู้ใช้เลื่อน input field (เพิ่มหรือลดค่าด้วยปุ่มลูกศร)
+            $("input[name='crt_qty']").on('mousewheel', function(e) {
+                e.preventDefault();
+                let currentValue = parseInt($(this).val());
+                if (e.originalEvent.wheelDelta > 0 || e.originalEvent.detail < 0) {
+                    // Scroll up
+                    if (currentValue < maxQty) {
+                        $(this).val(currentValue + 1);
+                    }
+                } else {
+                    // Scroll down
+                    if (currentValue > 1) {
+                        $(this).val(currentValue - 1);
+                    }
+                }
+                validateQty($(this));
+            });
+        });
+    </script> -->
 </body>
 
 </html>
+<?php require_once('includes/sweetalert2.php') ?>

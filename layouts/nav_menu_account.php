@@ -20,7 +20,7 @@
         ที่อยู่
     </a>
 
-    <a href="account_whitelist" class="<?php echo ($current_page == 'account_whitelist') ? 'active' : ''; ?>">
+    <a href="account_wishlist" class="<?php echo ($current_page == 'account_wishlist') ? 'active' : ''; ?>">
         <i class="fa fa-cloud-download"></i>
         รายการที่ชอบ
     </a>
@@ -30,12 +30,12 @@
         ประวัติการสั่งซื้อ
     </a>
 
-    <a href="account_find_books" class="<?php echo ($current_page == 'account_find_books') ? 'active' : ''; ?>">
+    <a href="account_product_request" class="<?php echo ($current_page == 'account_product_request' || $current_page == 'account_product_request_detail') ? 'active' : ''; ?>">
         <i class="fa fa-map-marker"></i>
         ประวัติรายการหาหนังสือตามสั่ง
     </a>
 
-    <a href="account_transfer_coins" class="<?php echo ($current_page == 'account_coin') ? 'active' : ''; ?>">
+    <a href="account_transfer_coins" class="<?php echo ($current_page == 'account_transfer_coins') ? 'active' : ''; ?>">
         <i class="fa fa-user"></i>
         โอนเหรียญ
     </a>

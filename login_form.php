@@ -3,7 +3,7 @@ $titlePage = "เข้าสู่ระบบ";
 require_once('db/connectdb.php');
 
 
-if (!empty($_SESSION['emp_id'])) {
+if (!empty($_SESSION['mem_id'])) {
     header('Location: index');
     exit;
 }
@@ -38,25 +38,29 @@ if (!empty($_SESSION['emp_id'])) {
                 <div class="offset-lg-3 col-lg-6 col-md-12 col-12">
                     <div class="login-form">
                         <form id="formLogin" action="process/login_check.php" method="post">
-                            <div class="mb-3">
-                                <label for="username" class="form-label"><strong>ชื่อผู้ใช้งาน หรือ อีเมล :</strong> </label><span class="text-danger">*</span>
-                                <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้ หรือ อีเมล" maxlength="100">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label"><strong>รหัสผ่าน : </strong></label><span class="text-danger">*</span>
-                                <div class="input-group">
-                                    <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
-                                    <button class="btn btn-outline-secondary password-toggle" type="button">
-                                        <i class="fas fa-eye-slash"></i>
-                                    </button>
+                            <div class="account-details-form">
+                                <div class="row">
+                                    <div class="single-input-item mb-3">
+                                        <label for="username" class="form-label"><strong>ชื่อผู้ใช้งาน หรือ อีเมล :</strong> </label><span class="text-danger">*</span>
+                                        <input class="form-control" name="username_email" type="text" placeholder="กรุณาระบุ ชื่อผู้ใช้ หรือ อีเมล" maxlength="100">
+                                    </div>
+                                    <div class="single-input-item mb-3">
+                                        <label for="password" class="form-label"><strong>รหัสผ่าน : </strong></label><span class="text-danger">*</span>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" name="password" placeholder="ระบุ รหัสผ่าน" maxlength="255">
+                                            <button class="btn btn-outline-secondary password-toggle" type="button">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="single-login single-login-2">
+                                        <button type="submit" name="btn-login">
+                                            <i class="fa-solid fa-right-to-bracket me-1"></i>
+                                            เข้าสู่ระบบ
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <div class="single-login single-login-2">
-                                <button type="submit" name="btn-login">
-                                    <i class="fa-solid fa-right-to-bracket me-1"></i>
-                                    เข้าสู่ระบบ
-                                </button>
                             </div>
                         </form>
 

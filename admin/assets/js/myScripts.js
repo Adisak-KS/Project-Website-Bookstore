@@ -23,7 +23,7 @@
 */
 
 // ============================== 1. Data Table Default ==============================
-$(document).ready(function() {
+$(document).ready(function () {
     $('#MyTable').DataTable({
         responsive: true
     });
@@ -1158,4 +1158,72 @@ $(document).ready(function () {
     });
 });
 
-
+// ============================== 18. Jquery Validation Form (Setting Banner) ==============================
+$(document).ready(function () {
+    $("#formProductResponse").validate({
+        rules: {
+            prp_prd_name: {
+                required: true,
+                maxlength: 200,
+            },
+            prp_publisher: {
+                required: true,
+                maxlength: 100,
+            },
+            prp_author: {
+                required: true,
+                maxlength: 100,
+            },
+            prp_prd_volume_number: {
+                digits: true,
+                min: 1,
+            },
+            prp_detail: {
+                required: true,
+                maxlength: 250,
+            },
+            prp_img: {
+                required: true,
+                accept: "image/png, image/jpg, image/jpeg"
+            }
+        },
+        messages: {
+            prp_prd_name: {
+                required: "กรุณาระบุ ชื่อสินค้า",
+                maxlength: "ต้องไม่เกิน 200 ตัวอักษร",
+            },
+            prp_publisher: {
+                required: "กรุณาระบุ สำนักพิมพ์",
+                maxlength: "ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            prp_author: {
+                required: "กรุณาระบุ ผู้แต่ง",
+                maxlength: "ต้องไม่เกิน 100 ตัวอักษร",
+            },
+            prp_prd_volume_number: {
+                digits: "ต้องเป้นตัวเลขจำนวนเต็มบวก",
+                min: "ค่าต่ำสุดคือ 1",
+            },
+            prp_detail: {
+                required: "กรุณาระบุ รายละเอียด",
+                maxlength: "ต้องไม่เกิน 250 ตัวอักษร",
+            },
+            prp_img: {
+                required: "กรุณาระบุ รูปภาพสินค้า",
+                accept: "ต้องเป็นไฟล์ png, jpg, jpeg เท่านั้น"
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});

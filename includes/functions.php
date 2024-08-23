@@ -889,42 +889,124 @@ function  validateFormAddress($memId, $addrType, $addrFname, $addrLname, $addrPh
         messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
     }
 
-    if(empty($addrPhone)){
+    if (empty($addrPhone)) {
         messageError("กรุณาระบุ เบอร์โทรศัพท์", $locationError);
-    } elseif(!preg_match('/^\d{10}$/', $addrPhone)) {
+    } elseif (!preg_match('/^\d{10}$/', $addrPhone)) {
         messageError("เบอร์โทรศัพท์ต้องมี 10 หลัก", $locationError);
     }
 
-    if(empty($province)){
+    if (empty($province)) {
         messageError("กรุณาระบุ จังหวัด", $locationError);
-    }elseif(mb_strlen($province, 'UTF-8') > 100){
+    } elseif (mb_strlen($province, 'UTF-8') > 100) {
         messageError("จังหวัด ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if(empty($district)){
+    if (empty($district)) {
         messageError("กรุณาระบุ อำเภอ", $locationError);
-    }elseif(mb_strlen($district, 'UTF-8') > 100){
+    } elseif (mb_strlen($district, 'UTF-8') > 100) {
         messageError("อำเภอ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if(empty($subDistrict)){
+    if (empty($subDistrict)) {
         messageError("กรุณาระบุ ตำบล", $locationError);
-    }elseif(mb_strlen($subDistrict, 'UTF-8') > 100){
+    } elseif (mb_strlen($subDistrict, 'UTF-8') > 100) {
         messageError("ตำบล ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if(empty($zipCode)){
+    if (empty($zipCode)) {
         messageError("กรุณาระบุ รหัสไปรษณีย์", $locationError);
-    }elseif(!is_numeric($zipCode)){
+    } elseif (!is_numeric($zipCode)) {
         messageError("รหัสไปรษณีย์ต้องเป็นตัวเลข", $locationError);
-    }elseif(mb_strlen($zipCode, 'UTF-8') != 5){
+    } elseif (mb_strlen($zipCode, 'UTF-8') != 5) {
         messageError("รหัสไปรษณีย์ต้องมี 5 หลัก", $locationError);
     }
 
-    if(empty($addrDetail)){
+    if (empty($addrDetail)) {
         messageError("กรุณาระบุ รายละเอียดที่อยู่", $locationError);
-    }elseif(mb_strlen($addrDetail, 'UTF-8') > 255){
+    } elseif (mb_strlen($addrDetail, 'UTF-8') > 255) {
         messageError("รายละเอียดที่อยู่ ต้องไม่เกิน 255 ตัวอักษร", $locationError);
+    }
+}
+
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function valiDateFromProductRequest($memId, $prqTitle, $prqPrdName, $prqPublisher, $prqAuthor, $prqPrdVolumeNumber, $prqDetail, $locationError)
+{
+    if (empty($memId) || $memId == null || !is_numeric($memId)) {
+        messageError("ไม่พบรหัสสมาชิกของคุณ", $locationError);
+    }
+
+    if (empty($prqTitle)) {
+        messageError("กรุณาระบุ หัวเรื่องการค้นหา", $locationError);
+    } elseif (mb_strlen($prqTitle, 'UTF-8') > 200) {
+        messageError("หัวเรื่องการค้นหา ต้องไม่เกิน 200 ตัวอักษร", $locationError);
+    }
+
+    if (mb_strlen($prqPrdName, 'UTF-8') > 200) {
+        messageError("หัวเรื่องการค้นหา ต้องไม่เกิน 200 ตัวอักษร", $locationError);
+    }
+
+    if (mb_strlen($prqPublisher, 'UTF-8') > 100) {
+        messageError("สำนักพิมพ์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (mb_strlen($prqAuthor, 'UTF-8') > 100) {
+        messageError("ผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!is_numeric($prqPrdVolumeNumber) || $prqPrdVolumeNumber < 0 || floor($prqPrdVolumeNumber) != $prqPrdVolumeNumber) {
+        messageError("เล่มที่ ต้องเป็นจำนวนเต็มบวก", $locationError);
+    }
+
+    if (empty($prqDetail)) {
+        messageError("กรุณาระบุ รายละเอียดอื่น ๆ", $locationError);
+    } elseif (mb_strlen($prqDetail, 'UTF-8') > 200) {
+        messageError("รายละเอียด ต้องไม่เกิน 200 ตัวอักษร", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function valiDateFromProductResponse($prqId, $empId, $prpPrdName, $prpPublisher, $prpAuthor, $prpPrdVolumeNumber, $prpDetail, $prpImg, $locationError)
+{
+    if (empty($prqId) || $prqId == null || !is_numeric($prqId)) {
+        messageError("ไม่พบรหัสรายการตามหาตามสั่ง", $locationError);
+    }
+
+    if (empty($empId) || $empId == null || !is_numeric($empId)) {
+        messageError("ไม่พบรหัสพนักงาน", $locationError);
+    }
+
+
+    if (empty($prpPrdName)) {
+        messageError("กรุณาระบุ ชื่อสินค้า", $locationError);
+    } elseif (mb_strlen($prpPrdName, 'UTF-8') > 200) {
+        messageError("ชื่อสินค้า ต้องไม่เกิน 200 ตัวอักษร", $locationError);
+    }
+
+    if (empty($prpPublisher)) {
+        messageError("กรุณาระบุ สำนักพิมพ์", $locationError);
+    } elseif (mb_strlen($prpPublisher, 'UTF-8') > 100) {
+        messageError("สำนักพิมพ์ ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (empty($prpAuthor)) {
+        messageError("กรุณาระบุ ผู้แต่ง", $locationError);
+    } elseif (mb_strlen($prpAuthor, 'UTF-8') > 100) {
+        messageError("ผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
+    }
+
+    if (!is_numeric($prpPrdVolumeNumber) || $prpPrdVolumeNumber < 0 || floor($prpPrdVolumeNumber) != $prpPrdVolumeNumber) {
+        messageError("เล่มที่ ต้องเป็นจำนวนเต็มบวกและมากกว่า 0", $locationError);
+    }
+
+    if (empty($prpDetail)) {
+        messageError("กรุณาระบุ รายละเอียดอื่น ๆ", $locationError);
+    } elseif (mb_strlen($prpDetail, 'UTF-8') > 200) {
+        messageError("รายละเอียด ต้องไม่เกิน 200 ตัวอักษร", $locationError);
+    }
+
+    if (empty($prpImg)) {
+        messageError("กรุณาระบุ รูปภาพสินค้า", $locationError);
     }
 }
 
@@ -951,5 +1033,36 @@ function valiDateFormTransferCoinMember($myId, $myCoin, $recipientId, $coin, $pa
 
     if ($password == null) {
         messageError("กรุณาระบุ รหัสผ่าน", $locationError);
+    }
+}
+
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function valiDateFromCartAdd($memId, $prdId, $prdQuantity, $crtQty, $myCartQty, $locationError)
+{
+    if (empty($memId) || !is_numeric($memId)) {
+        messageError("ไม่พบรหัสสมาชิก", $locationError);
+    }
+
+    if (empty($memId) || !is_numeric($memId)) {
+        messageError("ไม่พบรหัสสินค้านี้", $locationError);
+    }
+
+    if (!isset($prdQuantity)) {
+        messageError("ไม่พบข้อมูลจำนวนสินค้าในคลัง", $locationError);
+    } elseif (!is_numeric($prdQuantity) || intval($prdQuantity) != $prdQuantity || $prdQuantity < 0) {
+        messageError("จำนวนสินค้าในคลังไม่ถูกต้อง", $locationError);
+    } elseif ($prdQuantity <= 0) {
+        messageError("จำนวนสินค้าในคลังหมด", $locationError);
+    }
+
+    if (empty($crtQty) || !is_numeric($crtQty)) {
+        messageError("จำนวนสินค้าที่เพิ่มในรถเข็น ไม่ถูกต้อง", $locationError);
+    } elseif (intval($crtQty) != $crtQty) {
+        messageError("จำนวนสินค้าที่เพิ่มในรถเข็น ต้องเป็นจำนวนเต็ม", $locationError);
+    } elseif ($crtQty < 1) {
+        messageError("จำนวนสินค้าที่เพิ่มในรถเข็น ต้องมากกว่าหรือเท่ากับ 1", $locationError);
+    } elseif ($crtQty > $prdQuantity || $crtQty > $prdQuantity - $myCartQty) {
+        messageError("เต็มจำนวนที่ให้ซื้อแล้ว หรือสินค้าอาจมีไม่เพียงพอ", $locationError);
     }
 }

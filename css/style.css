@@ -679,7 +679,7 @@ body {
   bottom: 0;
   color: #fff;
   display: inline-block;
-  font-size: 18px;
+  font-size: 19px;
   height: 30px;
   left: 24px;
   line-height: 30px;
@@ -5099,6 +5099,7 @@ nav.menu .cr-dropdown ul {
   padding: 0 10px;
 }
 
+.product-add-form form button,
 .product-add-form form a {
   background: #333 none repeat scroll 0 0;
   border: 0 none;
@@ -5145,11 +5146,29 @@ nav.menu .cr-dropdown ul {
   width: 50px;
   transition: 0.3s;
 }
+.product-addto-links button {
+  background: #000 none repeat scroll 0 0;
+  color: #fff;
+  display: inline-block;
+  font-size: 19px;
+  font-weight: 700;
+  height: 45px;
+  line-height: 45px;
+  margin-right: 5px;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  width: 50px;
+  transition: 0.3s;
+}
 
 .product-addto-links a:hover,
+.product-addto-links button:hover,
 .product-add-form form a:hover {
   background: #f07c29 none repeat scroll 0 0;
+  border: none; 
 }
+
 
 .product-add-form form a.btnDisabled {
   pointer-events: none; 
@@ -6359,7 +6378,7 @@ nav.menu .cr-dropdown ul {
 
 .table-content table th {
   border-top: medium none;
-  font-weight: normal;
+  font-weight:bold;
   padding: 20px 10px;
   text-align: center;
   text-transform: uppercase;
@@ -6382,7 +6401,9 @@ nav.menu .cr-dropdown ul {
 }
 
 .table-content table td.product-thumbnail {
-  width: 130px;
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
 }
 
 .table-content table td.product-name a {
@@ -6452,6 +6473,7 @@ nav.menu .cr-dropdown ul {
 
 .btn.btn-sqr,
 .buttons-cart ul li a,
+.coupon form button,
 .coupon form a {
   background: #252525 none repeat scroll 0 0;
   border-radius: 0;
@@ -7130,6 +7152,7 @@ p.lost-password a:hover {
   width: 20px;
 }
 
+.wishlist-table table .product-remove > button,
 .wishlist-table table .product-remove > a {
   font-size: 25px;
   color: #333;
@@ -7137,6 +7160,7 @@ p.lost-password a:hover {
   font-weight: 400;
 }
 
+.wishlist-table table .product-remove > button:hover,
 .wishlist-table table .product-remove > a:hover {
   color: #f07c29;
 }
@@ -7565,6 +7589,15 @@ p.lost-password a:hover {
   /* width: 100%; */
   font-size: 14px;
   background: #f9f9f9;
+}
+
+.single-input-item select {
+  color: #555555;
+  border: 1px solid #ccc;
+  padding: 12px 10px;
+  /* width: 100%; */
+  font-size: 14px;
+  /* background: #f9f9f9;  */
 }
 
 .account-details-form .single-input-item {

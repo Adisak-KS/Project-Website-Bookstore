@@ -6,14 +6,15 @@ require_once("db/controller/PublisherController.php");
 require_once("db/controller/AuthorController.php");
 require_once("db/controller/ProductController.php");
 require_once("db/controller/LoginController.php");
+require_once("db/controller/CartController.php");
 
 $ContactController = new ContactController($conn);
 $ProductTypeController = new ProductTypeController($conn);
 $PublisherController = new PublisherController($conn);
 $AuthorController = new AuthorController($conn);
 $ProductController = new ProductController($conn);
-
 $LoginController = new LoginController($conn);
+$CartController = new CartController($conn);
 
 $contacts = $ContactController->useContact();
 $prdPreorder = 1; //สินค้าปกติ
@@ -31,6 +32,9 @@ $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount()
 if (!empty($_SESSION['mem_id'])) {
     $memId = $_SESSION['mem_id'];
     $useLoginEmployee = $LoginController->useLoginMember($memId);
+
+    // จำนวนสินค้าในตะกร้า
+    $cartItem = $CartController->getCartItemCount($memId);
 
     if (!$useLoginEmployee) {
         unset($_SESSION['mem_id']);
@@ -138,8 +142,10 @@ if (!empty($_SESSION['mem_id'])) {
                     <div class="my-cart">
                         <ul class="list-unstyled d-flex">
                             <li class="me-3">
-                                <a href="#"><i class="fa fa-shopping-cart mt-2"></i></a>
-                                <span>2</span>
+                                <a href="cart"><i class="fa fa-shopping-cart mt-2"></i></a>
+                                <?php if (!empty($_SESSION['mem_id']) && $cartItem) { ?>
+                                    <span><?php echo number_format($cartItem) ?></span>
+                                <?php } ?>
                             </li>
                             <?php if (!empty($_SESSION['mem_id'])) { ?>
                                 <!-- <li>
@@ -233,7 +239,7 @@ if (!empty($_SESSION['mem_id'])) {
                         <a href="products_promotions">ลดเริ่มต้น <?php echo $productPercentDiscount . " %" ?></a>
                     </div>
                     <div class="safe-area">
-                        <a href="find_product">ตามหาหนังสือ</a>
+                        <a href="product_request_form">ตามหาหนังสือ</a>
                     </div>
                 </div>
             </div>

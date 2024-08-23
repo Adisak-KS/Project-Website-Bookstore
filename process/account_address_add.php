@@ -1,10 +1,10 @@
 <?php
 require_once('../db/connectdb.php');
-require_once('../db/controller/MemberController.php');
+require_once('../db/controller/MemberAddressController.php');
 require_once('../includes/functions.php');
 
 
-$MemberController = new MemberController($conn);
+$MemberAddressController = new MemberAddressController($conn);
 
 if (isset($_POST['btn-add'])) {
     $memId = $_POST['mem_id'];
@@ -48,7 +48,7 @@ if (isset($_POST['btn-add'])) {
     validateFormAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $locationError);
 
     //เพิ่มที่อยู่สมาชิก
-    $addMemberAddress = $MemberController->insertMemberAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $addrStatus);
+    $addMemberAddress = $MemberAddressController->insertMemberAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $addrStatus);
 
     if ($addMemberAddress) {
         $_SESSION['success'] = "เพิ่มที่อยู่ใหม่ สำเร็จ";
