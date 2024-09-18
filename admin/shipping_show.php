@@ -1,13 +1,21 @@
 <?php
-$titlePage = "ช่องทางขนส่ง";
+$titlePage = "ช่องทางจัดส่ง";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ShippingController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $ShippingController = new ShippingController($conn);
 
 $shipping = $ShippingController->getShipping();
 
+$empId = $_SESSION['emp_id'];
 
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 4]; // [Super Admin, Admin, Accounting]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -124,7 +132,7 @@ $shipping = $ShippingController->getShipping();
                                                             <img class="rounded" width="50px" height="50px" src="../uploads/img_shipping/<?php echo $row['shp_logo'] ?>">
                                                         </td>
                                                         <td class="text-start"><?php echo $row['shp_name']; ?></td>
-                                                        <td class="text-start">฿<?php echo number_format( $row['shp_price'],2) ?></td>
+                                                        <td class="text-start">฿<?php echo number_format($row['shp_price'], 2) ?></td>
                                                         <td class="text-center">
                                                             <?php if ($row['shp_status'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-success fs-6">แสดง</span>

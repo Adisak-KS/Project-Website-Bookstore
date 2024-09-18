@@ -1,15 +1,13 @@
 <?php
-// ========================================== Member ========================================== 
+// ========================================== Member Address ========================================== 
 /* 
     1.  __construct
-    2. getMember
-    3. checkUsernameEmailMember
-    4. insertMember
-    5. getDetailMember
-    6. updateDetailMember
-    7. updateNewProfileMember
-    8. deleteMember
-    9. getDetailAccountMember 
+    2. getMemberAddress
+    3. insertMemberAddress
+    4. getDetailMemberAddress
+    5. updateMemberAddress
+    6. updateMemberAddressStatus
+    7. deleteAddress
 */
 // ============================================================================================
 class MemberAddressController extends BaseController
@@ -22,7 +20,7 @@ class MemberAddressController extends BaseController
         //  echo "<br> เรียกใช้ Member Address Controller สำเร็จ <br>";
     }
 
-    // ============================= 12. insertMemberAddress ===================================
+    // ============================= 2. getMemberAddress ===================================
     function getMemberAddress($memId)
     {
         try {
@@ -41,7 +39,7 @@ class MemberAddressController extends BaseController
         }
     }
 
-    // ============================= 12. insertMemberAddress ===================================
+    // ============================= 3. insertMemberAddress ===================================
     function insertMemberAddress($memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail, $addrStatus)
     {
         try {
@@ -67,8 +65,7 @@ class MemberAddressController extends BaseController
         }
     }
 
-
-    // ============================= 12. updateMemberPassword ===================================
+    // ============================= 4. getDetailMemberAddress ===================================
     function getDetailMemberAddress($addrId, $memId)
     {
         try {
@@ -87,7 +84,7 @@ class MemberAddressController extends BaseController
         }
     }
 
-    // ============================= 12. insertMemberAddress ===================================
+    // ============================= 5. updateMemberAddress ===================================
     function updateMemberAddress($addrId, $memId, $addrType, $addrFname, $addrLname, $addrPhone, $province, $district, $subDistrict, $zipCode, $addrDetail)
     {
         try {
@@ -122,7 +119,7 @@ class MemberAddressController extends BaseController
         }
     }
 
-    // ============================= 12. updateMemberPassword ===================================
+    // ============================= 6. updateMemberAddressStatus ===================================
     function updateMemberAddressStatus($addrId, $memId)
     {
         try {
@@ -156,7 +153,7 @@ class MemberAddressController extends BaseController
         }
     }
 
-    // ============================= 12. insertMemberAddress ===================================
+    // ============================= 7. deleteAddress ===================================
     function deleteAddress($addrId)
     {
         try {

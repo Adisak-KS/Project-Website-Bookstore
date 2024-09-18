@@ -3,11 +3,20 @@ $titlePage = "สมาชิก";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/MemberController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $MemberController = new MemberController($conn);
+
 
 $members = $MemberController->getMember();
 
+$empId = $_SESSION['emp_id'];
 
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3]; // [Super Admin, Admin]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 ?>
 <!DOCTYPE html>
 <html lang="en">

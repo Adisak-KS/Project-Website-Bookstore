@@ -76,7 +76,6 @@ class PaymentController extends BaseController
     function insertPayment($pmtBank, $newImg, $pmtName, $pmtNumber, $pmtDetail, $pmtStatus)
     {
         try {
-            $this->db->beginTransaction();
 
             // เพิ่มข้อมูล
             $sql = "INSERT INTO bs_payments (pmt_bank, pmt_bank_logo, pmt_name, pmt_number, pmt_detail, pmt_status)
@@ -89,24 +88,8 @@ class PaymentController extends BaseController
             $stmt->bindParam(':pmt_detail', $pmtDetail, PDO::PARAM_STR);
             $stmt->bindParam(':pmt_status', $pmtStatus, PDO::PARAM_INT);
             $stmt->execute();
-
-            $lastInsertId = $this->db->lastInsertId();
-
-            if ($pmtStatus == 1) {
-                // update Status อื่นให้เป็น 0 ทุก Id ที่ไม่ใช่ Id ตัวเอง
-                $sql = "UPDATE bs_payments 
-                        SET pmt_status = 0
-                        WHERE pmt_id != :pmt_id";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':pmt_id', $lastInsertId, PDO::PARAM_INT);
-                $stmt->execute();
-            }
-
-            $this->db->commit();
-
             return true;
         } catch (PDOException $e) {
-            $this->db->rollBack();
             echo "<hr>Error in insertPayment : " . $e->getMessage();
             return false;
         }
@@ -116,8 +99,6 @@ class PaymentController extends BaseController
     function updatePaymentStatus($pmtStatus, $pmtId)
     {
         try {
-            $this->db->beginTransaction();
-
             $sql = "UPDATE bs_payments
                     SET pmt_status = :pmt_status
                     WHERE pmt_id = :pmt_id";
@@ -126,20 +107,8 @@ class PaymentController extends BaseController
             $stmt->bindParam(':pmt_id', $pmtId, PDO::PARAM_INT);
             $stmt->execute();
 
-            if ($pmtStatus == 1) {
-                // อัปเดตสถานะการชำระเงินอื่นทั้งหมดเป็น 0
-                $sql = "UPDATE bs_payments
-                        SET pmt_status = 0
-                        WHERE pmt_id != :pmt_id";
-                $stmt = $this->db->prepare($sql);
-                $stmt->bindParam(':pmt_id', $pmtId, PDO::PARAM_INT);
-                $stmt->execute();
-            }
-
-            $this->db->commit();
             return true;
         } catch (PDOException $e) {
-            $this->db->rollBack();
             echo "<hr>Error in updatePaymentStatus : " . $e->getMessage();
             return true;
         }

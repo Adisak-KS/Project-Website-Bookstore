@@ -11,6 +11,10 @@
     7. updateNewProfileMember
     8. deleteMember
     9. getDetailAccountMember 
+    10. updateDetailAccountMember
+    11. updateDetailAccountMember
+    12. updateMemberPassword
+    13. getMemberAccountHistoryCoins
 */
 // ============================================================================================
 
@@ -264,26 +268,7 @@ class MemberController extends BaseController
         }
     }
 
-    // ============================= 12. updateMemberPassword ===================================
-    function checkRecipientId($recipientId)
-    {
-        try {
-            $sql = "SELECT mem_id
-                    FROM bs_members
-                    WHERE mem_id = :recipient_id
-                    LIMIT 1";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':recipient_id', $recipientId, PDO::PARAM_INT);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result;
-        } catch (PDOException $e) {
-            echo "<hr>Error in checkRecipientId : " . $e->getMessage();
-            return false;
-        }
-    }
-
-    // ============================= 12. updateMemberPassword ===================================
+    // ============================= 13. getMemberAccountHistoryCoins ===================================
     function getMemberAccountHistoryCoins($memId)
     {
         try {
@@ -300,55 +285,6 @@ class MemberController extends BaseController
         }
     }
     
-    // ============================= 12. updateMemberPassword ===================================
-    // function updateTransferCoinMember($remainCoin, $myId, $coin, $recipientId)
-    // {
-    //     try {
-    //         $this->db->beginTransaction();
-
-    //         // ตรวจสอบว่ามี id ของผู้รับหรือไม่
-    //         $sql = "SELECT mem_id
-    //                 FROM bs_members
-    //                 WHERE mem_id = :recipient_id";
-    //         $stmt = $this->db->prepare($sql);
-    //         $stmt->bindParam(':recipient_id', $recipientId, PDO::PARAM_INT);
-    //         $stmt->execute();
-    //         $checkId = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    //         // มี id ผู้รับ
-    //         if ($checkId) {
-    //             // ลบเหรียญของผู้ส่ง
-    //             $sql = "UPDATE bs_members
-    //                     SET mem_coin = :mem_coin
-    //                     WHERE mem_id = :mem_id";
-    //             $stmt = $this->db->prepare($sql);
-    //             $stmt->bindParam(':mem_coin', $remainCoin, PDO::PARAM_INT);
-    //             $stmt->bindParam(':mem_id', $myId, PDO::PARAM_INT);
-    //             $stmt->execute();
-
-
-    //             // เพิ่มเหรียญของผู้ส่ง
-    //             $sql = "UPDATE bs_member
-    //                     SET mem_coin += :transfer_coin
-    //                     WHERE mem_id = :recipient_id";
-    //             $stmt = $this->db->prepare($sql);
-    //             $stmt->bindParam(':transfer_coin', $coin, PDO::PARAM_INT);
-    //             $stmt->bindParam(':recipient_id', $recipientId, PDO::PARAM_INT);
-    //             $stmt->execute();
-
-    //             return true;
-    //         }else{
-    //             //ไม่มี id ผู้รับ
-    //             return false;
-    //         }
-
-    //         $this->db->commit();
-    //     } catch (PDOException $e) {
-    //         $this->db->rollBack();
-    //         echo "<hr>Error in updateTransferCoinMember : " . $e->getMessage();
-    //         return false;
-    //     }
-    // }
 }
 
 ?>

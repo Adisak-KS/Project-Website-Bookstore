@@ -2,11 +2,13 @@
 $titlePage = "โอนเหรียญ";
 
 require_once("db/connectdb.php");
+require_once("db/controller/CoinHistoryController.php");
 require_once("db/controller/MemberController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
 
 $MemberController = new MemberController($conn);
+$CoinHistoryController = new CoinHistoryController($conn);
 
 if (empty($_SESSION['mem_id'])) {
     $_SESSION['error'] = "กรุณาเข้าสู่ระบบ";
@@ -17,7 +19,9 @@ if (empty($_SESSION['mem_id'])) {
 
     $memProfile = $MemberController->getDetailAccountMember($memId);
 
-    if (!$memProfile) {
+    if ($memProfile) {
+        $coinHistory = $CoinHistoryController->getMemberCoinHistory($memId);
+    } else {
         unset($_SESSION['mem_id']);
         $_SESSION['error'] = "ไม่พบข้อมูลบัญชี";
         header("Location: index");
@@ -103,17 +107,22 @@ if (empty($_SESSION['mem_id'])) {
                                             <div class="myaccount-content">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h5>โอนเหรียญ</h5>
+
                                                     <?php if ($memProfile['mem_coin'] > 0) { ?>
                                                         <button href="#" class="btn btn-sqr mb-3" data-bs-toggle="modal" data-bs-target="#addAddrModal">
-                                                            <i class="fa-regular fa-square-plus"></i>
+                                                            <i class="fa-solid fa-right-left"></i>
                                                             โอนเหรียญ
+                                                        </button>
+                                                    <?php } else { ?>
+                                                        <button href="#" class="btn btn-sqr mb-3" disabled>
+                                                            <i class="fa-solid fa-right-left"></i>
+                                                            คุณไม่มีเหรียญที่โอนได้
                                                         </button>
                                                     <?php } ?>
 
-
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="addAddrModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                        <form id="formTransfer_coin" action="process/account_transfer_coins_edit.php" Method="post">
+                                                        <form id="formTransferCoin" action="process/account_transfer_coins_edit.php" Method="post">
                                                             <div class="modal-dialog modal-dialog-scrollable">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -125,30 +134,26 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <div class="modal-body">
                                                                         <div class="account-details-form">
                                                                             <div class="row">
-                                                                                <input type="text" name="my_id" value="<?php echo $memProfile['mem_id'] ?>" readonly>
-                                                                                <input type="number" name="my_coin" value="<?php echo $memProfile['mem_coin'] ?>" readonly>
+                                                                                <input type="hidden" id="mhc_from_mem_id" name="mhc_from_mem_id" value="<?php echo $memProfile['mem_id'] ?>" readonly>
+                                                                                <input type="hidden" id="my_coin" name="my_coin" value="<?php echo $memProfile['mem_coin'] ?>" readonly>
+                                                                                
+                                                                                <h6><i class="fa-brands fa-gg-circle mt-3 me-1 text-warning"></i>เหรียญที่คุณมี : <?php echo number_format($memProfile['mem_coin']) . " เหรียญ"; ?></h6>
+                                                                                
                                                                                 <div class="col-lg-12">
-                                                                                    <div class="col-lg-6">
-                                                                                        <div class="single-input-item">
-                                                                                            <h6><i class="fa-brands fa-gg-circle mt-3 me-1 text-warning"></i>เหรียญที่คุณมี : <?php echo number_format($memProfile['mem_coin']) . " เหรียญ"; ?></h6>
-                                                                                        </div>
+                                                                                    <div class="single-input-item mb-3">
+                                                                                        <label for="mhc_to_mem_id" class="form-label">รหัสสมาชิกผู้รับเหรียญ<span class="text-danger">*</span></label>
+                                                                                        <input type="number" class="form-control" name="mhc_to_mem_id" placeholder="กรุณาระบุ รหัสสมาชิกผู้รับเหรียญ" maxlength="50">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-lg-12">
                                                                                     <div class="single-input-item mb-3">
-                                                                                        <label for="recipient_id" class="form-label">รหัสสมาชิกผู้รับเหรียญ</label>
-                                                                                        <input type="number" class="form-control" name="recipient_id" placeholder="กรุณาระบุ รหัสสมาชิกผู้รับเหรียญ" maxlength="50">
+                                                                                        <label for="mhc_coin_amount" class="form-label">จำนวนเหรียญที่จะโอน<span class="text-danger">*</span></label>
+                                                                                        <input type="number" class="form-control" name="mhc_coin_amount" placeholder="กรุณาระบุ จำนวนเหรียญที่จะโอน" min="1">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-lg-12">
                                                                                     <div class="single-input-item mb-3">
-                                                                                        <label for="coin" class="form-label">จำนวนเหรียญที่จะโอน</label>
-                                                                                        <input type="number" class="form-control" name="coin" placeholder="กรุณาระบุ จำนวนเหรียญที่จะโอน" maxlength="50">
-                                                                                    </div>
-                                                                                </div>
-                                                                                <div class="col-lg-12">
-                                                                                    <div class="single-input-item mb-3">
-                                                                                        <label for="new-pwd" class="form-label">รหัสผ่าน</label>
+                                                                                        <label for="new-pwd" class="form-label">รหัสผ่าน<span class="text-danger">*</span></label>
                                                                                         <div class="input-group">
                                                                                             <input type="password" name="password" class="form-control" placeholder="ระบุ รหัสผ่าน" maxlength="255">
                                                                                             <button class="btn btn-outline-secondary password-toggle" type="button">
@@ -157,98 +162,91 @@ if (empty($_SESSION['mem_id'])) {
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                                <hr>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" data-bs-dismiss="modal" class="btn">ยกเลิก</button>
-                                                                        <button type="submit" name="btn-edit" class="btn btn-sqr"><i class="fa-solid fa-floppy-disk"></i> บันทึก</button>
+                                                                        <button type="submit" name="btn-edit" class="btn btn-sqr"><i class="fa-solid fa-right-left"></i> ยืนยันการโอนเหรียญ</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </form>
                                                     </div>
-                                                    <?php if ($memProfile['mem_coin'] > 0) { ?>
-                                                        <!-- <div class="account-details-form">
-                                                            <form id="formTransfer_coin" action="process/account_transfer_coins_edit.php" Method="post">
-                                                                <div class="row">
-                                                                    <input type="text" name="my_id" value="<?php echo $memProfile['mem_id'] ?>" readonly>
-                                                                    <input type="number" name="my_coin" value="<?php echo $memProfile['mem_coin'] ?>" readonly>
-                                                                    <div class="col-lg-12">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="single-input-item">
-                                                                                <h6><i class="fa-brands fa-gg-circle mt-3 me-1 text-warning"></i>เหรียญที่คุณมี : <?php echo number_format($memProfile['mem_coin']) . " เหรียญ"; ?></h6>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-12">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="single-input-item mb-3">
-                                                                                <label for="recipient_id" class="form-label">รหัสสมาชิกผู้รับเหรียญ</label>
-                                                                                <input type="number" class="form-control" name="recipient_id" placeholder="กรุณาระบุ รหัสสมาชิกผู้รับเหรียญ" maxlength="50">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-12">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="single-input-item mb-3">
-                                                                                <label for="coin" class="form-label">จำนวนเหรียญที่จะโอน</label>
-                                                                                <input type="number" class="form-control" name="coin" placeholder="กรุณาระบุ จำนวนเหรียญที่จะโอน" maxlength="50">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-lg-12">
-                                                                        <div class="col-lg-6">
-                                                                            <div class="single-input-item mb-3">
-                                                                                <label for="new-pwd" class="form-label">รหัสผ่าน</label>
-                                                                                <div class="input-group">
-                                                                                    <input type="password" name="password" class="form-control" placeholder="ระบุ รหัสผ่าน" maxlength="255">
-                                                                                    <button class="btn btn-outline-secondary password-toggle" type="button">
-                                                                                        <i class="fas fa-eye-slash"></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <hr>
-                                                                    <div class="single-input-item mb-3">
-                                                                        <button type="submit" name="btn-edit" class="btn btn-sqr">
-                                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                                            บันทึกการแก้ไข
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div> -->
-                                                    <?php } else { ?>
-                                                        <div class="alert alert-secondary text-center" role="alert">
-                                                            <h4 class="alert-heading">ไม่มีเหรียญ</h4>
-                                                            <p>คุณไม่มีเหรียญที่สามารถโอนได้ กรุณาซื้อสินค้าเพื่อรับเหรียญ</p>
-                                                            <hr>
-                                                            <a href="products_show">สินค้าทั้งหมด</a>
-                                                        </div>
-                                                    <?php } ?>
-
                                                 </div>
-                                                <table id="myAccountTable" class="table table-bordered table-hover table-responsive">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th class="text-center">วัน เวลา</th>
-                                                            <th class="text-center">หัวเรื่อง</th>
-                                                            <th class="text-center">สถานะ</th>
-                                                            <th class="text-center">จัดการ</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+
+                                                <p class="mb-3"><strong><i class="fa-brands fa-gg-circle mt-3 me-1 text-warning"></i>เหรียญที่คุณมี : <?php echo number_format($memProfile['mem_coin']) . " เหรียญ"; ?></strong></p>
+
+                                                <?php if ($coinHistory) { ?>
+                                                    <table id="myAccountTable" class="table table-bordered table-hover table-responsive">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th class="text-center">วัน เวลา</th>
+                                                                <th class="text-center">รายละเอียด</th>
+                                                                <th class="text-center">จำนวนเหรียญ</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($coinHistory as $row) { ?>
+                                                                <tr>
+                                                                    <td class="text-center"><?php echo $row['mhc_time'] ?></td>
+                                                                    <td>
+                                                                        <?php
+                                                                        if ($row['mhc_transaction_type'] == 'transfer') {
+                                                                            // กรณีเป็นการโอนเหรียญ
+                                                                            if ($row['mhc_from_mem_id'] == $_SESSION['mem_id']) {
+                                                                                echo 'โอนเหรียญให้กับสมาชิก : ' . $row['to_mem_username'] . " (ID : " . $row['mhc_to_mem_id'] . ")";
+                                                                            } else {
+                                                                                echo 'ได้รับเหรียญจากสมาชิก : ' . $row['from_mem_username'] . " (ID : " . $row['mhc_from_mem_id'] . ")";
+                                                                            }
+                                                                        } elseif ($row['mhc_transaction_type'] == 'purchase') {
+                                                                            // กรณีเป็นการซื้อสินค้า
+                                                                            echo 'ได้รับเหรียญจากการซื้อสินค้า';
+                                                                            if (!empty($row['ord_id'])) {
+                                                                                echo " รายการสั่งซื้อที่: " . $row['ord_id'];
+                                                                            }
+                                                                        } elseif ($row['mhc_transaction_type'] == 'discount') {
+                                                                            // กรณีใช้เหรียญเป็นส่วนลด
+                                                                            echo 'ใช้เหรียญเป็นส่วนลด';
+                                                                            if (!empty($row['ord_id'])) {
+                                                                                echo " รายการสั่งซื้อที่ : " . $row['ord_id'];
+                                                                            }
+                                                                        } elseif ($row['mhc_transaction_type'] == 'refund') {
+                                                                            // กรณีคืนเหรียญจากการยกเลิก
+                                                                            echo 'ได้รับเหรียญจากการยกเลิก';
+                                                                            if (!empty($row['ord_id'])) {
+                                                                                echo " รายการสั่งซื้อที่ : " . $row['ord_id'];
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <?php
+                                                                        if ($row['mhc_transaction_type'] == 'transfer') {
+                                                                            if ($row['mhc_from_mem_id'] == $_SESSION['mem_id']) {
+                                                                                echo "<span class='text-danger'>-" . number_format($row['mhc_coin_amount']) . "</span>";
+                                                                            } else {
+                                                                                echo "<span class='text-success'>+" . number_format($row['mhc_coin_amount']) . "</span>";
+                                                                            }
+                                                                        } elseif ($row['mhc_transaction_type'] == 'discount') {
+                                                                            echo "<span class='text-danger'>-" . number_format($row['mhc_coin_amount']) . "</span>";
+                                                                        } elseif ($row['mhc_transaction_type'] == 'purchase' || $row['mhc_transaction_type'] == 'refund') {
+                                                                            echo "<span class='text-success'>+" . number_format($row['mhc_coin_amount']) . "</span>";
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                <?php } else { ?>
+                                                    <div class="alert alert-secondary text-center" role="alert">
+                                                        <h4 class="alert-heading">ไม่มีประวัติการใช้เหรียญ</h4>
+                                                        <p>ประวัติการใช้เหรียญจะแสดงเมื่อคุณมีการได้รับหรือใช้เหรียญที่นี่</p>
+                                                        <hr>
+                                                        <a href="products_show">สินค้าทั้งหมด</a>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +277,10 @@ if (empty($_SESSION['mem_id'])) {
 
     <script>
         new DataTable('#myAccountTable', {
-            responsive: true
+            responsive: true,
+            order: [
+                [0, 'DESC']
+            ]
         });
     </script>
 </body>

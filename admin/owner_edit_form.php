@@ -5,6 +5,10 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/OwnerController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
+
 
 if (isset($_GET['id'])) {
 
@@ -19,6 +23,13 @@ if (isset($_GET['id'])) {
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($owners);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 2]; // [Super Admin, Owner]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: owner_show');
     exit;
@@ -91,6 +102,13 @@ if (isset($_GET['id'])) {
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
 
+
+                                <?php
+                                // เช็คสิทธิ์การใช้ระบบ
+                                $allowedAuthorities = [1]; // [Super Admin, Owner]
+                                $hasAuthority = checkAuthorityEmployeesSystems($useAuthority, $allowedAuthorities);
+                                ?>
+
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
@@ -101,14 +119,14 @@ if (isset($_GET['id'])) {
                                         <div class="form-check mb-2 form-check-success">
                                             <input class="form-check-input" type="radio" name="status" id="1" value="1" <?php if ($owners['emp_status'] == 1) {
                                                                                                                             echo 'checked';
-                                                                                                                        } ?>>
+                                                                                                                        } ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
                                             <label class="form-check-label" for="1">ใช้งานได้</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
                                             <input class="form-check-input" type="radio" name="status" id="0" value="0" <?php if ($owners['emp_status'] != 1) {
                                                                                                                             echo 'checked';
-                                                                                                                        } ?>>
+                                                                                                                        } ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
                                             <label class="form-check-label" for="0">ระงับการใช้งาน</label>
                                         </div>
 
@@ -147,32 +165,26 @@ if (isset($_GET['id'])) {
                                         <div class="form-check mb-2 form-check-pink">
                                             <input class="form-check-input" type="radio" name="new_eat_id" id="1" value="2" <?php if ($owners['authority'] == 2) {
                                                                                                                                 echo 'checked';
-                                                                                                                            } ?>>
+                                                                                                                            } ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
                                             <label class="form-check-label" for="1">Owner (เจ้าของ / ผู้บริหาร)</label>
                                         </div>
+
+
                                         <div class="form-check mb-2 form-check-warning">
-                                            <input class="form-check-input" type="radio" name="new_eat_id" id="3" value="3" <?php if ($owners['authority'] == 3) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
-                                            <label class="form-check-label" for="1">Admin (ผู้ดูแลระบบ)</label>
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="3" value="3" <?php if ($owners['authority'] == 3) echo 'checked'; ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
+                                            <label class="form-check-label" for="3">Admin (ผู้ดูแลระบบ)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-danger">
-                                            <input class="form-check-input" type="radio" name="new_eat_id" id="4" value="4" <?php if ($owners['authority'] == 4) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
-                                            <label class="form-check-label" for="1">Accounting (พนักงานฝ่ายการเงิน)</label>
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="4" value="4" <?php if ($owners['authority'] == 4) echo 'checked'; ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
+                                            <label class="form-check-label" for="4">Accounting (พนักงานฝ่ายการเงิน)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-success">
-                                            <input class="form-check-input" type="radio" name="new_eat_id" id="5" value="5" <?php if ($owners['authority'] == 5) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
-                                            <label class="form-check-label" for="1">Sale (พนักงานฝ่ายขาย)</label>
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="5" value="5" <?php if ($owners['authority'] == 5) echo 'checked'; ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
+                                            <label class="form-check-label" for="5">Sale (พนักงานฝ่ายขาย)</label>
                                         </div>
                                         <div class="form-check mb-2 form-check-primary">
-                                            <input class="form-check-input" type="radio" name="new_eat_id" id="6" value="6" <?php if (!in_array($owners['authority'], [2, 3, 4, 5])) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
-                                            <label class="form-check-label" for="1">Employee (สิทธิ์เริ่มต้น)</label>
+                                            <input class="form-check-input" type="radio" name="new_eat_id" id="6" value="6" <?php if (!in_array($owners['authority'], [2, 3, 4, 5])) echo 'checked'; ?> <?php if (!$hasAuthority) echo 'disabled'; ?>>
+                                            <label class="form-check-label" for="6">Employee (สิทธิ์เริ่มต้น)</label>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->

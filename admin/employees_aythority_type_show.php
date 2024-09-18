@@ -1,11 +1,22 @@
 <?php
 $titlePage = "สิทธิ์พนักงานในระบบ";
+//
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AuthorityTypeController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 $AuthorityTypeController = new AuthorityTypeController($conn);
 $authorityType = $AuthorityTypeController->getAuthorityTypeEmployees();
+
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1]; // Super Admin
+checkAuthorityEmployees($useAuthority, $allowedAuthorities)
 
 ?>
 <!DOCTYPE html>

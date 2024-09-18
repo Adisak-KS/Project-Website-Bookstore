@@ -8,11 +8,9 @@
                      <div class="footer-top-menu bb-2">
                          <nav>
                              <ul>
-                                 <li><a href="#">home</a></li>
-                                 <li><a href="#">Enable Cookies</a></li>
-                                 <li><a href="#">Privacy and Cookie Policy</a></li>
-                                 <li><a href="#">contact us</a></li>
-                                 <li><a href="#">blog</a></li>
+                                 <li><a href="index">หน้าแรก</a></li>
+                                 <li><a href="contact">ติดต่อเรา</a></li>
+                               
                              </ul>
                          </nav>
                      </div>
@@ -30,14 +28,13 @@
                          <div class="col-lg-4 col-md-4 col-12">
                              <div class="single-footer br-2 xs-mb">
                                  <div class="footer-title mb-20">
-                                     <h3>Products</h3>
+                                     <h3>บริการ</h3>
                                  </div>
                                  <div class="footer-mid-menu">
                                      <ul>
-                                         <li><a href="about.html">About us</a></li>
-                                         <li><a href="#">Prices drop </a></li>
-                                         <li><a href="#">New products</a></li>
-                                         <li><a href="#">Best sales</a></li>
+                                         <li><a href="products_show">สินค้าทั้งหมด</a></li>
+                                         <li><a href="products_preorder_show">สินค้าพรีออเดอร์ </a></li>
+                                         <li><a href="product_request_form">ตามหาหนังสือ</a></li>
                                      </ul>
                                  </div>
                              </div>
@@ -45,14 +42,13 @@
                          <div class="col-lg-4 col-md-4 col-12">
                              <div class="single-footer br-2 xs-mb">
                                  <div class="footer-title mb-20">
-                                     <h3>Our company</h3>
+                                     <h3>ทางลัด</h3>
                                  </div>
                                  <div class="footer-mid-menu">
                                      <ul>
-                                         <li><a href="contact.html">Contact us</a></li>
-                                         <li><a href="#">Sitemap</a></li>
-                                         <li><a href="#">Stores</a></li>
-                                         <li><a href="register.html">My account </a></li>
+                                         <li><a href="login_form">เข้าสู่ระบบ</a></li>
+                                         <li><a href="register_form">สมัครสมาชิก</a></li>
+                                         <li><a href="cart">รถเข็น</a></li>
                                      </ul>
                                  </div>
                              </div>
@@ -60,14 +56,13 @@
                          <div class="col-lg-4 col-md-4 col-12">
                              <div class="single-footer br-2 xs-mb">
                                  <div class="footer-title mb-20">
-                                     <h3>Your account</h3>
+                                     <h3>บัญชีของคุณ</h3>
                                  </div>
                                  <div class="footer-mid-menu">
                                      <ul>
-                                         <li><a href="contact.html">Addresses</a></li>
-                                         <li><a href="#">Credit slips </a></li>
-                                         <li><a href="#"> Orders</a></li>
-                                         <li><a href="#">Personal info</a></li>
+                                         <li><a href="account_show">ข้อมูลส่วนตัว</a></li>
+                                         <li><a href="account_address">ที่อยู่</a></li>
+                                         <li><a href="account_order_history">รายการสั่งซื้อ</a></li>
                                      </ul>
                                  </div>
                              </div>

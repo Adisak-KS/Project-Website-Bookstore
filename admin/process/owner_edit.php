@@ -26,7 +26,7 @@ if (isset($_POST['btn-edit'])) {
     valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError);
 
     // update Detail Owner
-    $updateDetailOwner = $OwnerController->updateDetailOwner($Id, $fname, $lname, $status);
+    $updateDetailOwner = $OwnerController->updateDetailOwner($Id, $fname, $lname);
     if ($updateDetailOwner) {
 
         // หากมีการเปลี่ยนรูปใหม่
@@ -66,8 +66,13 @@ if (isset($_POST['btn-edit'])) {
             }
         }
 
+        // หากมีการแก้ไขสถานะ
+        if (isset($status)) {
+            $updateStatus = $OwnerController->updateDetailOwnerStatus($Id, $status);
+        }
+
         // หากเป็นการแก้ไขสิทธิ์ใหม่
-        if ($newEatId != $oldEatId) {
+        if (!empty($newEatId) && $newEatId != $oldEatId) {
             $updateAuthorityOwner = $OwnerController->updateAuthorityOwner($Id, $newEatId);
         }
     }

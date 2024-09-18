@@ -3,10 +3,19 @@ $titlePage = "ช่องทางติดต่อ";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ContactController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $ContactController = new ContactController($conn);
 
 $contacts = $ContactController->getContact();
 
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 6]; // [Super Admin, Owner, Admin, Employee]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 
 ?>
 <!DOCTYPE html>

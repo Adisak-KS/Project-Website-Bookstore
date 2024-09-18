@@ -2,22 +2,34 @@
 $titlePage = "หน้าแรก";
 require_once("../db/connectdb.php");
 require_once("../db/controller/SettingWebsiteController.php");
+require_once("../db/controller/OrderController.php");
 require_once("../db/controller/ProductController.php");
 require_once("../db/controller/ProductRequestController.php");
+require_once("../db/controller/ReviewController.php");
+
 
 $SettingWebsiteController = new SettingWebsiteController($conn);
+$OrderController = new OrderController($conn);
 $ProductController = new ProductController($conn);
 $ProductRequestController = new ProductRequestController($conn);
+$ReviewController = new ReviewController($conn);
 
+// order รอตรวจสอบการชำระเงิน
+$amountOrderUnderReview = $OrderController->getAmountOrderStatusUnderReview();
+$amountOrderAwaitingShipment = $OrderController->getAmountOrderStatusAwaitingShipment();
 
 // หาหนังสือ
 $amountProductRequest = $ProductRequestController->getAmountProductRequest();
+
+// ความคิดเห็น
+$amountReviewNotShowing = $ReviewController->getAmountReviewStatusNotShowing();
 
 // สินค้าในคลัง
 $QueryProductNumber = $SettingWebsiteController->getProductNumberLow();
 $prdNumberLow = $QueryProductNumber;
 
 $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,15 +67,15 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                             <a href="order_show">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <h4 class="header-title mt-0 mb-3">รอตรวจสอบชำระเงิน<?php echo $useLoginEmployee['authority'] ?></h4>
+                                        <h4 class="header-title mt-0 mb-3">รอตรวจสอบชำระเงิน</h4>
 
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
                                                 <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
-                                                <?php if ($productsLowNumber) { ?>
-                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                <?php if ($amountOrderUnderReview) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($amountOrderUnderReview) ?> รายการ</span>
                                                 <?php } else { ?>
-                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($amountOrderUnderReview) ?> รายการ</span>
                                                 <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
@@ -78,17 +90,20 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                         </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="#">
+                            <a href="order_awaiting_shipment_show">
                                 <div class="card">
                                     <div class="card-body text-center">
                                         <h4 class="header-title mt-0 mb-3">รอการจัดส่ง</h4>
 
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
-                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
-                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
-                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
-                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-truck-fast"></i> </h2>
+                                                <?php if ($amountOrderAwaitingShipment) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($amountOrderAwaitingShipment) ?> รายการ</span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($amountOrderAwaitingShipment) ?> รายการ</span>
+                                                <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
                                                 <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -110,7 +125,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
                                                 <h2 class="fw-normal mb-1 text-center">
-                                                    <i class="fa-solid fa-cart-shopping"></i>
+                                                    <i class="fa-solid fa-book"></i>
                                                 </h2>
 
                                                 <?php if ($amountProductRequest) { ?>
@@ -131,17 +146,20 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                         </div><!-- end col -->
 
                         <div class="col-xl-3 col-md-6">
-                            <a href="#">
+                            <a href="review_show">
                                 <div class="card">
                                     <div class="card-body text-center">
-                                        <h4 class="header-title mt-0 mb-3">ความคิดเห็น</h4>
+                                        <h4 class="header-title mt-0 mb-3">ความคิดเห็นรอตรวจสอบ</h4>
 
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
-                                                <!-- <span class="badge bg-pink rounded-pill float-start mt-3"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span> -->
-                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
-                                                <!-- <p class="text-muted mb-3 text-center mt-2 text-danger">10 รายการ</p> -->
-                                                <span class="badge bg-danger rounded-pill mt-2"> 10 รายการ <i class="mdi mdi-trending-up"></i> </span>
+
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-comment-dots"></i> </h2>
+                                                <?php if ($amountReviewNotShowing) { ?>
+                                                    <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($amountReviewNotShowing) ?> รายการ</span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($amountReviewNotShowing) ?> รายการ</span>
+                                                <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
                                                 <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
@@ -162,7 +180,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
 
                                         <div class="widget-box-2">
                                             <div class="widget-detail-2 text-center">
-                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-cart-shopping"></i> </h2>
+                                                <h2 class="fw-normal mb-1 text-center"> <i class="fa-solid fa-arrow-trend-down"></i> </h2>
 
                                                 <?php if ($productsLowNumber) { ?>
                                                     <span class="badge bg-danger rounded-pill mt-2"><?php echo number_format($productsLowNumber) ?> รายการ</span>

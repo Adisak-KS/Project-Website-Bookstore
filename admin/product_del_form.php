@@ -5,6 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -23,6 +26,11 @@ if (isset($_GET['id'])) {
     $productType = $ProductController->getProductType();
     $publisher = $ProductController->getPublisher();
     $author = $ProductController->getAuthor();
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: product_show');
     exit;
@@ -245,12 +253,12 @@ if (isset($_GET['id'])) {
                                             <label for="prd_price" class="form-label">รายละเอียดสินค้า :</label>
                                             <br>
                                             <?php
-                                                if($product['prd_detail'] == "ไม่พบรายละเอียดสินค้า"){
-                                                    echo '<span class="text-danger">* ไม่พบรายละเอียดสินค้า</span>';
-                                                }else{
-                                                    echo $product['prd_detail'];
-                                                }
-                                             ?>
+                                            if ($product['prd_detail'] == "ไม่พบรายละเอียดสินค้า") {
+                                                echo '<span class="text-danger">* ไม่พบรายละเอียดสินค้า</span>';
+                                            } else {
+                                                echo $product['prd_detail'];
+                                            }
+                                            ?>
                                         </div>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
@@ -264,7 +272,7 @@ if (isset($_GET['id'])) {
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $product["prd_id"]; ?>" data-img1="<?php echo $product["prd_img1"]; ?>"  data-img2="<?php echo $product["prd_img2"]; ?>">
+                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $product["prd_id"]; ?>" data-img1="<?php echo $product["prd_img1"]; ?>" data-img2="<?php echo $product["prd_img2"]; ?>">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>ลบข้อมูล</span>
                                             </button>
@@ -293,8 +301,8 @@ if (isset($_GET['id'])) {
 
         <?php require_once('layouts/vendor.php') ?>
 
-          <!-- Delete  -->
-          <script>
+        <!-- Delete  -->
+        <script>
             $(document).ready(function() {
                 $(".btn-delete").click(function(e) {
                     e.preventDefault();

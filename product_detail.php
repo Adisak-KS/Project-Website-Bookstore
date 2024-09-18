@@ -5,10 +5,14 @@ require_once("db/connectdb.php");
 require_once("db/controller/ProductController.php");
 require_once("db/controller/WishlistController.php");
 require_once("db/controller/CartController.php");
+require_once("db/controller/ReviewController.php");
+require_once("db/controller/ReportViewController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
 
 $CartController = new CartController($conn);
+$ReviewController = new ReviewController($conn);
+$ReportViewController = new ReportViewController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -35,6 +39,9 @@ if (isset($_GET['id'])) {
     $productAdvertising = $ProductController->getProductAdvertising($prdPreorder, $prdId);
 
 
+    $inertReportView = $ReportViewController->insertReportView($prdId, $ptyId);
+
+
     // ตรวจสอบรายการ wishlist
     if (isset($_SESSION['mem_id'])) {
         $WishlistController = new WishlistController($conn);
@@ -45,6 +52,13 @@ if (isset($_GET['id'])) {
         $myCartQty = $CartController->getCartItemQty($memId, $prdId); // จำนวนสินค้าที่อยู่ในตะกร้า
     } else {
         $myCartQty = 0;  // จำนวนสินค้าที่อยู่ในตะกร้า ในกรณีไม่ได้ login
+    }
+
+
+    $checkReview = $ReviewController->checkReviewInProductDetail($prdId);
+
+    if ($checkReview) {
+        $review = $ReviewController->getReviewInProductDetail($prdId);
     }
 } else {
     header('Location: index');
@@ -250,118 +264,32 @@ if (isset($_GET['id'])) {
                             <div class="tab-pane fade" id="Reviews">
                                 <div class="valu valu-2">
                                     <div class="section-title mb-60 mt-60">
-                                        <h2>Customer Reviews</h2>
+                                        <h2>รีวิวจากผู้ซื้อจริง</h2>
                                     </div>
-                                    <ul>
-                                        <li>
-                                            <div class="review-title">
-                                                <h3>themes</h3>
+                                    <?php if ($review) { ?>
+                                        <?php foreach ($review as $row) { ?>
+                                            <div class="border border-2 py-2 px-2">
+                                                <div class="d-flex justify-content-between">
+                                                    <p><strong>ผู้ซื้อ : </strong><?php echo $row['mem_username']; ?></p>
+                                                    <p><strong>วัน / เวลา : </strong><?php echo $row['prv_time_create']; ?></p>
+                                                </div>
+                                                <p>
+                                                    <strong>ระดับความพึงพอใจ : </strong>
+                                                    <?php
+                                                    $rating = $row['prv_rating'];
+
+                                                    for ($i = 1; $i <= 5; $i++) {
+                                                        $color = $i <= $rating ? '#f07c29' : ''; // สีตามค่าของ $row['prv_rating']
+                                                        echo '<i class="fa-solid fa-star" style="color:' . $color . '"></i>';
+                                                    }
+                                                    ?>
+                                                </p>
+                                                <p><strong>รายละเอียด : </strong><?php echo $row['prv_detail']; ?></p>
                                             </div>
-                                            <div class="review-left">
-                                                <div class="review-rating">
-                                                    <span>Price</span>
-                                                    <div class="rating-result">
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="review-rating">
-                                                    <span>Value</span>
-                                                    <div class="rating-result">
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="review-rating">
-                                                    <span>Quality</span>
-                                                    <div class="rating-result">
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                        <a href="#"><i class="fa fa-star"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="review-right">
-                                                <div class="review-content">
-                                                    <h4>themes </h4>
-                                                </div>
-                                                <div class="review-details">
-                                                    <p class="review-author">Review by<a href="#">plaza</a></p>
-                                                    <p class="review-date">Posted on <span>12/9/16</span></p>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="review-add">
-                                        <h3>You're reviewing:</h3>
-                                        <h4>Joust Duffle Bag</h4>
-                                    </div>
-                                    <div class="review-field-ratings">
-                                        <span>Your Rating <sup>*</sup></span>
-                                        <div class="control">
-                                            <div class="single-control">
-                                                <span>Value</span>
-                                                <div class="review-control-vote">
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="single-control">
-                                                <span>Quality</span>
-                                                <div class="review-control-vote">
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="single-control">
-                                                <span>Price</span>
-                                                <div class="review-control-vote">
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                    <a href="#"><i class="fa fa-star"></i></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="review-form">
-                                        <div class="single-form">
-                                            <label>Nickname <sup>*</sup></label>
-                                            <form action="#">
-                                                <input type="text" />
-                                            </form>
-                                        </div>
-                                        <div class="single-form single-form-2">
-                                            <label>Summary <sup>*</sup></label>
-                                            <form action="#">
-                                                <input type="text" />
-                                            </form>
-                                        </div>
-                                        <div class="single-form">
-                                            <label>Review <sup>*</sup></label>
-                                            <form action="#">
-                                                <textarea name="massage" cols="10" rows="4"></textarea>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="review-form-button">
-                                        <a href="#">Submit Review</a>
-                                    </div>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <p class="text-danger">*ไม่พบรีวิวสินค้าจากผู้ซื้อ สั่งซื้อสินค้าเพื่อรีวิว</p>
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>
@@ -611,7 +539,7 @@ if (isset($_GET['id'])) {
                 if (isNaN(value) || value < 1 || !Number.isInteger(value)) {
                     input.val(1);
                 } else if (value > maxQty) {
-                    input.val(maxQty); 
+                    input.val(maxQty);
                 }
             }
 

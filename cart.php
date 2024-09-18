@@ -16,9 +16,6 @@ if (empty($_SESSION['mem_id'])) {
 
     $memId = $_SESSION['mem_id'];
     $productCart = $CartController->getCartItem($memId);
-    $shippings = $CartController->getShipping();
-    $payments = $CartController->getPayment();
-    $Promotions = $CartController->getPromotion();
 }
 ?>
 <!doctype html>
@@ -72,9 +69,10 @@ if (empty($_SESSION['mem_id'])) {
         <!-- cart-main-area-start -->
         <div class="cart-main-area mb-70">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <form action="#">
+                <form action="process/cart_edit.php" method="post">
+                    <input type="hidden" name="mem_id" value="<?php echo $_SESSION['mem_id'] ?>" readonly>
+                    <div class="row">
+                        <div class="col-lg-12">
                             <div class="table-content table-responsive mb-15 border-1">
                                 <table class="table table-hover table-responsive">
                                     <thead>
@@ -92,10 +90,13 @@ if (empty($_SESSION['mem_id'])) {
                                         <?php foreach ($productCart as $row) { ?>
                                             <?php
                                             $originalId = $row["prd_id"];
-                                            require_once("includes/salt.php");   // รหัส Salt 
-                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            require_once("includes/salt.php");
+                                            $saltedId = $salt1 . $originalId . $salt2;
+                                            $base64Encoded = base64_encode($saltedId);
                                             ?>
+
+                                            <input type="hidden" name="prd_id[]" value="<?php echo $row['prd_id'] ?>" readonly>
+                                            <input type="hidden" name="prd_quantity[]" value="<?php echo $row['prd_quantity']; ?>" readonly>
                                             <tr>
                                                 <td class="product-thumbnail">
                                                     <a href="product_detail?id=<?php echo $base64Encoded; ?>">
@@ -103,7 +104,11 @@ if (empty($_SESSION['mem_id'])) {
                                                     </a>
                                                 </td>
                                                 <td class="product-name">
-                                                    <a href="product_detail?id=<?php echo $base64Encoded; ?>"><?php echo $row['prd_name'] ?></a>
+                                                    <?php if ($row['prd_preorder'] == 0) { ?>
+                                                        <a href="product_detail?id=<?php echo $base64Encoded; ?>"><?php echo "<span class='text-warning'>[พรีออเดอร์] </span>" . $row['prd_name'] ?></a>
+                                                    <?php } else { ?>
+                                                        <a href="product_detail?id=<?php echo $base64Encoded; ?>"><?php echo $row['prd_name'] ?></a>
+                                                    <?php } ?>
                                                 </td>
                                                 <td class="product-price">
                                                     <span class="amount"><?php echo "฿" . number_format($row['price_sale'], 2) ?></span>
@@ -112,16 +117,12 @@ if (empty($_SESSION['mem_id'])) {
                                                     <?php } ?>
                                                 </td>
                                                 <td class="product-quantity">
-                                                    <input name="crt_qty"
-                                                        data-max="<?php echo $row['prd_quantity']; ?>"
-                                                        data-price="<?php echo $row['price_sale']; ?>"
-                                                        data-coin="<?php echo $row['prd_coin']; ?>"
-                                                        style="background-color: transparent;"
-                                                        type="number"
-                                                        value="<?php echo $row['crt_qty'] ?>">
+                                                    <input type="number" name="crt_qty[]" class="crt_qty" data-price="<?php echo $row['price_sale']; ?>" data-coin="<?php echo $row['prd_coin']; ?>" data-max="<?php echo $row['prd_quantity']; ?>" style="background-color: transparent;" value="<?php echo $row['crt_qty'] ?>">
+
                                                 </td>
-                                                <td class="product-subtotal coin"><?php echo number_format($row['prd_coin'] * $row['crt_qty']) ?></td>
-                                                <td class="product-subtotal total-sum"><?php echo "฿" . number_format($row['price_sale'] * $row['crt_qty'], 2) ?></td>
+                                                <td class="product-subtotal coin" data-coin="<?php echo $row['prd_coin']; ?>"><?php echo number_format($row['coins_per_item']); ?></td>
+
+                                                <td class="product-subtotal total-sum"><?php echo "฿" . number_format($row['total_price_sale'], 2) ?></td>
                                                 <td class="product-remove">
                                                     <button type="button" data-id="<?php echo $row["crt_id"]; ?>" class="border border-0 btn-delete" style="background-color: transparent;">
                                                         <i class="fa-solid fa-trash text-danger"></i>
@@ -131,137 +132,55 @@ if (empty($_SESSION['mem_id'])) {
                                         <?php } ?>
 
 
-
                                     </tbody>
                                 </table>
                             </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-8 col-md-6 col-12">
-                        <div class="buttons-cart mb-30">
-                            <ul>
-                                <!-- <li><a href="#">Update Cart</a></li> -->
-                                <li><a href="products_show">ซื้อสินค้าต่อ</a></li>
-                            </ul>
                         </div>
-                        <?php if ($row["mem_coin"] > 0) { ?>
-                            <div class="coupon">
-                                <h3>ใช้เหรียญเป็นส่วนลด (คุณมีอยู่ <?php echo $row["mem_coin"] ?> เหรียญ)</h3>
-                                <form id="coinForm" action="#">
-                                    <input type="number" id="coinInput" placeholder="ระบุจำนวนเหรียญ" min="0">
-                                    <a href="#" id="applyCoin">ยืนยันใช้เหรียญ</a>
-                                </form>
-                            </div>
-                        <?php } ?>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="cart_totals">
-                            <h2>สรุปรายการสั่งซื้อ</h2>
-                            <table>
-                                <tbody>
-                                    <tr class="cart-subtotal">
-                                        <th>ค่าสินค้าทั้งหมด : </th>
-                                        <td>
-                                            <span class="amount total-price-cost"></span>
-                                        </td>
-                                    </tr>
-                                    <tr class="cart-subtotal">
-                                        <th>เหรียญที่ใช้เป็นส่วนลด : </th>
-                                        <td>
-                                            <span class="amount coins-discount">0</span>
-                                        </td>
-                                    </tr>
-                                    <?php if ($Promotions) { ?>
-                                        <tr class="shipping">
-                                            <th class="mt-1">โปรโมชั่นส่วนลด : </th>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 col-12">
+                            <div class="buttons-cart mb-30">
+                                <ul>
+                                    <li>
+                                        <a href="products_show">
+                                            <i class="fa-solid fa-right-from-bracket fa-rotate-180"></i>
+                                            เลือกซื้อสินค้าต่อ
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-12">
+                            <div class="cart_totals">
+                                <h2>สรุปรายการสินค้า</h2>
+                                <table>
+                                    <tbody>
+                                        <tr class="cart-subtotal">
+                                            <th class="pe-5">เหรียญที่จะได้รับ : </th>
                                             <td>
-                                                <ul id="">
-                                                    <li class="d-flex justify-content-end">
-                                                        <select id="promotion-select" class="form-select form-select-sm" aria-label="Default select example">
-                                                            <option value="">ไม่ใช้โปรโมชั่น</option>
-                                                            <?php foreach ($Promotions as $row) { ?>
-                                                                <option value="<?php echo $row['pro_percent_discount']; ?>">
-                                                                    <?php echo $row['pro_name'] . " (-" . $row['pro_percent_discount'] . "%)"; ?>
-                                                                </option>
-                                                            <?php } ?>
-                                                        </select>
-                                                    </li>
-                                                    <!-- <li>
-                                                    <input type="radio">
-                                                    <label> Free Shipping </label>
-                                                </li> -->
-                                                </ul>
-                                                <!-- <a href="#">Calculate Shipping</a> -->
+                                                <span class="text-success coins-received">+0</span>
                                             </td>
                                         </tr>
-                                    <?php } ?>
-                                    <tr class="shipping">
-                                        <th class="mt-1">ช่องทางการส่ง : </th>
-                                        <td>
-                                            <ul id="shipping_method">
-                                                <li class="d-flex justify-content-end">
-                                                    <select id="shipping-select" class="form-select form-select-sm" aria-label="Default select example">
-                                                        <?php foreach ($shippings as $row) { ?>
-                                                            <option value="<?php echo $row['shp_price']; ?>">
-                                                                <?php echo $row['shp_name'] . " (฿" . $row['shp_price'] . ")" ?>
-                                                            </option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </li>
-                                                <!-- <li>
-                                                    <input type="radio">
-                                                    <label> Free Shipping </label>
-                                                </li> -->
-                                            </ul>
-                                            <!-- <a href="#">Calculate Shipping</a> -->
-                                        </td>
-                                    </tr>
-                                    <tr class="shipping">
-                                        <th class="mt-1">ช่องทางชำระเงิน : </th>
-                                        <td>
-                                            <ul id="">
-                                                <li class="d-flex justify-content-end">
-                                                    <select class="form-select w-75 form-select-sm" aria-label="Default select example">
-                                                        <?php foreach ($payments as $row) { ?>
-                                                            <option value="<?php echo $row['pmt_id']; ?>"><?php echo $row['pmt_bank']; ?></option>
-                                                        <?php } ?>
-                                                        <!-- <option selected>Open this select menu</option> -->
-                                                    </select>
-                                                </li>
-                                                <!-- <li>
-                                                    <input type="radio">
-                                                    <label> Free Shipping </label>
-                                                </li> -->
-                                            </ul>
-                                            <!-- <a href="#">Calculate Shipping</a> -->
-                                        </td>
-                                    </tr>
-
-
-                                    <tr class="cart-subtotal">
-                                        <th>เหรียญที่จะได้รับ : </th>
-                                        <td>
-                                            <span class="text-success">+215</span>
-                                        </td>
-                                    </tr>
-                                    <tr class="order-total">
-                                        <th class="text-danger">ราคาทั้งหมด</th>
-                                        <td>
-                                            <strong>
-                                                <span class="amount net-price"></span>
-                                            </strong>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="wc-proceed-to-checkout">
-                                <a href="#" class="w-100 text-center fs-6">ยืนยันรายการสั่งซื้อสินค้า</a>
+                                        <tr class="order-total">
+                                            <th class="text-danger pe-5">ราคาทั้งหมด</th>
+                                            <td>
+                                                <strong>
+                                                    <span class="amount total-price-product">0</span>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="wc-proceed-to-checkout">
+                                    <button type="submit" name="btn-cart-edit" class=" text-center fs-6">
+                                        <i class="fa-solid fa-check"></i>
+                                        ยืนยันรายการสินค้า
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <!-- cart-main-area-end -->
@@ -355,324 +274,65 @@ if (empty($_SESSION['mem_id'])) {
 
     <script>
         $(document).ready(function() {
-            function validateQty(input) {
-                let maxQty = parseInt(input.data('max'));
-                let value = parseFloat(input.val());
+            function updateCart() {
+                let totalPrice = 0;
+                let totalCoins = 0;
 
-                value = parseInt(value);
+                $('.crt_qty').each(function() {
+                    const $this = $(this);
+                    let quantity = $this.val();
+                    const pricePerItem = parseFloat($this.data('price'));
+                    const coinPerItem = parseFloat($this.data('coin'));
+                    const maxQuantity = parseInt($this.data('max'), 10);
 
-                if (isNaN(value) || value < 1) {
-                    input.val(1);
-                } else if (value > maxQty) {
-                    input.val(maxQty);
-                } else {
-                    input.val(value);
-                }
+                    // ลบจุดทศนิยมออกและปรับค่าเป็นจำนวนเต็ม
+                    quantity = quantity.replace(/\./g, '');
 
-                updateTotalSum(input);
-                updateCoin(input);
-                updateGrandTotal();
-            }
+                    // ตรวจสอบค่าที่กรอก
+                    if (quantity === '' || parseFloat(quantity) <= 0) {
+                        quantity = 1;
+                    } else if (parseFloat(quantity) > maxQuantity) {
+                        quantity = maxQuantity;
+                    }
 
-            function updateTotalSum(input) {
-                let quantity = parseInt(input.val());
-                let pricePerItem = parseFloat(input.data('price'));
-                let totalSum = quantity * pricePerItem;
-                input.closest('tr').find('.total-sum').text("฿" + totalSum.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
+                    // คำนวณราคาและเหรียญรวม
+                    const itemTotalPrice = parseFloat(quantity) * pricePerItem;
+                    const itemTotalCoins = parseFloat(quantity) * coinPerItem;
 
-            function updateCoin(input) {
-                let quantity = parseInt(input.val());
-                let coinPerItem = parseInt(input.data('coin'));
-                let totalCoin = quantity * coinPerItem;
-                input.closest('tr').find('.coin').text(totalCoin.toLocaleString());
-            }
+                    // อัปเดตค่าใน input, <td> ของเหรียญ, และ <td> ของราคา
+                    $this.val(quantity);
+                    $this.closest('tr').find('.product-subtotal.coin').text(number_format_coins(itemTotalCoins));
+                    $this.closest('tr').find('.product-subtotal.total-sum').text('฿' + number_format_price(itemTotalPrice));
 
-            function updateGrandTotal() {
-                let grandTotal = 0;
-                $(".total-sum").each(function() {
-                    let sum = parseFloat($(this).text().replace('฿', '').replace(',', ''));
-                    grandTotal += sum;
+                    // รวมราคาและเหรียญทั้งหมด
+                    totalPrice += itemTotalPrice;
+                    totalCoins += itemTotalCoins;
                 });
-                $(".total-price-cost").data('value', grandTotal);
-                $(".total-price-cost").text("฿" + grandTotal.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-                updateNetPrice();
+
+                // อัปเดตค่าเหรียญรวมใน <span>
+                $('.coins-received').text('+' + number_format_coins(totalCoins));
+
+                // อัปเดตราคาสุทธิรวมใน <span>
+                $('.total-price-product').text('฿' + number_format_price(totalPrice));
             }
 
-            function updateNetPrice() {
-                let totalPrice = parseFloat($('.total-price-cost').data('value')) || 0;
-                let shippingPrice = parseFloat($('#shipping-select').val()) || 0;
-                let discountPercent = parseFloat($('#promotion-select').val()) || 0;
+            // เรียกใช้ฟังก์ชันเมื่อมีการเปลี่ยนแปลงค่าใน input
+            $('.crt_qty').on('input', updateCart);
 
-                // คำนวณราคาหลังหักส่วนลด
-                let discountAmount = totalPrice * (discountPercent / 100);
-                let discountedTotal = totalPrice - discountAmount;
-
-                // คำนวณราคาสุทธิรวมค่าขนส่ง
-                let netPrice = discountedTotal + shippingPrice;
-                $('.net-price').text("฿" + netPrice.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
+            function number_format_price(number) {
+                // ฟังก์ชันสำหรับการจัดรูปแบบจำนวนเงินให้มีทศนิยม 2 ตำแหน่ง
+                return number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
 
-            $("input[name='crt_qty']").on('input change keyup', function(e) {
-                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
-                    e.preventDefault();
-                }
-                validateQty($(this));
-            });
+            function number_format_coins(number) {
+                // ฟังก์ชันสำหรับการจัดรูปแบบจำนวนเหรียญให้ไม่มีทศนิยม
+                return Math.round(number).toLocaleString();
+            }
 
-            $('#shipping-select, #promotion-select').on('change', function() {
-                updateNetPrice();
-            });
-
-            updateGrandTotal();
+            // เรียกใช้ฟังก์ชันเริ่มต้นเพื่อแสดงผลรวมเริ่มต้น
+            updateCart();
         });
     </script>
-
-    <!-- <script>
-        $(document).ready(function() {
-            function validateQty(input) {
-                let maxQty = parseInt(input.data('max'));
-                let value = parseFloat(input.val());
-
-                value = parseInt(value);
-
-                if (isNaN(value) || value < 1) {
-                    input.val(1);
-                } else if (value > maxQty) {
-                    input.val(maxQty);
-                } else {
-                    input.val(value);
-                }
-
-                updateTotalSum(input);
-                updateCoin(input);
-                updateGrandTotal();
-            }
-
-            function updateTotalSum(input) {
-                let quantity = parseInt(input.val());
-                let pricePerItem = parseFloat(input.data('price'));
-                let totalSum = quantity * pricePerItem;
-                input.closest('tr').find('.total-sum').text("฿" + totalSum.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            function updateCoin(input) {
-                let quantity = parseInt(input.val());
-                let coinPerItem = parseInt(input.data('coin'));
-                let totalCoin = quantity * coinPerItem;
-                input.closest('tr').find('.coin').text(totalCoin.toLocaleString());
-            }
-
-            function updateGrandTotal() {
-                let grandTotal = 0;
-                $(".total-sum").each(function() {
-                    let sum = parseFloat($(this).text().replace('฿', '').replace(',', ''));
-                    grandTotal += sum;
-                });
-                $(".total-price-cost").data('value', grandTotal);
-                $(".total-price-cost").text("฿" + grandTotal.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-                updateNetPrice();
-            }
-
-            function updateNetPrice() {
-                let totalPrice = parseFloat($('.total-price-cost').data('value')) || 0;
-                let shippingPrice = parseFloat($('#shipping-select').val()) || 0;
-                let netPrice = totalPrice + shippingPrice;
-                $('.net-price').text("฿" + netPrice.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            $("input[name='crt_qty']").on('input change keyup', function(e) {
-                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
-                    e.preventDefault();
-                }
-                validateQty($(this));
-            });
-
-            $('#shipping-select').on('change', function() {
-                updateNetPrice();
-            });
-
-            updateGrandTotal();
-        });
-    </script> -->
-
-    <!-- <script>
-        $(document).ready(function() {
-            function validateQty(input) {
-                let maxQty = parseInt(input.data('max'));
-                let value = parseFloat(input.val());
-
-                value = parseInt(value);
-
-                if (isNaN(value) || value < 1) {
-                    input.val(1);
-                } else if (value > maxQty) {
-                    input.val(maxQty);
-                } else {
-                    input.val(value);
-                }
-
-                updateTotalSum(input);
-                updateCoin(input);
-                updateGrandTotal();
-            }
-
-            function updateTotalSum(input) {
-                let quantity = parseInt(input.val());
-                let pricePerItem = parseFloat(input.data('price'));
-                let totalSum = quantity * pricePerItem;
-                input.closest('tr').find('.total-sum').text("฿" + totalSum.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            function updateCoin(input) {
-                let quantity = parseInt(input.val());
-                let coinPerItem = parseInt(input.data('coin'));
-                let totalCoin = quantity * coinPerItem;
-                input.closest('tr').find('.coin').text(totalCoin.toLocaleString());
-            }
-
-            function updateGrandTotal() {
-                let grandTotal = 0;
-                $(".total-sum").each(function() {
-                    let sum = parseFloat($(this).text().replace('฿', '').replace(',', ''));
-                    grandTotal += sum;
-                });
-                $(".total-price-cost, .net-price").text("฿" + grandTotal.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            $("input[name='crt_qty']").on('input change keyup', function(e) {
-                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
-                    e.preventDefault();
-                }
-                validateQty($(this));
-            });
-
-            $("input[name='crt_qty']").on('change', function() {
-                let currentValue = parseInt($(this).val());
-                let maxQty = parseInt($(this).data('max'));
-                if (currentValue < 1) {
-                    $(this).val(1);
-                } else if (currentValue > maxQty) {
-                    $(this).val(maxQty);
-                }
-                updateTotalSum($(this));
-                updateCoin($(this));
-                updateGrandTotal();
-            });
-
-            // เรียกใช้ฟังก์ชัน updateGrandTotal เมื่อโหลดหน้าเว็บครั้งแรก
-            updateGrandTotal();
-        });
-
-        $(document).ready(function() {
-            function updateNetPrice() {
-                let totalPrice = parseFloat($('.total-price').data('value'));
-                let shippingPrice = parseFloat($('#shipping-select').val());
-
-                let netPrice = totalPrice + shippingPrice;
-                $('.net-price').text("฿" + netPrice.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            // เมื่อผู้ใช้เลือกค่าขนส่งใหม่
-            $('#shipping-select').on('change', function() {
-                updateNetPrice();
-            });
-
-            // เรียกใช้ฟังก์ชัน updateNetPrice เมื่อเริ่มต้นหน้า
-            updateNetPrice();
-        });
-    </script> -->
-
-
-    <!-- <script>
-        $(document).ready(function() {
-            // ฟังก์ชันในการตรวจสอบและปรับค่าของ crt_qty
-            function validateQty(input) {
-                let maxQty = parseInt(input.data('max'));
-                let value = parseFloat(input.val());
-
-                // ตัดจุดทศนิยมออก
-                value = parseInt(value);
-
-                if (isNaN(value) || value < 1) {
-                    input.val(1);
-                } else if (value > maxQty) {
-                    input.val(maxQty);
-                } else {
-                    input.val(value); // อัปเดตฟิลด์ให้แสดงเฉพาะเลขด้านหน้า
-                }
-
-                // อัปเดตราคารวม
-                updateTotalSum(input);
-                // อัปเดตจำนวนเหรียญ
-                updateCoin(input);
-            }
-
-            // ฟังก์ชันในการอัปเดตราคารวม
-            function updateTotalSum(input) {
-                let quantity = parseInt(input.val());
-                let pricePerItem = parseFloat(input.data('price'));
-                let totalSum = quantity * pricePerItem;
-                input.closest('tr').find('.total-sum').text("฿" + totalSum.toLocaleString(undefined, {
-                    minimumFractionDigits: 2
-                }));
-            }
-
-            // ฟังก์ชันในการอัปเดตจำนวนเหรียญ
-            function updateCoin(input) {
-                let quantity = parseInt(input.val());
-                let coinPerItem = parseInt(input.data('coin'));
-                let totalCoin = quantity * coinPerItem;
-                input.closest('tr').find('.coin').text(totalCoin.toLocaleString());
-            }
-
-            // ตรวจสอบค่าเมื่อมีการเปลี่ยนแปลง input
-            $("input[name='crt_qty']").on('input change keyup', function(e) {
-                // ป้องกันการใส่ค่าเลขทศนิยมหรือค่าที่ไม่เหมาะสมผ่านคีย์บอร์ด
-                if (e.key === '.' || e.key === ',' || (e.key === '-' && $(this).val().length > 0)) {
-                    e.preventDefault();
-                }
-                validateQty($(this));
-            });
-
-            // ปรับการเพิ่ม/ลดค่าผ่านปุ่มเพิ่ม/ลดใน input type number
-            $("input[name='crt_qty']").on('change', function() {
-                let currentValue = parseInt($(this).val());
-                let maxQty = parseInt($(this).data('max'));
-                if (currentValue < 1) {
-                    $(this).val(1);
-                } else if (currentValue > maxQty) {
-                    $(this).val(maxQty);
-                }
-                updateTotalSum($(this));
-                updateCoin($(this));
-            });
-        });
-    </script> -->
-
-
-
-
-
-
 </body>
 
 </html>

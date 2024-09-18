@@ -485,6 +485,9 @@ $(document).ready(function () {
                 required: true,
                 maxlength: 250,
             },
+            prq_img:{
+                accept: "image/png, image/jpg, image/jpeg"
+            }
         },
         messages: {
             prq_title: {
@@ -508,6 +511,89 @@ $(document).ready(function () {
                 required: "กรุณาระบุ รายละเอียด",
                 maxlength: "ต้องไม่เกิน 250 ตัวอักษร",
             },
+            prq_img:{
+                accept: "ต้องเป็นไฟล์ png, jpg, jpeg เท่านั้น",
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 4. Jquery Validation Form (Account Address) ==============================
+$(document).ready(function () {
+    $("#formTransferCoin").validate({
+        rules: {
+            mhc_to_mem_id: {
+                required: true,
+                digits: true,
+                min: 1,
+                notEqualTo: "#mhc_from_mem_id",
+            },
+            mhc_coin_amount: {
+                required: true,
+                digits: true,
+                min: 1,
+            },
+            password: {
+                required: true,
+            }
+        },
+        messages: {
+            mhc_to_mem_id: {
+                required: "กรุณาระบุ รหัสสมาชิกผู้รับเหรียญ",
+                digits: "ต้องเป็นตัวเลขจำนวนเต็มบวกเท่านั้น",
+                min: "ค่าต่ำสุดตือ 1",
+                notEqualTo: "ไม่สามาถโอนไปยังรหัสสมาชิกตนเองได้",
+            },
+            mhc_coin_amount: {
+                required: "กรุณาระบุ จำนวนเหรียญ",
+                digits: "ต้องเป็นตัวเลขจำนวนเต็มบวกเท่านั้น",
+                min: "ค่าต่ำสุดตือ 1",
+            },
+            password: {
+                required: "กรุณาระบุ รหัสผ่านของท่าน",
+            }
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 4. Jquery Validation Form (Account Address) ==============================
+$(document).ready(function () {
+    $("#formUploadSlip").validate({
+        rules: {
+            osl_slip: {
+                required: true,
+                accept: "image/png, image/jpg, image/jpeg"
+            }
+        },
+        messages: {
+            osl_slip: {
+                required: "กรุณาระบุ สลิปหลักฐานการชำระเงิน",
+                accept: "ต้องเป็นไฟล์ png, jpg, jpeg เท่านั้น",
+            }
         },
         errorElement: 'span',
         errorPlacement: function (error, element) {

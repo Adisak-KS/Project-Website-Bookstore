@@ -3,11 +3,19 @@ $titlePage = "ประเภทสินค้า";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ProductTypeController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $ProductTypeController = new ProductTypeController($conn);
 
 $productType = $ProductTypeController->getProductType();
 
+$empId = $_SESSION['emp_id'];
 
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 ?>
 <!DOCTYPE html>
 <html lang="en">

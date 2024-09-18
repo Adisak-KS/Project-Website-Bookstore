@@ -175,7 +175,7 @@ function generateUniqueProfileEmployees($extension, $folder)
 }
 
 // ======================== 8. Validation Form Update Employees =====================================
-function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError)
+function valiDateFormUpdateEmployees($fname, $lname, $status = NULL, $authority = NULL, $locationError)
 {
 
     // Check First name
@@ -192,29 +192,30 @@ function valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locat
         messageError("นามสกุล ต้องไม่เกิน 50 ตัวอักษร", $locationError);
     }
 
-    if (!isset($status)) {
-        messageError("กรุณาระบุ สถานะบัญชี", $locationError);
-    } elseif ($status !== "1" && $status !== "0") {
-        messageError("สถานะบัญชีต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+    if ($status !== NULL) {
+        if (!isset($status)) {
+            messageError("กรุณาระบุ สถานะบัญชี", $locationError);
+        } elseif ($status !== "1" && $status !== "0") {
+            messageError("สถานะบัญชีต้องเป็น 1 หรือ 0 เท่านั้น โปรดแก้ไข Code", $locationError);
+        }
     }
 
+    if ($authority !== NULL) {
+        $validAuthorities = [2, 3, 4, 5, 6];  // Owner, Admin, Accounting, Sale, Employee (Default)
 
-    $validAuthorities = [2, 3, 4, 5, 6];  // Owner, Admin, Accounting, Sale, Employee (Default)
+        if (!isset($authority)) {
+            messageError("กรุณาระบุ สิทธิ์การใช้งาน", $locationError);
+        } else {
+            if (!is_array($authority)) {
+                $authority = explode(',', $authority);
+            }
 
-    // Ensure $authority is always treated as an array
-    if (!isset($authority)) {
-        messageError("กรุณาระบุ สิทธิ์การใช้งาน", $locationError);
-    } else {
-        // If $authority is not an array, convert it to an array
-        if (!is_array($authority)) {
-            $authority = explode(',', $authority);
-        }
-
-        // Validate each value in the $authority array
-        foreach ($authority as $auth) {
-            if (!in_array($auth, $validAuthorities)) {
-                messageError("กรุณาระบุ สิทธิ์การใช้งานที่ถูกต้อง โปรดแก้ไข Code", $locationError);
-                break;
+            // Validate each value in the $authority array
+            foreach ($authority as $auth) {
+                if (!in_array($auth, $validAuthorities)) {
+                    messageError("กรุณาระบุ สิทธิ์การใช้งานที่ถูกต้อง โปรดแก้ไข Code", $locationError);
+                    break;
+                }
             }
         }
     }
@@ -1011,9 +1012,9 @@ function valiDateFromProductResponse($prqId, $empId, $prpPrdName, $prpPublisher,
 }
 
 // ======================== 27. valiDate Form Transfer coins (Member) =====================================
-function valiDateFormTransferCoinMember($myId, $myCoin, $recipientId, $coin, $password, $locationError)
+function valiDateFormTransferCoinMember($mhcFromMemId, $myCoin,  $mhcToMemId, $mhcCoinAmount, $password, $locationError)
 {
-    if (empty($myId) || $myId == null || !is_numeric($myId)) {
+    if (empty($mhcFromMemId) || $mhcFromMemId == null || !is_numeric($mhcFromMemId)) {
         messageError("ไม่พบรหัสสมาชิกของคุณ", $locationError);
     }
 
@@ -1021,13 +1022,13 @@ function valiDateFormTransferCoinMember($myId, $myCoin, $recipientId, $coin, $pa
         messageError("ไม่พบเหรียญของคุณ", $locationError);
     }
 
-    if (empty($recipientId) || $recipientId == null || !is_numeric($recipientId)) {
+    if (empty($mhcToMemId) || $mhcToMemId == null || !is_numeric($mhcToMemId)) {
         messageError("ไม่พบรหัสสมาชิกของผู้รับ", $locationError);
     }
 
-    if (empty($coin) || !ctype_digit($coin) || (int)$coin <= 0) {
+    if (empty($mhcCoinAmount) || !ctype_digit($mhcCoinAmount) || (int)$mhcCoinAmount <= 0) {
         messageError("กรุณาระบุ จำนวนเหรียญที่จะโอน ให้ถูกต้องและต้องมากกว่า 0", $locationError);
-    } elseif ((int)$coin > $myCoin) {
+    } elseif ((int)$mhcCoinAmount > $myCoin) {
         messageError("คุณมีเหรียญไม่เพียงพอ", $locationError);
     }
 
@@ -1064,5 +1065,52 @@ function valiDateFromCartAdd($memId, $prdId, $prdQuantity, $crtQty, $myCartQty, 
         messageError("จำนวนสินค้าที่เพิ่มในรถเข็น ต้องมากกว่าหรือเท่ากับ 1", $locationError);
     } elseif ($crtQty > $prdQuantity || $crtQty > $prdQuantity - $myCartQty) {
         messageError("เต็มจำนวนที่ให้ซื้อแล้ว หรือสินค้าอาจมีไม่เพียงพอ", $locationError);
+    }
+}
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function checkAuthorityEmployees($useAuthority, $allowedAuthorities)
+{
+    // ตรวจสอบว่าตัวแปร $useAuthority['authority'] ถูกตั้งค่าอยู่หรือไม่
+    if (isset($useAuthority['authority'])) {
+        // แยกค่า authority ออกเป็นอาเรย์
+        $authorityArray = explode(',', $useAuthority['authority']);
+
+        // หาค่าที่ตรงกันระหว่าง $allowedAuthorities และ $authorityArray
+        $hasAuthority = array_intersect($allowedAuthorities, $authorityArray);
+
+        // ถ้าไม่มีสิทธิ์ที่ตรงกันให้ทำการเปลี่ยนเส้นทาง
+        if (empty($hasAuthority)) {
+            header('Location: error_not_result');
+            exit();
+        }
+    } else {
+        // ถ้า $useAuthority['authority'] ไม่ถูกตั้งค่าให้ทำการเปลี่ยนเส้นทาง
+        header('Location: error_not_result');
+        exit();
+    }
+}
+
+// ======================== 27. valiDate Form Transfer coins (Member) =====================================
+function checkAuthorityEmployeesSystems($useAuthority, $allowedAuthorities)
+{
+    // ตรวจสอบว่าตัวแปร $useAuthority['authority'] ถูกตั้งค่าอยู่หรือไม่
+    if (isset($useAuthority['authority'])) {
+        // แยกค่า authority ออกเป็นอาเรย์
+        $authorityArray = explode(',', $useAuthority['authority']);
+
+        // หาค่าที่ตรงกันระหว่าง $allowedAuthorities และ $authorityArray
+        $hasAuthority = array_intersect($allowedAuthorities, $authorityArray);
+
+        // ตรวจสอบว่ามีค่าที่ตรงกันหรือไม่
+        if (!empty($hasAuthority)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        // ถ้า $useAuthority['authority'] ไม่ถูกตั้งค่าให้ทำการเปลี่ยนเส้นทาง
+        header('Location: error_not_result');
+        exit();
     }
 }

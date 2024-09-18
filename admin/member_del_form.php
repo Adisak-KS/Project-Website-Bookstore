@@ -5,6 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/MemberController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -19,6 +22,12 @@ if (isset($_GET['id'])) {
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($members);
 
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3]; // [Super Admin, Admin]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: member_show');
     exit;
@@ -98,7 +107,7 @@ if (isset($_GET['id'])) {
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
 
-                              
+
                             </div>
                             <!-- end col -->
                             <div class="col-lg-6">

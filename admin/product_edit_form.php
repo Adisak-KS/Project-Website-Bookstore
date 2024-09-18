@@ -5,6 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -23,6 +26,13 @@ if (isset($_GET['id'])) {
     $productType = $ProductController->getProductType();
     $publisher = $ProductController->getPublisher();
     $author = $ProductController->getAuthor();
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: product_show');
     exit;

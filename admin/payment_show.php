@@ -3,10 +3,19 @@ $titlePage = "ช่องทางชำระเงิน";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/PaymentController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $PaymentController = new PaymentController($conn);
 
 $payments = $PaymentController->getPayment();
 
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 4]; // [Super Admin, Admin, Accounting]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 
 ?>
 <!DOCTYPE html>

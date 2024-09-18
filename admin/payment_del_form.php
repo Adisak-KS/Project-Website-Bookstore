@@ -5,7 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/PaymentController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
 
+$LoginController = new LoginController($conn);
 
 
 if (isset($_GET['id'])) {
@@ -21,6 +23,13 @@ if (isset($_GET['id'])) {
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($payment);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3, 4]; // [Super Admin, Admin, Accounting]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: payment_show');
     exit;
@@ -63,7 +72,7 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">
-                                           <i class="fa-solid fa-trash"></i>
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>ข้อมูลช่องทางชำระเงิน</span>
                                         </h4>
 
@@ -98,7 +107,7 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">
-                                           <i class="fa-solid fa-trash"></i>
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>รูปภาพโลโก้ ธนาคาร</span>
                                         </h4>
                                         <div class="">
@@ -118,7 +127,7 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-danger">
-                                           <i class="fa-solid fa-trash"></i>
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>QR Code</span>
                                         </h4>
                                         <div class="">
@@ -137,7 +146,7 @@ if (isset($_GET['id'])) {
                                 <div class="card">
                                     <div class="card-body">
                                         <h4 class="mb-2 header-title text-danger">
-                                           <i class="fa-solid fa-trash"></i>
+                                            <i class="fa-solid fa-trash"></i>
                                             <span>สถานะการแสดง <small class="text-danger">(แสดงได้ 1 ช่องทาง เท่านั้น)</small></span>
                                         </h4>
                                         <input type="hidden" name="pmt_old_status" value="<?php echo $payment['pmt_status']; ?>" readonly>
@@ -168,7 +177,7 @@ if (isset($_GET['id'])) {
                                                 <i class="fa-solid fa-xmark me-1"></i>
                                                 <span>ยกเลิก</span>
                                             </a>
-                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $payment["pmt_id"]; ?>" data-logo="<?php echo $payment["pmt_bank_logo"]; ?>"  data-qrcode="<?php echo $payment["pmt_qrcode"]; ?>">
+                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $payment["pmt_id"]; ?>" data-logo="<?php echo $payment["pmt_bank_logo"]; ?>" data-qrcode="<?php echo $payment["pmt_qrcode"]; ?>">
                                                 <i class="fa-solid fa-trash"></i>
                                                 <span>ลบข้อมูล</span>
                                             </button>

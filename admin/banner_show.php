@@ -3,11 +3,19 @@ $titlePage = "แบนเนอร์";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/BannerController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $BannerController = new BannerController($conn);
 
 $banners = $BannerController->getBanner();
 
+$empId = $_SESSION['emp_id'];
 
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 6]; // [Super Admin, Owner, Admin, Employee]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 ?>
 <!DOCTYPE html>
 <html lang="en">

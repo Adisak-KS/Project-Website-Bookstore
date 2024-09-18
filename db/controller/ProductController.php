@@ -410,12 +410,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -446,12 +446,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -482,12 +482,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
                     AND bs_publishers.pub_status = 1
@@ -518,14 +518,14 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating,
+                        SUM(bs_products_reviews.prv_rating) AS total_rating,
                         SUM(bs_products_views.prv_view) AS total_views
                       	
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     LEFT JOIN bs_products_views ON bs_products.prd_id = bs_products_views.prd_id
                     WHERE bs_products.prd_status = 1
                     AND bs_products_type.pty_status = 1
@@ -553,12 +553,12 @@ class ProductController extends BaseController
                         bs_products_type.pty_id,
                         bs_products_type.pty_name,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -590,12 +590,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -630,12 +630,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -675,12 +675,12 @@ class ProductController extends BaseController
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -724,12 +724,12 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -774,12 +774,12 @@ class ProductController extends BaseController
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -826,12 +826,12 @@ class ProductController extends BaseController
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -876,12 +876,12 @@ class ProductController extends BaseController
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
@@ -912,12 +912,12 @@ class ProductController extends BaseController
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prs_rating) AS total_rating
+                        SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prs_status = 1
+                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1 
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1

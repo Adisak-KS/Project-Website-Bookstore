@@ -1227,3 +1227,114 @@ $(document).ready(function () {
         errorClass: 'text-danger'
     });
 });
+
+// ============================== 18. Jquery Validation Form (Setting Banner) ==============================
+$(document).ready(function () {
+    $("#formOrderAwaitingShipmentDetail").validate({
+        rules: {
+            ord_tracking_number: {
+                required: true,
+                nowhitespace: true,
+                maxlength: 30,
+            },
+        },
+        messages: {
+            ord_tracking_number: {
+                required: "กรุณาระบุ หมายเลขติดตามสินค้า",
+                nowhitespace: "ห้ามมีช่องว่าง หรือเว้นวรรค",
+                maxlength: "ต้องไม่เกิน 30 ตัวอักษร",
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        errorClass: 'text-danger'
+    });
+});
+
+// ============================== 15. Jquery Validation Form (Search Product View) ==============================
+$(document).ready(function () {
+    $.validator.addMethod("after", function (value, element, params) {
+        let start_time = $(params).val();
+        let end_time = value;
+
+        if (!start_time || !end_time) {
+            return true;
+        }
+
+        return Date.parse(end_time) >= Date.parse(start_time);
+    });
+    $.validator.addMethod("greaterThan", function (value, element, param) {
+        let target = $(param).val();
+        return this.optional(element) || (parseFloat(value) >= parseFloat(target));
+    }, "ราคาสูงสุดต้องมากกว่าราคาต่ำสุด");
+
+    $("#formSearchSale").validate({
+        rules: {
+            time_start: {
+                after: "#time_end"
+            },
+            time_end: {
+                after: "#time_start"
+            },
+            price_start: {
+                number: true,
+                min: 0,
+                max: 9999999999
+            },
+            price_end: {
+                number: true,
+                min: 0,
+                max: 9999999999,
+                greaterThan: "#price_start"
+            },
+            mem_username: {
+                maxlength: 50
+            },
+        },
+        messages: {
+            time_start: {
+                after: "วันสิ้นสุด ต้องมากกว่า วันเริ่ม"
+            },
+            time_end: {
+                after: "วันสิ้นสุด ต้องมากกว่า วันเริ่ม"
+            },
+            price_start: {
+                number: "ต้องเป็นตัวเลข เท่านั้น",
+                min: "ค่าต่ำสุด คือ 0",
+                max: "ค่าสูงสุด คือ 9,999,999,999",
+            },
+            price_end: {
+                number: "ต้องเป็นตัวเลข เท่านั้น",
+                min: "ค่าต่ำสุด คือ 0",
+                max: "ค่าสูงสุด คือ 9,999,999,999",
+                greaterThan: "ราคาสูงสุด ต้องมากกว่า ราคาต่ำสุด"
+            },
+            mem_username: {
+                maxlength: 50
+            },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.mb-3').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        },
+        // ปรับแต่งสีของข้อความ error
+        errorClass: 'text-danger'
+    });
+});
+

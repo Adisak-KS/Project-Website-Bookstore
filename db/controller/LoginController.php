@@ -70,7 +70,7 @@ class LoginController extends BaseController
                     FROM bs_employees
                     JOIN bs_employees_authority ON bs_employees.emp_id = bs_employees_authority.emp_id
                     JOIN bs_employees_authority_type ON bs_employees_authority.eat_id = bs_employees_authority_type.eat_id
-                    WHERE bs_employees.emp_id = :emp_id AND  bs_employees.emp_status = 1
+                    WHERE bs_employees.emp_id = :emp_id AND bs_employees.emp_status = 1
                     GROUP BY bs_employees.emp_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':emp_id', $empId);

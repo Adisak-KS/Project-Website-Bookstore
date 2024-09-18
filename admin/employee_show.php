@@ -3,11 +3,19 @@ $titlePage = "พนักงาน";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/EmployeeController.php");
+require_once('../db/controller/LoginController.php');
 
+$LoginController = new LoginController($conn);
 $EmployeeController = new EmployeeController($conn);
 
 $employees = $EmployeeController->getEmployee();
 
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 2, 3]; // [Super Admin, Owner, Admin]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities)
 
 ?>
 <!DOCTYPE html>

@@ -38,13 +38,13 @@ if (isset($_POST['btn-add'])) {
 
     if ($check) {
         // หากมีในตะกร้าให้ update
-        $updateCartItem = $CartController->updateCartItem($memId, $prdId, $crtQty);
+        $plusCartItem = $CartController->plusCartItem($memId, $prdId, $crtQty);
     } else {
         // หากไม่มีในตะกร้าให้ insert
         $insertCartItem = $CartController->insertCartItem($memId, $prdId, $crtQty);
     }
 
-    if ($updateCartItem || $insertCartItem) {
+    if ($plusCartItem || $insertCartItem) {
         $_SESSION['success'] = "เพิ่มสินค้าเข้ารถเข็น สำเร็จ";
         header($locationSuccess);
         exit;

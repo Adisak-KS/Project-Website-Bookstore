@@ -5,6 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/AuthorController.php");
 require_once("../includes/salt.php");
 require_once('../includes/functions.php');
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -18,6 +21,13 @@ if (isset($_GET['id'])) {
     $author = $AuthorController->getDetailAuthor($Id);
 
     checkResultDetail($author);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: product_type_show');
     exit;
@@ -53,7 +63,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formAuthor"  action="process/author_edit" method="post" enctype="multipart/form-data">
+                    <form id="formAuthor" action="process/author_edit" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="card">
@@ -79,7 +89,7 @@ if (isset($_GET['id'])) {
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
 
-                               
+
                             </div>
                             <!-- end col -->
                             <div class="col-lg-6">
@@ -110,15 +120,15 @@ if (isset($_GET['id'])) {
 
                                         <div class="form-check mb-2 form-check-success">
                                             <input class="form-check-input" type="radio" name="auth_status" id="1" value="1" <?php if ($author['auth_status'] == 1) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
+                                                                                                                                    echo 'checked';
+                                                                                                                                } ?>>
                                             <label class="form-check-label" for="1">แสดง</label>
                                         </div>
 
                                         <div class="form-check mb-2 form-check-danger">
                                             <input class="form-check-input" type="radio" name="auth_status" id="0" value="0" <?php if ($author['auth_status'] != 1) {
-                                                                                                                                echo 'checked';
-                                                                                                                            } ?>>
+                                                                                                                                    echo 'checked';
+                                                                                                                                } ?>>
                                             <label class="form-check-label" for="0">ไม่แสดง</label>
                                         </div>
 

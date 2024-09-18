@@ -5,6 +5,8 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/AdminController.php");
 require_once("../includes/salt.php");
 require_once('../includes/functions.php');
+require_once('../db/controller/LoginController.php');
+$LoginController = new LoginController($conn);;
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -16,8 +18,15 @@ if (isset($_GET['id'])) {
     $AdminController = new AdminController($conn);
     $admins = $AdminController->getDetailAdmin($Id);
 
-     //ตรวจสอบว่ามีข้อมูลหรือไม่
-    checkResultDetail($admins);    
+    //ตรวจสอบว่ามีข้อมูลหรือไม่
+    checkResultDetail($admins);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 2]; // [Super Admin, Owner]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: admin_show');
     exit;
@@ -127,7 +136,7 @@ if (isset($_GET['id'])) {
                                         </h4>
 
                                         <div class="">
-                                        <img class="rounded-circle mx-auto d-block img-fluid" id="profile" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_employees/<?php echo $admins['emp_profile']; ?>">
+                                            <img class="rounded-circle mx-auto d-block img-fluid" id="profile" style="width:150px; height:150px; object-fit: cover;" src="../uploads/img_employees/<?php echo $admins['emp_profile']; ?>">
                                             <input type="hidden" name="profile" value="<?php echo $admins['emp_profile'] ?>" readonly>
                                         </div>
                                     </div> <!-- end card-body-->

@@ -3,10 +3,12 @@ $titlePage = "ประวัติการสั่งซื้อ";
 
 require_once("db/connectdb.php");
 require_once("db/controller/MemberController.php");
+require_once("db/controller/OrderController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
 
 $MemberController = new MemberController($conn);
+$OrderController = new OrderController($conn);
 
 if (empty($_SESSION['mem_id'])) {
     $_SESSION['error'] = "กรุณาเข้าสู่ระบบ";
@@ -14,6 +16,8 @@ if (empty($_SESSION['mem_id'])) {
     exit;
 } else {
     $memId = $_SESSION['mem_id'];
+
+    $orderHistory = $OrderController->getAccountOrderHistory($memId);
 }
 
 
@@ -96,33 +100,82 @@ if (empty($_SESSION['mem_id'])) {
                                         <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
                                             <div class="myaccount-content">
                                                 <h5>ประวัติการสั่งซื้อ</h5>
-                                                <table id="myAccountTable" class="table table-bordered table-hover table-responsive">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th class="text-center">วัน เวลา</th>
-                                                            <th class="text-center">ยอดสั่งซื้อรวม</th>
-                                                            <th class="text-center">สถานะ</th>
-                                                            <th class="text-center">หมายเลขติดตาม</th>
-                                                            <th class="text-center">จัดการ</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                            <td>10</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                <?php if ($orderHistory) { ?>
+                                                    <table id="myAccountTable" class="table table-bordered table-hover table-responsive">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th class="text-center">วัน เวลา</th>
+                                                                <th class="text-center">รหัสสั่งซื้อ</th>
+                                                                <th class="text-center">ยอดสั่งซื้อ</th>
+                                                                <th class="text-center">สถานะ</th>
+                                                                <th class="text-center">ติดตาม</th>
+                                                                <th class="text-center">จัดการ</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php foreach ($orderHistory as $row) { ?>
+                                                                <tr>
+                                                                    <td class="text-center"><?php echo $row['ord_time_create'] ?></td>
+                                                                    <td class="text-center"><?php echo $row['ord_id'] ?></td>
+                                                                    <td class="text-center"><?php echo "฿" . number_format($row['ord_price'], 2) ?></td>
+                                                                    <td class="text-center">
+                                                                        <?php
+                                                                        if ($row['ord_status'] == "Pending Payment") {
+                                                                            echo '<span class="badge text-bg-warning">รอชำระเงิน</span>';
+                                                                        } elseif ($row['ord_status'] == "Under Review") {
+                                                                            echo '<span class="badge text-bg-secondary">รอตรวจสอบ</span>';
+                                                                        } elseif ($row['ord_status'] == "Payment Retry") {
+                                                                            echo '<span class="badge text-bg-warning">ชำระเงินใหม่</span>';
+                                                                        } elseif ($row['ord_status'] == "Awaiting Shipment") {
+                                                                            echo '<span class="badge text-bg-info">รอจัดส่ง</span>';
+                                                                        } elseif ($row['ord_status'] == "Shipped") {
+                                                                            echo '<span class="badge text-bg-primary">จัดส่งแล้ว</span>';
+                                                                        } elseif ($row['ord_status'] == "Completed") {
+                                                                            echo '<span class="badge text-bg-success">สำเร็จ</span>';
+                                                                        } elseif ($row['ord_status'] == "Cancelled") {
+                                                                            echo '<span class="badge text-bg-danger">ยกเลิกแล้ว</span>';
+                                                                        } else {
+                                                                            echo '<span class="badge text-bg-secondary">สถานะไม่ถูกต้อง</span>';
+                                                                        }
+                                                                        ?>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <?php if (empty($row['ord_tracking_number'])) {
+                                                                            echo "-";
+                                                                        } else {
+                                                                            echo '<a href="https://maayoung.com/" target="_blank">' . $row['ord_tracking_number'] . '</a>';
+                                                                        }
+                                                                        ?>
 
-                                                <!-- <div class="alert alert-secondary text-center" role="alert">
+                                                                    </td>
+
+                                                                    <td class="text-center">
+                                                                        <?php
+
+                                                                        $originalId = $row["ord_id"];
+                                                                        require_once("includes/salt.php");   // รหัส Salt 
+                                                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
+                                                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+
+                                                                        if ($row['ord_status'] == "Pending Payment" || $row['ord_status'] == "Payment Retry") {
+                                                                            echo '<a href="checkout_payment?id=' . $base64Encoded . '" class="btn btn-secondary">ชำระเงิน</a>';
+                                                                        }
+                                                                        ?>
+                                                                        <a href="account_order_history_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-info"><i class="fa-solid fa-eye"></i> รายละเอียด</a>
+
+                                                                    </td>
+                                                                </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                <?php } else { ?>
+                                                    <div class="alert alert-secondary text-center" role="alert">
                                                         <h4 class="alert-heading">ไม่พบประวัติการสั่งซื้อ</h4>
                                                         <p>สามารถสั่งซื้อสินค้าได้ที่หน้าสินค้าทั้งหมด</p>
                                                         <hr>
                                                         <a href="products_show" class="btn btn-link">สินค้าทั้งหมด</a>
-                                                    </div> -->
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -153,7 +206,10 @@ if (empty($_SESSION['mem_id'])) {
 
     <script>
         new DataTable('#myAccountTable', {
-            responsive: true
+            responsive: true,
+            "order": [
+                [0, 'DESC']
+            ]
         });
     </script>
 

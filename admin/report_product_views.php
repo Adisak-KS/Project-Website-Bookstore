@@ -3,8 +3,17 @@ $titlePage = "รายงานยอดเข้าชม";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/ReportViewController.php");
+require_once('../db/controller/LoginController.php');
 
+$LoginController = new LoginController($conn);
 $ReportViewController = new ReportViewController($conn);
+
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 2, 3, 4]; // [Super Admin, Owner, Admin, Accounting]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 
 
 if (isset($_GET['time_start']) || isset($_GET['time_end']) || isset($_GET['prd_name']) || isset($_GET['pty_name'])) {
@@ -22,6 +31,9 @@ if (isset($_GET['time_start']) || isset($_GET['time_end']) || isset($_GET['prd_n
 } else {
     $reportViews = $ReportViewController->getReportProductView();
 }
+
+// ประเภทสินค้าที่มี
+$productType = $ReportViewController->getProductTypeName();
 
 // 
 $chartReportProductViews = $ReportViewController->getChartReportProductView();
@@ -109,9 +121,15 @@ $chartReportProductTypeViews = $ReportViewController->getChartReportProductTypeV
                                                             </div>
                                                             <div class="col mb-3">
                                                                 <label for="">ประเภทสินค้า :</label>
-                                                                <input type="text" class="form-control" name="pty_name" placeholder="ระบุประเภทสินค้า" value="<?php if (!empty($_GET['pty_name'])) {
-                                                                                                                                                                    echo $_GET['pty_name'];
-                                                                                                                                                                }  ?>">
+                                                                <!-- <input type="text" class="form-control" name="pty_name" placeholder="ระบุประเภทสินค้า" value="<?php if (!empty($_GET['pty_name'])) {
+                                                                                                                                                                        echo $_GET['pty_name'];
+                                                                                                                                                                    }  ?>"> -->
+                                                                <select class="form-select" name="pty_name" aria-label="Default select example">
+                                                                    <option value="">ไม่ระบุประเภทสินค้า</option>
+                                                                    <?php foreach ($productType  as $row) { ?>
+                                                                        <option value="<?php echo $row['pty_name'] ?>" <?php if( !empty($_GET['pty_name']) && $_GET['pty_name'] == $row['pty_name']){ echo 'selected'; } ?> ><?php echo $row['pty_name'] ?></option>
+                                                                    <?php } ?>
+                                                                </select>
                                                             </div>
                                                         </div>
 
@@ -190,7 +208,7 @@ $chartReportProductTypeViews = $ReportViewController->getChartReportProductTypeV
                                             <tbody class="">
                                                 <?php foreach ($reportViews as $row) { ?>
                                                     <tr>
-                                                        <td class="text-center"><?php echo $row['pri_time']; ?></td>
+                                                        <td class="text-center"><?php echo $row['prv_time']; ?></td>
                                                         <td class="text-center"><?php echo $row['prd_name']; ?></td>
                                                         <td class="text-center"><?php echo $row['pty_name']; ?></td>
                                                         <td class="text-center"><?php echo $row['prv_view']; ?></td>
@@ -341,7 +359,7 @@ $chartReportProductTypeViews = $ReportViewController->getChartReportProductTypeV
                 datasets: [{
                     label: 'ยอดเข้าชม (ครั้ง)',
                     data: productTypeViews,
-                     backgroundColor: [
+                    backgroundColor: [
                         'rgb(255, 99, 132)',
                         'rgb(255, 159, 64)',
                         'rgb(75, 192, 192)',

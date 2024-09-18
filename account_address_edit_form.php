@@ -115,7 +115,7 @@ if (empty($_SESSION['mem_id'])) {
                                                             <input type="hidden" class="form-control" name="mem_id" value="<?php echo $detailMemberAddress['mem_id'] ?>" readonly>
                                                             <input type="hidden" name="addr_id" value="<?php echo $addrId; ?>" readonly>
                                                             <div class="col-lg-12 ingle-input-item mb-3">
-                                                                <label for="">ประเภทที่อยู่</label>
+                                                                <label for="">ประเภทที่อยู่ <span class="text-danger">*</span></label>
 
                                                                 <input class="form-check-input ms-3 me-1" type="radio" name="addr_type" id="1" value="1" <?php if ($detailMemberAddress['addr_type'] != 2) {
                                                                                                                                                                 echo 'checked';
@@ -129,20 +129,20 @@ if (empty($_SESSION['mem_id'])) {
                                                             </div>
 
                                                             <div class="col-lg-4 single-input-item mb-3">
-                                                                <label for="fname" class="form-label">ชื่อจริง</label>
+                                                                <label for="fname" class="form-label">ชื่อจริง <span class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" name="addr_fname" placeholder="กรุณาระบุ ชื่อจริง" value="<?php echo $detailMemberAddress['addr_fname']; ?>" maxlength="50">
                                                             </div>
                                                             <div class="col-lg-4 single-input-item mb-3">
-                                                                <label for="lname" class="form-label">นามสกุล</label>
+                                                                <label for="lname" class="form-label">นามสกุล <span class="text-danger">*</span></label>
                                                                 <input type="text" class="form-control" name="addr_lname" placeholder="กรุณาระบุ นามสกุล" value="<?php echo $detailMemberAddress['addr_lname']; ?>" maxlength="50">
                                                             </div>
                                                             <div class="col-lg-4 single-input-item mb-3">
-                                                                <label for="phone" class="form-label">เบอร์โทร</label>
+                                                                <label for="phone" class="form-label">เบอร์โทร <span class="text-danger">*</span></label>
                                                                 <input type="number" class="form-control" name="addr_phone" placeholder="กรุณาระบุ เบอร์โทรศัพท์" value="<?php echo $detailMemberAddress['addr_phone']; ?>">
                                                             </div>
 
                                                             <div class="col-lg-3 single-input-item mb-3">
-                                                                <label for="province" class="form-label">จังหวัด</label>
+                                                                <label for="province" class="form-label">จังหวัด <span class="text-danger">*</span></label>
                                                                 <input type="hidden" id="province_name" name="province_name" value="<?php echo $detailMemberAddress['addr_province'] ?>" readonly>
 
                                                                 <select class="form-select" id="province" name="province">
@@ -150,7 +150,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-3 single-input-item mb-3">
-                                                                <label for="district" class="form-label">อำเภอ/เขต</label>
+                                                                <label for="district" class="form-label">อำเภอ/เขต <span class="text-danger">*</span></label>
                                                                 <input type="hidden" id="district_name" name="district_name" value="<?php echo $detailMemberAddress['addr_district'] ?>" readonly>
 
                                                                 <select class="form-select" id="district" name="district">
@@ -158,7 +158,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                 </select>
                                                             </div>
                                                             <div class="col-lg-3 single-input-item mb-3">
-                                                                <label for="subdistrict" class="form-label">ตำบล/แขวง</label>
+                                                                <label for="subdistrict" class="form-label">ตำบล/แขวง <span class="text-danger">*</span></label>
                                                                 <input type="hidden" id="subdistrict_name" name="subdistrict_name" value="<?php echo $detailMemberAddress['addr_subdistrict'] ?>" readonly>
 
                                                                 <select class="form-select" id="subdistrict" name="subdistrict">
@@ -167,11 +167,11 @@ if (empty($_SESSION['mem_id'])) {
                                                             </div>
 
                                                             <div class="col-lg-3 single-input-item mb-3">
-                                                                <label for="zip_code" class="form-label">รหัสไปรษณีย์</label>
+                                                                <label for="zip_code" class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span></label>
                                                                 <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="กรุณาระบุ รหัสไปราณีย์" readonly>
                                                             </div>
                                                             <div class="col-lg-12 single-input-item mb-3">
-                                                                <label for="zip_code" class="form-label">รายละเอียดที่อยู่</label>
+                                                                <label for="zip_code" class="form-label">รายละเอียดที่อยู่ <span class="text-danger">*</span></label>
                                                                 <textarea name="addr_detail" class="form-control" placeholder="ระบุรายละเอียดที่อยู่ เช่น บ้านเลขที่ ถนน ซอย สถานที่ใกล้เคียง"><?php echo $detailMemberAddress['addr_phone']; ?></textarea>
                                                             </div>
                                                         </div>

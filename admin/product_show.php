@@ -4,9 +4,20 @@ $titlePage = "สินค้า";
 require_once("../db/connectdb.php");
 require_once("../db/controller/ProductController.php");
 require_once("../db/controller/SettingWebsiteController.php");
+require_once('../db/controller/LoginController.php');
 
+$LoginController = new LoginController($conn);
 $SettingWebsiteController = new SettingWebsiteController($conn);
 $ProductController = new ProductController($conn);
+
+
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
+
 
 // ส่วนลด
 $productPercentDiscount = $SettingWebsiteController->getProductPercentDiscount();

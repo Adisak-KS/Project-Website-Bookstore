@@ -6,7 +6,8 @@
    2. getAdmin
    3. getDetailAdmin
    4. updateDetailAdmin
-   5. updateAuthorityAdmin
+   5. updateDetailAdminStatus
+   6. updateAuthorityAdmin
 */
 // ============================================================================================
 
@@ -80,20 +81,18 @@ class AdminController extends BaseController
    }
 
    // ============================= 4. updateDetailAdmin ===================================
-   function updateDetailAdmin($Id, $fname, $lname, $status)
+   function updateDetailAdmin($Id, $fname, $lname)
    {
       try {
          // Update Detail
          $sql = " UPDATE bs_employees
                   SET   emp_fname = :emp_fname,
                         emp_lname = :emp_lname,
-                        emp_status = :emp_status,
                         emp_time_update = NOW()
                   WHERE emp_id = :emp_id";
          $stmt = $this->db->prepare($sql);
          $stmt->bindParam(':emp_fname', $fname, PDO::PARAM_STR);
          $stmt->bindParam(':emp_lname', $lname, PDO::PARAM_STR);
-         $stmt->bindParam(':emp_status', $status, PDO::PARAM_STR);
          $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
          $stmt->execute();
          return true;
@@ -103,7 +102,26 @@ class AdminController extends BaseController
       }
    }
 
-   // ============================= 5. updateAuthorityAdmin ===================================
+   // ============================= 5. updateDetailAdminStatus ===================================
+   function updateDetailAdminStatus($Id, $status)
+   {
+      try {
+         // Update Detail Status
+         $sql = " UPDATE bs_employees
+                  SET  emp_status = :emp_status,
+                        emp_time_update = NOW()
+                  WHERE emp_id = :emp_id";
+         $stmt = $this->db->prepare($sql);
+         $stmt->bindParam(':emp_status', $status, PDO::PARAM_STR);
+         $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+         $stmt->execute();
+         return true;
+      } catch (PDOException $e) {
+         echo "<hr>Error in updateDetailAdminStatus : " . $e->getMessage();
+         return false;
+      }
+   }
+   // ============================= 6. updateAuthorityAdmin ===================================
    function updateAuthorityAdmin($Id, $newEatId)
    {
       try {

@@ -45,7 +45,7 @@ if (empty($_SESSION['mem_id'])) {
                                         <input type="hidden" name="mem_id" value="<?php echo $_SESSION['mem_id']; ?>" readonly>
 
                                         <div class="single-input-item mb-3">
-                                            <label for="recipient_id" class="form-label">หัวเรื่องการค้นหา</label>
+                                            <label for="recipient_id" class="form-label">หัวเรื่องการค้นหา <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="prq_title" placeholder="กรุณาระบุ หัวเรื่องการค้นหา" maxlength="200">
                                         </div>
                                         <div class="single-input-item mb-3">
@@ -65,7 +65,7 @@ if (empty($_SESSION['mem_id'])) {
                                             <input type="number" class="form-control" name="prq_prd_volume_number" min="1" placeholder="กรุณาระบุ เล่มที่">
                                         </div>
                                         <div class="single-input-item mb-3">
-                                            <label for="recipient_id" class="form-label">รายละเอียด</label>
+                                            <label for="recipient_id" class="form-label">รายละเอียด  <span class="text-danger">*</span></label>
                                             <textarea class="form-control" name="prq_detail" maxlength="255"></textarea>
                                         </div>
                                         <div class="single-input-item mb-3">
@@ -78,7 +78,7 @@ if (empty($_SESSION['mem_id'])) {
                                         <div class="single-register">
                                             <hr>
                                             <button type="submit" name="btn-add" class="btn btn-primary">
-                                                <i class="fa-solid fa-plus me-1"></i>
+                                                <i class="fa-solid fa-upload"></i>
                                                 ส่งเรื่องค้นหาสินค้า
                                             </button>
                                         </div>
@@ -101,6 +101,7 @@ if (empty($_SESSION['mem_id'])) {
 
     <!-- all js here -->
     <?php require_once("layouts/vendor.php") ?>
+
     <script>
         function previewImg(input) {
             const file = input.files[0];

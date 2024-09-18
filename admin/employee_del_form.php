@@ -5,6 +5,10 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/EmployeeController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
+
 
 if (isset($_GET['id'])) {
 
@@ -19,6 +23,13 @@ if (isset($_GET['id'])) {
 
     //ตรวจสอบว่ามีข้อมูลหรือไม่
     checkResultDetail($employees);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 2, 3]; // [Super Admin, Owner, Admin]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: owner_show');
     exit;

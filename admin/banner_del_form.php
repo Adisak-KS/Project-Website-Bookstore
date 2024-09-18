@@ -5,6 +5,9 @@ require_once("../db/connectdb.php");
 require_once("../db/controller/BannerController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -19,6 +22,13 @@ if (isset($_GET['id'])) {
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
     checkResultDetail($banner);
+
+    $empId = $_SESSION['emp_id'];
+
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 3, 6]; // [Super Admin, Owner, Admin, Accounting]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 } else {
     header('Location: banner_show');
     exit;
@@ -161,8 +171,8 @@ if (isset($_GET['id'])) {
         <?php require_once('layouts/nav_rightbar.php') ?>
 
         <?php require_once('layouts/vendor.php') ?>
-  <!-- Delete  -->
-  <script>
+        <!-- Delete  -->
+        <script>
             $(document).ready(function() {
                 $(".btn-delete").click(function(e) {
                     e.preventDefault();

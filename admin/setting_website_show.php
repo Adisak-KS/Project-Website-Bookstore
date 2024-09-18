@@ -3,10 +3,19 @@ $titlePage = "ตั้งค่าเว็บไซต์";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/SettingWebsiteController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $SettingWebsiteController = new SettingWebsiteController($conn);
 
 $settings = $SettingWebsiteController->getSettingsWebsite();
 
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 6]; // [Super Admin, Owner, Admin, Employee]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 
 ?>
 <!DOCTYPE html>

@@ -3,9 +3,20 @@ $titlePage = "ผู้ดูแลระบบ";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AdminController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $AdminController = new AdminController($conn);
 
 $admins = $AdminController->getAdmin();
+
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 2, 3]; // [Super Admin, Owner, Admin]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities)
+
 
 ?>
 <!DOCTYPE html>
@@ -137,6 +148,13 @@ $admins = $AdminController->getAdmin();
                                             </thead>
 
                                             <tbody>
+
+                                                <?php
+                                                // เช็คสิทธิ์การใช้ระบบ
+                                                $allowedAuthorities = [1, 2]; // [Super Admin, Owner]
+                                                $hasAuthority = checkAuthorityEmployeesSystems($useAuthority, $allowedAuthorities);
+                                                ?>
+
                                                 <?php foreach ($admins as $row) { ?>
                                                     <tr>
                                                         <td class="text-center">
@@ -166,11 +184,12 @@ $admins = $AdminController->getAdmin();
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>
                                                             </a>
-
-                                                            <a href="admin_del_form?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
-                                                                <i class="fa-solid fa-trash me-1"></i>
-                                                                <span>ลบข้อมูล</span>
-                                                            </a>
+                                                            <?php if ($hasAuthority) { ?>
+                                                                <a href="admin_del_form?id=<?php echo $base64Encoded ?>" class="btn btn-danger ms-2">
+                                                                    <i class="fa-solid fa-trash me-1"></i>
+                                                                    <span>ลบข้อมูล</span>
+                                                                </a>
+                                                            <?php } ?>
                                                         </td>
                                                     </tr>
                                                 <?php } ?>

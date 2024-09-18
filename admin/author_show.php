@@ -3,10 +3,19 @@ $titlePage = "ผู้แต่ง";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/AuthorController.php");
+require_once('../db/controller/LoginController.php');
+
+$LoginController = new LoginController($conn);
 $AuthorController = new AuthorController($conn);
 
 $authors = $AuthorController->getAuthor();
 
+$empId = $_SESSION['emp_id'];
+
+// ตรวจสอบสิทธิ์การใช้งาน
+$useAuthority = $LoginController->useLoginEmployees($empId);
+$allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
+checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 
 ?>
 <!DOCTYPE html>

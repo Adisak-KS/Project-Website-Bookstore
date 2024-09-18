@@ -7,6 +7,7 @@
     4. getDetailOwner
     5. updateDetailOwner
     6. updateAuthorityOwner
+    7. updateAuthorityOwner
 */
 // ============================================================================================
 
@@ -121,20 +122,18 @@ class OwnerController extends BaseController
     }
 
     // ============================= 5. updateDetailOwner ===================================
-    function updateDetailOwner($Id, $fname, $lname, $status)
+    function updateDetailOwner($Id, $fname, $lname)
     {
         try {
             // Update Detail
             $sql = " UPDATE bs_employees
                    SET   emp_fname = :emp_fname,
                          emp_lname = :emp_lname,
-                         emp_status = :emp_status,
                          emp_time_update = NOW()
                    WHERE emp_id = :emp_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(':emp_fname', $fname, PDO::PARAM_STR);
             $stmt->bindParam(':emp_lname', $lname, PDO::PARAM_STR);
-            $stmt->bindParam(':emp_status', $status, PDO::PARAM_STR);
             $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
             $stmt->execute();
             return true;
@@ -145,6 +144,25 @@ class OwnerController extends BaseController
     }
 
     // ============================= 6. updateAuthorityOwner ===================================
+    function updateDetailOwnerStatus($Id, $status)
+    {
+        try {
+            // Update Detail Status
+            $sql = " UPDATE bs_employees
+                   SET  emp_status = :emp_status,
+                         emp_time_update = NOW()
+                   WHERE emp_id = :emp_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':emp_status', $status, PDO::PARAM_STR);
+            $stmt->bindParam(':emp_id', $Id, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateDetailOwnerStatus : " . $e->getMessage();
+            return false;
+        }
+    }
+    // ============================= 7. updateAuthorityOwner ===================================
     function updateAuthorityOwner($Id, $newEatId)
     {
         try {
