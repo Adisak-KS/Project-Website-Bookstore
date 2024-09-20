@@ -129,11 +129,13 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <td class="text-center">
                                                                         <?php
                                                                         $originalId = $row['prq_id'];
-                                                                        require_once("includes/salt.php");   // รหัส Salt 
                                                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                                         ?>
-                                                                        <a href="account_product_request_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-info">รายละเอียด</a>
+                                                                        <a href="account_product_request_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-detail">
+                                                                            <i class="fa-solid fa-eye"></i>
+                                                                            รายละเอียด
+                                                                        </a>
                                                                     </td>
                                                                 </tr>
                                                             <?php } ?>
@@ -180,7 +182,9 @@ if (empty($_SESSION['mem_id'])) {
     <script>
         new DataTable('#myAccountTable', {
             responsive: true,
-            "order": [[0, 'DESC']]
+            "order": [
+                [0, 'DESC']
+            ]
         });
     </script>
 </body>

@@ -225,13 +225,14 @@ if (empty($_SESSION['mem_id'])) {
                                                                         <td class="product-subtotal" style="border-right: none;">
                                                                             <?php if (!$hasReview) { ?>
                                                                                 <!-- Button trigger modal -->
-                                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal-<?php echo $row['prd_id']; ?>">
+                                                                                <button type="button" class="btn btn-review" data-bs-toggle="modal" data-bs-target="#reviewModal-<?php echo $row['prd_id']; ?>">
+                                                                                    <i class="fa-solid fa-comment-dots"></i>
                                                                                     รีวิว
                                                                                 </button>
 
                                                                                 <!-- Modal -->
                                                                                 <div class="modal fade" id="reviewModal-<?php echo $row['prd_id']; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                                                    <form action="process/account_order_history_detail_review_add.php" method="post">
+                                                                                    <form id="formReview" action="process/account_order_history_detail_review_add.php" method="post">
 
                                                                                         <div class="modal-dialog">
                                                                                             <div class="modal-content">
@@ -284,9 +285,9 @@ if (empty($_SESSION['mem_id'])) {
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                                                    <button type="button" class="btn" data-bs-dismiss="modal">ยกเลิก</button>
                                                                                                                     <button type="submit" name="btn-review-add" class="btn btn-sqr">
-                                                                                                                        <i class="fa-regular fa-square-plus"></i>
+                                                                                                                        <i class="fa-solid fa-comment-dots"></i>
                                                                                                                         รีวิวสินค้า
                                                                                                                     </button>
                                                                                                                 </div>
@@ -299,13 +300,14 @@ if (empty($_SESSION['mem_id'])) {
                                                                                     </form>
                                                                                 </div>
                                                                             <?php } else { ?>
-                                                                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReviewModal-<?php echo $row['prd_id']; ?>">
+                                                                                <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#editReviewModal-<?php echo $row['prd_id']; ?>">
+                                                                                    <i class="fa-solid fa-pen-to-square"></i>
                                                                                     แก้ไขรีวิว
                                                                                 </button>
 
                                                                                 <!-- Modal -->
                                                                                 <div class="modal fade" id="editReviewModal-<?php echo $row['prd_id']; ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                                                                    <form action="process/account_order_history_detail_review_edit.php" method="post">
+                                                                                    <form id="formReview" action="process/account_order_history_detail_review_edit.php" method="post">
 
                                                                                         <div class="modal-dialog">
                                                                                             <div class="modal-content">
@@ -323,7 +325,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                                                                 <div class="single-input-item mb-3">
                                                                                                                     <div class="mb-3 star-rating-form">
                                                                                                                         <label for="prv_detail" class="form-label mb-3">ระดับความพึงพอใจ <span class="text-danger">*</span></label>
-                                                                                                                        <div class="d-flex justify-content-start starRatingGroup">
+                                                                                                                        <div class="mb-3 d-flex justify-content-start starRatingGroup">
                                                                                                                             <div class="d-flex align-items-start starRating">
                                                                                                                                 <div class="d-flex flex-column align-items-center mx-2">
                                                                                                                                     <i class="fa-solid fa-star fa-xl" data-rating="1"></i>
@@ -349,18 +351,18 @@ if (empty($_SESSION['mem_id'])) {
                                                                                                                             <input type="hidden" name="prv_rating" class="prv_rating" value="<?php echo $hasReview['prv_rating'] ?>">
                                                                                                                         </div>
                                                                                                                     </div>
-
                                                                                                                 </div>
+
                                                                                                                 <div class="single-input-item mb-3">
                                                                                                                     <div class="mb-3">
-                                                                                                                        <label for="prv_detail" class="form-label">รีวิวสินค้า</label> <br>
-                                                                                                                        <textarea name="prv_detail" class="form-control" placeholder="รายละเอียดการรีวิว"><?php echo $hasReview['prv_detail'] ?></textarea>
+                                                                                                                        <label for="prv_detail" class="form-label">รีวิวสินค้า <span class="text-danger">*</span></label> <br>
+                                                                                                                        <textarea name="prv_detail" class="form-control" placeholder="รายละเอียดการรีวิว" maxlength="250"><?php echo $hasReview['prv_detail'] ?></textarea>
                                                                                                                     </div>
                                                                                                                 </div>
                                                                                                                 <div class="modal-footer">
-                                                                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                                                    <button type="button" class="btn" data-bs-dismiss="modal">ยกเลิก</button>
                                                                                                                     <button type="submit" name="btn-review-add" class="btn btn-sqr">
-                                                                                                                        <i class="fa-regular fa-square-plus"></i>
+                                                                                                                        <i class="fa-solid fa-pen-to-square"></i>
                                                                                                                         แก้ไขรีวิวสินค้า
                                                                                                                     </button>
                                                                                                                 </div>
@@ -489,7 +491,10 @@ if (empty($_SESSION['mem_id'])) {
 
                                                             <input type="hidden" name="ord_id" value="<?php echo $order['ord_id'] ?>" readonly>
                                                             <input type="hidden" name="mem_id" value="<?php echo $_SESSION['mem_id'] ?>" readonly>
-                                                            <button type="submit" name="btn-add" class="btn btn-success">สั่งซื้อสินค้ารายการนี้อีกครั้ง</button>
+                                                            <button type="submit" name="btn-add" class="btn btn-confirm mt-2">
+                                                                <i class="fa-solid fa-cart-plus"></i>
+                                                                สั่งซื้อสินค้ารายการนี้อีกครั้ง
+                                                            </button>
                                                         </form>
                                                     </div>
                                                 <?php } ?>
@@ -501,14 +506,14 @@ if (empty($_SESSION['mem_id'])) {
                                             <div class="myaccount-content d-flex justify-content-between">
                                                 <div>
                                                     <?php if ($order['ord_status'] == 'Pending Payment' || $order['ord_status'] == 'Payment Retry') { ?>
-                                                        <button type="button" class="btn btn-danger btn-order-cancel" data-ord_id="<?php echo $order["ord_id"]; ?>" data-mem_id="<?php echo $order["mem_id"]; ?>" data-ord_coins_discount="<?php echo $order['ord_coins_discount'] ?>">
+                                                        <button type="button" class="btn btn-del btn-order-cancel" data-ord_id="<?php echo $order["ord_id"]; ?>" data-mem_id="<?php echo $order["mem_id"]; ?>" data-ord_coins_discount="<?php echo $order['ord_coins_discount'] ?>">
                                                             <i class="fa-solid fa-trash"></i>
                                                             <span>ยกเลิกรายการสั่งซื้อนี้</span>
                                                         </button>
                                                     <?php } ?>
                                                     <?php if ($order['ord_status'] == 'Shipped') { ?>
-                                                        <button type="button" class="btn btn-success btn-order-confirm" data-ord_id="<?php echo $order["ord_id"]; ?>" data-mem_id="<?php echo $order["mem_id"]; ?>" data-ord_coins_earned="<?php echo $order['ord_coins_earned'] ?>">
-
+                                                        <button type="button" class="btn btn-confirm btn-order-confirm" data-ord_id="<?php echo $order["ord_id"]; ?>" data-mem_id="<?php echo $order["mem_id"]; ?>" data-ord_coins_earned="<?php echo $order['ord_coins_earned'] ?>">
+                                                            <i class="fa-solid fa-check"></i>
                                                             <span>ยืนยันได้รับสินค้าแล้ว</span>
                                                         </button>
                                                     <?php } ?>
@@ -619,11 +624,11 @@ if (empty($_SESSION['mem_id'])) {
                 let memId = $(this).data('mem_id');
                 let ordCoinsEarned = $(this).data('ord_coins_earned');
 
-                OrderCancelConfirm(ordId, memId, ordCoinsEarned);
+                OrderConfirm(ordId, memId, ordCoinsEarned);
             });
         });
 
-        function OrderCancelConfirm(ordId, memId, ordCoinsEarned) {
+        function OrderConfirm(ordId, memId, ordCoinsEarned) {
             Swal.fire({
                 icon: "warning",
                 title: 'ยืนยันรายการสั่งซื้อ?',
@@ -667,77 +672,12 @@ if (empty($_SESSION['mem_id'])) {
     </script>
 
 
-<script>
-    $(document).ready(function() {
-        // ฟังก์ชันในการจัดการการให้คะแนนดาว
-        function setupStarRating(form) {
-            let selectedRating = parseInt($(form).find('.prv_rating').val()) || 0;
-
-            // เมื่อ hover เม้าส์
-            $(form).find('.starRating i').on('mouseover', function() {
-                let rating = $(this).data('rating');
-
-                // เพิ่มสีให้กับดาวทั้งหมดก่อนหน้าและดาวที่อยู่ปัจจุบัน
-                $(form).find('.starRating i').each(function() {
-                    if ($(this).data('rating') <= rating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-
-            // เมื่อเม้าส์ออกจากดาว (ถ้ายังไม่ได้คลิกจะกลับเป็นสถานะเดิม)
-            $(form).on('mouseleave', function() {
-                $(form).find('.starRating i').each(function() {
-                    if ($(this).data('rating') <= selectedRating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-
-            // เมื่อคลิก
-            $(form).find('.starRating i').on('click', function() {
-                selectedRating = $(this).data('rating');
-
-                // ใส่ค่าใน input ซ่อน
-                $(form).find('.prv_rating').val(selectedRating);
-
-                // เพิ่มสีค้างไว้หลังจากคลิก
-                $(form).find('.starRating i').each(function() {
-                    if ($(this).data('rating') <= selectedRating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-
-            // ตั้งค่าสีดาวตามค่า rating ที่มีอยู่
-            $(form).find('.starRating i').each(function() {
-                if ($(this).data('rating') <= selectedRating) {
-                    $(this).css('color', '#f07c29');
-                } else {
-                    $(this).css('color', '');
-                }
-            });
-        }
-
-        // ตั้งค่าให้กับฟอร์มทั้งหมดที่มีคลาส star-rating-form
-        $('.star-rating-form').each(function() {
-            setupStarRating(this);
-        });
-    });
-</script>
-
-
-    <!-- <script>
+    <!-- star  -->
+    <script>
         $(document).ready(function() {
             // ฟังก์ชันในการจัดการการให้คะแนนดาว
             function setupStarRating(form) {
-                let selectedRating = 0;
+                let selectedRating = parseInt($(form).find('.prv_rating').val()) || 0;
 
                 // เมื่อ hover เม้าส์
                 $(form).find('.starRating i').on('mouseover', function() {
@@ -780,6 +720,15 @@ if (empty($_SESSION['mem_id'])) {
                         }
                     });
                 });
+
+                // ตั้งค่าสีดาวตามค่า rating ที่มีอยู่
+                $(form).find('.starRating i').each(function() {
+                    if ($(this).data('rating') <= selectedRating) {
+                        $(this).css('color', '#f07c29');
+                    } else {
+                        $(this).css('color', '');
+                    }
+                });
             }
 
             // ตั้งค่าให้กับฟอร์มทั้งหมดที่มีคลาส star-rating-form
@@ -787,55 +736,7 @@ if (empty($_SESSION['mem_id'])) {
                 setupStarRating(this);
             });
         });
-    </script> -->
-
-    <!-- <script>
-        $(document).ready(function() {
-            let selectedRating = 0;
-
-            // เมื่อ hover เม้าส์
-            $('.starRating i').on('mouseover', function() {
-                let rating = $(this).data('rating');
-
-                // เพิ่มสีให้กับดาวทั้งหมดก่อนหน้าและดาวที่อยู่ปัจจุบัน
-                $('.starRating i').each(function() {
-                    if ($(this).data('rating') <= rating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-
-            // เมื่อเม้าส์ออกจากดาว (ถ้ายังไม่ได้คลิกจะกลับเป็นสถานะเดิม)
-            $('.starRating').on('mouseleave', function() {
-                $('.starRating i').each(function() {
-                    if ($(this).data('rating') <= selectedRating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-
-            // เมื่อคลิก
-            $('.starRating i').on('click', function() {
-                selectedRating = $(this).data('rating');
-
-                // ใส่ค่าใน input ซ่อน
-                $('#prv_rating').val(selectedRating);
-
-                // เพิ่มสีค้างไว้หลังจากคลิก
-                $('.starRating i').each(function() {
-                    if ($(this).data('rating') <= selectedRating) {
-                        $(this).css('color', '#f07c29');
-                    } else {
-                        $(this).css('color', '');
-                    }
-                });
-            });
-        });
-    </script> -->
+    </script>
 
 </body>
 

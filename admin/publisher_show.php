@@ -2,6 +2,8 @@
 $titlePage = "สำนักพิมพ์";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/PublisherController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -123,7 +125,13 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded" width="50px" height="50px" src="../uploads/img_publisher/<?php echo $row['pub_img'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['pub_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['pub_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php if ($row['pub_status'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-success fs-6">แสดง</span>
@@ -134,7 +142,6 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <?php
                                                             $originalId = $row["pub_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>

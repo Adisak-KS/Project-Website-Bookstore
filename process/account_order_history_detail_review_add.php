@@ -15,14 +15,10 @@ if (isset($_POST['btn-review-add'])) {
     $base64Encoded =  $_SESSION["base64Encoded"];
 
     $locationSuccess = "Location: ../account_order_history_detail?id=$base64Encoded";
-    $locationSuccess = "Location: ../account_order_history_detail?id=$base64Encoded";
+    $locationError = "Location: ../account_order_history_detail?id=$base64Encoded";
 
-    echo "prd id =" . $prdId . "<br>";
-    echo "ord id =" . $ordId . "<br>";
-    echo "mem id =" . $memId . "<br>";
-    echo "prv rating =" . $prvRating . "<br>";
-    echo "prv detail =" . $prvDetail . "<br>";
-
+    valiDateFromReview($prdId, $ordId, $memId, $prvRating, $prvDetail, $locationError);
+    
     $insertReview = $ReviewController->insertAccountReview($prdId, $ordId, $memId, $prvRating, $prvDetail);
 
 

@@ -78,7 +78,10 @@ if (!empty($_SESSION['emp_id'])) {
                                 </div> -->
                                 <hr>
                                 <div class="mb-3 d-grid text-center">
-                                    <button class="btn btn-primary" name="btn-login" type="submit"> เข้าสู่ระบบ </button>
+                                    <button class="btn btn-primary" name="btn-login" type="submit">
+                                        <i class="fa-solid fa-right-to-bracket"></i>
+                                        เข้าสู่ระบบ
+                                    </button>
                                 </div>
                             </form>
 

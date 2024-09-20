@@ -409,6 +409,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -417,9 +418,9 @@ class ProductController extends BaseController
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
                     LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
                     WHERE bs_products.prd_status = 1
-                    AND bs_products_type.pty_status = 1
-                    AND bs_publishers.pub_status = 1
-                    AND bs_authors.auth_status = 1
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
                     GROUP BY bs_products.prd_id
                     ORDER BY bs_products.prd_time_create DESC
                     LIMIT 10";
@@ -445,6 +446,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -481,6 +483,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -517,24 +520,31 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
-                        COUNT(bs_products_reviews.prd_id) AS review_count,
-                        SUM(bs_products_reviews.prv_rating) AS total_rating,
-                        SUM(bs_products_views.prv_view) AS total_views
-                      	
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
+                        COALESCE(bs_reviews.review_count, 0) AS review_count,
+                        COALESCE(bs_reviews.total_rating, 0) AS total_rating,
+                        COALESCE(bs_views.total_views, 0) AS total_views
                     FROM bs_products
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id
                     INNER JOIN bs_publishers ON bs_products.pub_id = bs_publishers.pub_id
                     INNER JOIN bs_authors ON bs_products.auth_id = bs_authors.auth_id
-                    LEFT JOIN bs_products_reviews ON bs_products.prd_id = bs_products_reviews.prd_id AND bs_products_reviews.prv_status = 1
-                    LEFT JOIN bs_products_views ON bs_products.prd_id = bs_products_views.prd_id
+                    LEFT JOIN (
+                        SELECT prd_id, COUNT(*) AS review_count, SUM(prv_rating) AS total_rating
+                        FROM bs_products_reviews
+                        WHERE prv_status = 1
+                        GROUP BY prd_id
+                    ) AS bs_reviews ON bs_products.prd_id = bs_reviews.prd_id
+                    LEFT JOIN (
+                        SELECT prd_id, SUM(prv_view) AS total_views
+                        FROM bs_products_views
+                        GROUP BY prd_id
+                    ) AS bs_views ON bs_products.prd_id = bs_views.prd_id
                     WHERE bs_products.prd_status = 1
-                    AND bs_products_type.pty_status = 1
-                    AND bs_publishers.pub_status = 1
-                    AND bs_authors.auth_status = 1
-                    GROUP BY bs_products.prd_id
+                        AND bs_products_type.pty_status = 1
+                        AND bs_publishers.pub_status = 1
+                        AND bs_authors.auth_status = 1
                     ORDER BY total_views DESC
                     LIMIT 10";
-
             $stmt = $this->db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -552,6 +562,7 @@ class ProductController extends BaseController
                         bs_products.*,
                         bs_products_type.pty_id,
                         bs_products_type.pty_name,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -589,6 +600,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -629,6 +641,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -674,6 +687,7 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -723,6 +737,7 @@ class ProductController extends BaseController
                         bs_products.prd_price,
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -773,6 +788,7 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -825,6 +841,7 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -875,6 +892,7 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products
@@ -886,7 +904,7 @@ class ProductController extends BaseController
                         AND bs_products_type.pty_status = 1
                         AND bs_publishers.pub_status = 1
                         AND bs_authors.auth_status = 1
-                        AND bs_products.prd_percent_discount > :prd_percent_discount
+                        AND bs_products.prd_percent_discount >= :prd_percent_discount
                     GROUP BY bs_products.prd_id
                     ORDER BY bs_products.prd_percent_discount DESC";
             $stmt = $this->db->prepare($sql);
@@ -911,6 +929,7 @@ class ProductController extends BaseController
                         bs_products.prd_percent_discount,
                         bs_products.prd_preorder,
                         bs_products.prd_detail,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale,
                         COUNT(bs_products_reviews.prd_id) AS review_count,
                         SUM(bs_products_reviews.prv_rating) AS total_rating
                     FROM bs_products

@@ -24,11 +24,8 @@ if (empty($_SESSION['mem_id'])) {
 
         $detailMemberAddress = $MemberAddressController->getDetailMemberAddress($addrId, $memId);
 
-        if (!$detailMemberAddress) {
-            $_SESSION['error'] = "ไม่พบที่อยู่ที่คุณต้องการ";
-            header("Location: account_address");
-            exit;
-        }
+        // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
+        checkResultDetail($detailMemberAddress);
     }
 }
 ?>

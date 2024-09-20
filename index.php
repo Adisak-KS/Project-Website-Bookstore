@@ -2,6 +2,7 @@
 $titlePage = "หน้าแรก";
 
 require_once("db/connectdb.php");
+require_once("includes/salt.php");
 require_once("db/controller/BannerController.php");
 require_once("db/controller/ProductController.php");
 
@@ -62,12 +63,11 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
             </div>
             <div class="tab-active owl-carousel">
                 <?php if ($newProducts) { ?>
-                    <?php foreach ($newProducts as $newProduct) { ?>
+                    <?php foreach ($newProducts as $row) { ?>
                         <div class="tab-total">
 
                             <?php
-                            $originalId = $newProduct["prd_id"];
-                            require_once("includes/salt.php");   // รหัส Salt 
+                            $originalId = $row["prd_id"];
                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                             ?>
@@ -76,7 +76,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <div class="product-wrapper">
                                 <div class="product-img">
                                     <a href="#" onclick="return false;">
-                                        <img src="uploads/img_product/<?php echo $newProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                        <img src="uploads/img_product/<?php echo $row['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                     </a>
                                     <div class="quick-view">
                                         <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -86,11 +86,11 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                     <div class="product-flag">
                                         <ul>
                                             <li><span class="sale">ใหม่</span> <br></li>
-                                            <?php if ($newProduct['prd_preorder'] == 0) { ?>
+                                            <?php if ($row['prd_preorder'] == 0) { ?>
                                                 <li><span class="sale">พรีออเดอร์</span> <br></li>
                                             <?php } ?>
-                                            <?php if ($newProduct['prd_percent_discount'] > 0) { ?>
-                                                <li><span class="discount-percentage"><?php echo "-" . $newProduct['prd_percent_discount'] . "%" ?></span></li>
+                                            <?php if ($row['prd_percent_discount'] > 0) { ?>
+                                                <li><span class="discount-percentage"><?php echo "-" . $row['prd_percent_discount'] . "%" ?></span></li>
                                             <?php } ?>
                                         </ul>
                                     </div>
@@ -99,45 +99,30 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                     <div class="product-rating mt-1">
                                         <ul>
                                             <?php
-                                            $review_count = $newProduct['review_count']; // จำนวนคนรีวิว
-                                            $total_rating = $newProduct['total_rating']; // คะแนน
-                                            $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                            // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                            for ($i = 0; $i < 5; $i++) {
-                                                if ($i < $average_rating) {
-                                                    echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                } else {
-                                                    echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                }
-                                            }
+                                            $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                            $totalRating = $row['total_rating']; // คะแนน
+                                            reviewRatingStars($reviewCount, $totalRating)
                                             ?>
 
-                                            <?php if ($review_count > 0) { ?>
-                                                <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                            <?php if ($reviewCount > 0) { ?>
+                                                <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                             <?php } ?>
 
                                         </ul>
 
                                     </div>
                                     <?php
-                                    $prd_name = $newProduct['prd_name'];
-                                    $max_length = 20;
-
-                                    $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                    $originalName = $row['prd_name'];
+                                    $shortName = shortenName($originalName);
                                     ?>
-                                    <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+                                    <h4><a href="#" onclick="return false;"><?php echo $shortName ?></a></h4>
                                     <div class="product-price">
                                         <ul>
-                                            <?php
-                                            $price = $newProduct['prd_price'];
-                                            $prdPercentDiscount = $newProduct['prd_percent_discount']; // ส่วนลด(%)
-                                            $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                            ?>
+
                                             <li>
-                                                <?php echo "฿" . number_format($priceSale, 2) ?>
-                                                <?php if ($prdPercentDiscount  > 0) { ?>
-                                                    <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                    <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                 <?php } ?>
 
                                             </li>
@@ -244,17 +229,17 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                     <div class="tab-active owl-carousel">
                         <?php if ($recommendProducts) { ?>
                             <!-- single-product-start -->
-                            <?php foreach ($recommendProducts as $recProduct) { ?>
+                            <?php foreach ($recommendProducts as $row) { ?>
                                 <?php
-                                $originalId = $recProduct["prd_id"];
-                                require_once("includes/salt.php");   // รหัส Salt 
+                                $originalId = $row["prd_id"];
                                 $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                 $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                 ?>
+
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false;">
-                                            <img src="uploads/img_product/<?php echo $recProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                            <img src="uploads/img_product/<?php echo $row['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -264,11 +249,11 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">แนะนำ</span> <br></li>
-                                                <?php if ($recProduct['prd_preorder'] == 0) { ?>
+                                                <?php if ($row['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
-                                                <?php if ($recProduct['prd_percent_discount']) { ?>
-                                                    <li><span class="discount-percentage"><?php echo "-" . $recProduct['prd_percent_discount'] . "%" ?></span></li>
+                                                <?php if ($row['prd_percent_discount']) { ?>
+                                                    <li><span class="discount-percentage"><?php echo "-" . $row['prd_percent_discount'] . "%" ?></span></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -277,45 +262,30 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-rating">
                                             <ul>
                                                 <?php
-                                                $review_count = $recProduct['review_count']; // จำนวนคนรีวิว
-                                                $total_rating = $recProduct['total_rating']; // คะแนน
-                                                $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                                // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                                for ($i = 0; $i < 5; $i++) {
-                                                    if ($i < $average_rating) {
-                                                        echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                    } else {
-                                                        echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                    }
-                                                }
+                                                $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                                $totalRating = $row['total_rating']; // คะแนน
+                                                // แสดง star
+                                                reviewRatingStars($reviewCount, $totalRating)
                                                 ?>
-
-                                                <?php if ($review_count > 0) { ?>
-                                                    <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                                <?php if ($reviewCount > 0) { ?>
+                                                    <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                                 <?php } ?>
                                             </ul>
                                         </div>
-                                        <?php
-                                        $prd_name = $recProduct['prd_name'];
-                                        $max_length = 20;
 
-                                        $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                        <?php
+                                        $originalName = $row['prd_name'];
+                                        $shortName = shortenName($originalName);
                                         ?>
-                                        <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+
+                                        <h4><a href="#" onclick="return false;"><?php echo $shortName ?></a></h4>
                                         <div class="product-price">
                                             <ul>
-                                                <?php
-                                                $price = $recProduct['prd_price'];
-                                                $prdPercentDiscount = $recProduct['prd_percent_discount']; // ส่วนลด(%)
-                                                $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                                ?>
                                                 <li>
-                                                    <?php echo "฿" . number_format($priceSale, 2) ?>
-                                                    <?php if ($prdPercentDiscount  > 0) { ?>
-                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                    <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                    <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                     <?php } ?>
-
                                                 </li>
                                             </ul>
                                         </div>
@@ -386,17 +356,16 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                     <div class="tab-active owl-carousel">
                         <?php if ($popularProducts) { ?>
                             <!-- single-product-start -->
-                            <?php foreach ($popularProducts as $popProduct) { ?>
+                            <?php foreach ($popularProducts as $row) { ?>
                                 <?php
-                                $originalId = $popProduct["prd_id"];
-                                require_once("includes/salt.php");   // รหัส Salt 
+                                $originalId = $row["prd_id"];
                                 $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                 $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                 ?>
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false">
-                                            <img src="uploads/img_product/<?php echo $popProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                            <img src="uploads/img_product/<?php echo $row['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded ?>" title="รายละเอียด">
@@ -406,11 +375,11 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">ยอดนิยม</span> <br></li>
-                                                <?php if ($popProduct['prd_preorder'] == 0) { ?>
+                                                <?php if ($row['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
-                                                <?php if ($popProduct['prd_percent_discount']) { ?>
-                                                    <li><span class="discount-percentage"><?php echo "-" . $popProduct['prd_percent_discount'] . "%" ?></span></li>
+                                                <?php if ($row['prd_percent_discount']) { ?>
+                                                    <li><span class="discount-percentage"><?php echo "-" . $row['prd_percent_discount'] . "%" ?></span></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -419,43 +388,31 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-rating">
                                             <ul>
                                                 <?php
-                                                $review_count = $popProduct['review_count']; // จำนวนคนรีวิว
-                                                $total_rating = $popProduct['total_rating']; // คะแนน
-                                                $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                                // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                                for ($i = 0; $i < 5; $i++) {
-                                                    if ($i < $average_rating) {
-                                                        echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                    } else {
-                                                        echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                    }
-                                                }
+                                                $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                                $totalRating = $row['total_rating']; // คะแนน
+                                                // แสดง star
+                                                reviewRatingStars($reviewCount, $totalRating)
                                                 ?>
 
-                                                <?php if ($review_count > 0) { ?>
-                                                    <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                                <?php if ($reviewCount > 0) { ?>
+                                                    <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                                 <?php } ?>
                                             </ul>
                                         </div>
-                                        <?php
-                                        $prd_name = $popProduct['prd_name'];
-                                        $max_length = 20;
 
-                                        $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                        <?php
+                                        $originalName = $row['prd_name'];
+                                        $shortName = shortenName($originalName);
                                         ?>
-                                        <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+                                        <h4><a href="#" onclick="return false;"><?php echo $shortName ?></a></h4>
+
                                         <div class="product-price">
                                             <ul>
-                                                <?php
-                                                $price = $popProduct['prd_price'];
-                                                $prdPercentDiscount = $popProduct['prd_percent_discount']; // ส่วนลด(%)
-                                                $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                                ?>
+
                                                 <li>
-                                                    <?php echo "฿" . number_format($priceSale, 2) ?>
-                                                    <?php if ($prdPercentDiscount  > 0) { ?>
-                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                    <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                    <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                     <?php } ?>
 
                                                 </li>
@@ -528,17 +485,16 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                     <div class="tab-active owl-carousel">
                         <?php if ($mostViewedProducts) { ?>
                             <!-- single-product-start -->
-                            <?php foreach ($mostViewedProducts as $mvProduct) { ?>
+                            <?php foreach ($mostViewedProducts as $row) { ?>
                                 <?php
-                                $originalId = $mvProduct["prd_id"];
-                                require_once("includes/salt.php");   // รหัส Salt 
+                                $originalId = $row["prd_id"];
                                 $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                 $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                 ?>
                                 <div class="product-wrapper">
                                     <div class="product-img">
                                         <a href="#" onclick="return false;">
-                                            <img src="uploads/img_product/<?php echo $mvProduct['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                            <img src="uploads/img_product/<?php echo $row['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                         </a>
                                         <div class="quick-view">
                                             <a class="action-view" href="product_detail?id=<?php echo $base64Encoded; ?>" title="รายละเอียด">
@@ -548,11 +504,11 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-flag">
                                             <ul>
                                                 <li><span class="sale">เข้าชมบ่อย</span> <br></li>
-                                                <?php if ($mvProduct['prd_preorder'] == 0) { ?>
+                                                <?php if ($row['prd_preorder'] == 0) { ?>
                                                     <li><span class="sale">พรีออเดอร์</span></li>
                                                 <?php } ?>
-                                                <?php if ($mvProduct['prd_percent_discount']) { ?>
-                                                    <li><span class="discount-percentage"><?php echo "-" . $mvProduct['prd_percent_discount'] . "%" ?></span></li>
+                                                <?php if ($row['prd_percent_discount']) { ?>
+                                                    <li><span class="discount-percentage"><?php echo "-" . $row['prd_percent_discount'] . "%" ?></span></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
@@ -561,45 +517,31 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                                         <div class="product-rating">
                                             <ul>
                                                 <?php
-                                                $review_count = $mvProduct['review_count']; // จำนวนคนรีวิว
-                                                $total_rating = $mvProduct['total_rating']; // คะแนน
-                                                $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                                // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                                for ($i = 0; $i < 5; $i++) {
-                                                    if ($i < $average_rating) {
-                                                        echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                    } else {
-                                                        echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                    }
-                                                }
+                                                $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                                $totalRating = $row['total_rating']; // คะแนน
+                                                // แสดง star
+                                                reviewRatingStars($reviewCount, $totalRating)
                                                 ?>
 
-                                                <?php if ($review_count > 0) { ?>
-                                                    <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                                <?php if ($reviewCount > 0) { ?>
+                                                    <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                                 <?php } ?>
                                             </ul>
                                         </div>
-                                        <?php
-                                        $prd_name = $mvProduct['prd_name'];
-                                        $max_length = 20;
 
-                                        $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                        <?php
+                                        $originalName = $row['prd_name'];
+                                        $shortName = shortenName($originalName);
                                         ?>
-                                        <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+                                        <h4><a href="#" onclick="return false;"><?php echo $shortName ?></a></h4>
+
                                         <div class="product-price">
                                             <ul>
-                                                <?php
-                                                $price = $mvProduct['prd_price'];
-                                                $prdPercentDiscount = $mvProduct['prd_percent_discount']; // ส่วนลด(%)
-                                                $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                                ?>
                                                 <li>
-                                                    <?php echo "฿" . number_format($priceSale, 2) ?>
-                                                    <?php if ($prdPercentDiscount  > 0) { ?>
-                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                    <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                    <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                     <?php } ?>
-
                                                 </li>
                                             </ul>
                                         </div>
@@ -671,7 +613,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
         </div>
     </div>
     <!-- product-area-end -->
-  
+
     <!-- footer-area-start -->
     <?php require_once('layouts/nav_footer.php') ?>
 

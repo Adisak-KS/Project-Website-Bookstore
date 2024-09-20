@@ -20,8 +20,8 @@ if (isset($_POST['btn-add'])) {
     $prdPreorder = $_POST['prd_preorder'];
     $prdStatus = $_POST['prd_status'];
 
-    $locationError = "Location: ../productshow";
-    $locationSuccess = "Location: ../productshow";
+    $locationError = "Location: ../product_show";
+    $locationSuccess = "Location: ../product_show";
 
     echo "prdName : " . $prdName . "<br>";
     echo "prdISBN : " . $prdISBN . "<br>";

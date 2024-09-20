@@ -2,6 +2,8 @@
 $titlePage = "ช่องทางชำระเงิน";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/PaymentController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -134,8 +136,20 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded" width="50px" height="50px" src="../uploads/img_payment/<?php echo $row['pmt_bank_logo'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['pmt_bank']; ?></td>
-                                                        <td class="text-start"><?php echo $row['pmt_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['pmt_bank'];
+                                                            $shortBankName = shortenName($originalName);
+                                                            echo $shortBankName;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['pmt_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-start"><?php echo $row['pmt_number']; ?></td>
                                                         <td class="text-center">
                                                             <?php if ($row['pmt_status'] == 1) { ?>
@@ -145,13 +159,12 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                             <?php } ?>
                                                         </td>
                                                         <td class="text-center">
+
                                                             <?php
                                                             $originalId = $row["pmt_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
-
 
                                                             <a href="payment_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

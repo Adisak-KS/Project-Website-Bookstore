@@ -2,6 +2,8 @@
 $titlePage = "ผู้แต่ง";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/AuthorController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -124,7 +126,13 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded-circle" style="object-fit: cover;" width="50px" height="50px" src="../uploads/img_author/<?php echo $row['auth_img'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['auth_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['auth_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php if ($row['auth_status'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-success fs-6">ใช้งานได้</span>
@@ -133,13 +141,12 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                             <?php } ?>
                                                         </td>
                                                         <td class="text-center">
+
                                                             <?php
                                                             $originalId = $row["auth_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
-
 
                                                             <a href="author_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

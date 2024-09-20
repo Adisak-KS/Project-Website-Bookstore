@@ -104,7 +104,7 @@ if (empty($_SESSION['mem_id'])) {
                                                     <table id="myAccountTable" class="table table-bordered table-hover table-responsive">
                                                         <thead class="thead-light">
                                                             <tr>
-                                                                <th class="text-center">วัน เวลา</th>
+                                                                <!-- <th class="text-center">วัน เวลา</th> -->
                                                                 <th class="text-center">รหัสสั่งซื้อ</th>
                                                                 <th class="text-center">ยอดสั่งซื้อ</th>
                                                                 <th class="text-center">สถานะ</th>
@@ -115,7 +115,7 @@ if (empty($_SESSION['mem_id'])) {
                                                         <tbody>
                                                             <?php foreach ($orderHistory as $row) { ?>
                                                                 <tr>
-                                                                    <td class="text-center"><?php echo $row['ord_time_create'] ?></td>
+                                                                    <!-- <td class="text-center"><?php echo $row['ord_time_create'] ?></td> -->
                                                                     <td class="text-center"><?php echo $row['ord_id'] ?></td>
                                                                     <td class="text-center"><?php echo "฿" . number_format($row['ord_price'], 2) ?></td>
                                                                     <td class="text-center">
@@ -151,17 +151,15 @@ if (empty($_SESSION['mem_id'])) {
 
                                                                     <td class="text-center">
                                                                         <?php
-
                                                                         $originalId = $row["ord_id"];
-                                                                        require_once("includes/salt.php");   // รหัส Salt 
                                                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
 
                                                                         if ($row['ord_status'] == "Pending Payment" || $row['ord_status'] == "Payment Retry") {
-                                                                            echo '<a href="checkout_payment?id=' . $base64Encoded . '" class="btn btn-secondary">ชำระเงิน</a>';
+                                                                            echo '<a href="checkout_payment?id=' . $base64Encoded . '" class="btn btn-pay"><i class="fa-solid fa-money-bill-transfer"></i> ชำระเงิน</a>';
                                                                         }
                                                                         ?>
-                                                                        <a href="account_order_history_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-info"><i class="fa-solid fa-eye"></i> รายละเอียด</a>
+                                                                        <a href="account_order_history_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-detail"><i class="fa-solid fa-eye"></i> รายละเอียด</a>
 
                                                                     </td>
                                                                 </tr>

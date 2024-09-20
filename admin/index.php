@@ -78,8 +78,9 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                                     <span class="badge bg-secondary rounded-pill mt-2"><?php echo number_format($amountOrderUnderReview) ?> รายการ</span>
                                                 <?php } ?>
                                             </div>
+                                            
                                             <div class="progress progress-bar-alt-pink progress-sm">
-                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                                                     <span class="visually-hidden">77% Complete</span>
                                                 </div>
                                             </div>
@@ -106,7 +107,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                                 <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
-                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                                                     <span class="visually-hidden">77% Complete</span>
                                                 </div>
                                             </div>
@@ -135,7 +136,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                                 <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
-                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                                                     <span class="visually-hidden">77% Complete</span>
                                                 </div>
                                             </div>
@@ -162,7 +163,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                                 <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
-                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
                                                     <span class="visually-hidden">77% Complete</span>
                                                 </div>
                                             </div>
@@ -189,7 +190,7 @@ $productsLowNumber = $ProductController->getProductLowNumber($prdNumberLow);
                                                 <?php } ?>
                                             </div>
                                             <div class="progress progress-bar-alt-pink progress-sm">
-                                                <div class="progress-bar bg-pink" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
 
                                             </div>
                                         </div>

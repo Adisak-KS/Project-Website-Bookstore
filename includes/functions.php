@@ -1114,3 +1114,54 @@ function checkAuthorityEmployeesSystems($useAuthority, $allowedAuthorities)
         exit();
     }
 }
+
+
+// ======================== 27. shortenName =====================================
+function valiDateFromReview($prdId, $ordId, $memId, $prvRating, $prvDetail, $locationError)
+{
+    if (empty($prdId) || empty($ordId) || empty($memId)) {
+        messageError("ไม่พบรหัสรายการของท่าน", $locationError);
+    }
+
+    if (empty($prvRating)) {
+        messageError("กรุณาระบุ ระดับความพึงพอใจ", $locationError);
+    } elseif (!is_numeric($prvRating)) {
+        messageError("ระดับความพึงพอใจ ต้องเป็นตัวเลข", $locationError);
+    } elseif ($prvRating < 1 || $prvRating > 5) {
+        messageError("ระดับความพึงพอใจ มีได้ 1-5 เท่านั้น", $locationError);
+    }
+
+    if (empty($prvDetail)) {
+        messageError("กรุณาระบุ รายละเอียดการรีวิว", $locationError);
+    } elseif (mb_strlen($prvDetail, 'UTF-8') > 250) {
+        messageError("รายละเอียดการรีวิว ต้องไม่เกิน 250 ตัวอักษร", $locationError);
+    }
+}
+
+
+// ======================== 27. shortenName =====================================
+function shortenName($originalName, $maxLength = NULL)
+{
+
+    if ($maxLength == NULL) {
+        $maxLength = 20;
+    }
+
+    return (mb_strlen($originalName, 'UTF-8') > $maxLength) ? mb_substr($originalName, 0, $maxLength, 'UTF-8') . '...' : $originalName;
+}
+
+// ======================== 27. reviewRatingStars =====================================
+function reviewRatingStars($reviewCount, $totalRating)
+{
+    // คำนวณค่าเฉลี่ยการให้คะแนน
+    $averageRating = ($reviewCount > 0) ? round($totalRating / $reviewCount) : 0;
+
+    // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
+    for ($i = 0; $i < 5; $i++) {
+        if ($i < $averageRating) {
+            echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
+        } else {
+            echo '<li><i class="fa-solid fa-star" style="color: #cccccc;"></i></li>'; // ดาวที่ว่าง
+        }
+    }
+}

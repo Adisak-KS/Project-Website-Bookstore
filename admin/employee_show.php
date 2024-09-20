@@ -2,6 +2,8 @@
 $titlePage = "พนักงาน";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/EmployeeController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -153,10 +155,34 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                         <td class="text-center">
                                                             <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_employees/<?php echo $row['emp_profile'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['emp_fname']; ?></td>
-                                                        <td class="text-start"><?php echo $row['emp_lname']; ?></td>
-                                                        <td class="text-start"><?php echo $row['emp_username']; ?></td>
-                                                        <td class="text-start"><?php echo $row['emp_email']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['emp_fname'];
+                                                            $shortFirstName = shortenName($originalName);
+                                                            echo $shortFirstName;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['emp_lname'];
+                                                            $shortLastName = shortenName($originalName);
+                                                            echo $shortLastName;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['emp_username'];
+                                                            $shortUsername = shortenName($originalName);
+                                                            echo $shortUsername;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['emp_email'];
+                                                            $shortUsername = shortenName($originalName);
+                                                            echo $shortUsername;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php
                                                             $authorityArray = explode(',', $row['authority']);
@@ -183,11 +209,9 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                         <td>
                                                             <?php
                                                             $originalId = $row["emp_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
-
 
                                                             <a href="employee_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

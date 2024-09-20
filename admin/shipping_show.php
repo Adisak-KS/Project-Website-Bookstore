@@ -2,6 +2,8 @@
 $titlePage = "ช่องทางจัดส่ง";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/ShippingController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -131,7 +133,13 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded" width="50px" height="50px" src="../uploads/img_shipping/<?php echo $row['shp_logo'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['shp_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['shp_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-start">฿<?php echo number_format($row['shp_price'], 2) ?></td>
                                                         <td class="text-center">
                                                             <?php if ($row['shp_status'] == 1) { ?>
@@ -143,7 +151,6 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <?php
                                                             $originalId = $row["shp_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>

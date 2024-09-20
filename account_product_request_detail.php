@@ -134,9 +134,12 @@ if (empty($_SESSION['mem_id'])) {
 
                                                         <div>
                                                             <?php if ($detail['prq_status'] !== 'success') { ?>
-                                                                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#editProductRequestModal">แก้ไข</button>
+                                                                <button class="btn btn-edit me-2" data-bs-toggle="modal" data-bs-target="#editProductRequestModal">
+                                                                    <i class="fa-solid fa-pen-to-square"></i>
+                                                                    แก้ไข
+                                                                </button>
                                                             <?php } ?>
-                                                            <button type="button" class="btn btn-danger btn-delete" data-id="<?php echo $detail["prq_id"]; ?>" data-img="<?php echo $detail["prq_img"]; ?>">
+                                                            <button type="button" class="btn btn-del btn-delete" data-id="<?php echo $detail["prq_id"]; ?>" data-img="<?php echo $detail["prq_img"]; ?>">
                                                                 <i class="fa-solid fa-trash"></i>
                                                                 <span>ลบ</span>
                                                             </button>
@@ -286,7 +289,8 @@ if (empty($_SESSION['mem_id'])) {
                                             <form action="process/product_request_add.php" method="post">
                                                 <div class="myaccount-content my-3 border-5 d-flex justify-content-between">
                                                     <?php if ($detail['prq_status'] !== 'success' && $detail['prq_status'] !== 'cancel') { ?>
-                                                        <button type="button" class="btn btn-danger btn-cancel" data-id="<?php echo $detail["prq_id"]; ?>">
+                                                        <button type="button" class="btn btn-del btn-cancel" data-id="<?php echo $detail["prq_id"]; ?>">
+                                                            <i class="fa-solid fa-ban"></i>
                                                             <span> ยกเลิกรายการตามหานี้</span>
                                                         </button>
                                                     <?php } ?>

@@ -6467,6 +6467,151 @@ nav.menu .cr-dropdown ul {
   color: #fff;
 }
 
+.btn.btn-edit {
+  background: #ffc107 none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-edit:hover {
+  background: #ffbf00 none repeat scroll 0 0;
+  color: #fff;
+}
+
+.btn.btn-del {
+  background: #dc3545 none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-del:hover {
+  background: #d92638 none repeat scroll 0 0;
+  color: #fff;
+}
+
+.btn.btn-pay {
+  background: #6c757d none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-pay:hover {
+  background: #6b737b none repeat scroll 0 0;
+  color: #fff;
+}
+
+.btn.btn-detail {
+  background: #0dcaf0 none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-detail:hover {
+  background: #0bb8da none repeat scroll 0 0;
+  color: #fff;
+}
+
+.btn.btn-confirm {
+  background: #198754 none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-confirm:hover {
+  background: #146c43 none repeat scroll 0 0;
+  color: #fff;
+}
+
+.btn.btn-review {
+  background: #0d6efd none repeat scroll 0 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  height: 40px;
+  line-height: 40px;
+  margin-right: 15px;
+  padding: 0 15px;
+  text-shadow: none;
+  text-transform: uppercase;
+  transition: all 0.3s ease 0s;
+  font-family: "Kanit", "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.btn.btn-review:hover {
+  background: #025ce3 none repeat scroll 0 0;
+  color: #fff;
+}
+
+
 .coupon {
   margin-bottom: 40px;
   overflow: hidden;

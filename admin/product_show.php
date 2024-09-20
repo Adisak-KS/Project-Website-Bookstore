@@ -2,6 +2,8 @@
 $titlePage = "สินค้า";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/ProductController.php");
 require_once("../db/controller/SettingWebsiteController.php");
 require_once('../db/controller/LoginController.php');
@@ -266,14 +268,22 @@ $author = $ProductController->getAuthor();
                                                             <img class="rounded" width="40px" height="50px" src="../uploads/img_product/<?php echo $row['prd_img1'] ?>">
                                                         </td>
                                                         <td class="text-start">
-                                                            <?php echo mb_substr($row['prd_name'], 0, 20, 'utf-8');
-                                                            if (mb_strlen($row['prd_name'], 'utf-8') > 20) echo '...';
+                                                            <?php
+                                                            $originalName = $row['prd_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
                                                             ?>
                                                         </td>
 
                                                         <td class="text-start"><?php echo "฿" . number_format($row['prd_price'], 2); ?></td>
                                                         <td class="text-start"><?php echo number_format($row['prd_percent_discount']) . " %"; ?></td>
-                                                        <td class="text-center"><?php echo $row['pty_name'] ?></td>
+                                                        <td class="text-center">
+                                                            <?php
+                                                            $originalName = $row['pty_name'];
+                                                            $shortTypeName = shortenName($originalName);
+                                                            echo $shortTypeName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php if ($row['prd_preorder'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-primary fs-6">ปกติ</span>
@@ -289,13 +299,12 @@ $author = $ProductController->getAuthor();
                                                             <?php } ?>
                                                         </td>
                                                         <td class="text-center">
+
                                                             <?php
                                                             $originalId = $row["prd_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
-
 
                                                             <a href="product_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

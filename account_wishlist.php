@@ -116,50 +116,36 @@ if (empty($_SESSION['mem_id'])) {
                                                                     </td>
                                                                     <td>
                                                                         <?php
-                                                                        // กำหนดความยาวสูงสุดที่ต้องการแสดง
-                                                                        $maxLength = 30;
 
-                                                                        // ตรวจสอบความยาวของชื่อสินค้า
-                                                                        $prdName = $row['prd_name'];
-                                                                        if (mb_strlen($prdName) > $maxLength) {
-                                                                            // ตัดชื่อสินค้าและเพิ่ม "..." ต่อท้าย
-                                                                            $prdName = mb_strimwidth($prdName, 0, $maxLength, '...');
-                                                                        }
-
+                                                                        $originalName = $row['prd_name'];
+                                                                        $shortName = shortenName($originalName);
                                                                         // แสดงชื่อสินค้า
-                                                                        echo $prdName;
+                                                                        echo $shortName;
+
                                                                         ?>
                                                                     </td>
 
+                                                                    <td class="text-center">
+                                                                        <span style="color: #f07c29;"><?php echo "฿" . number_format($row['price_sale'], 2) ?></span>
 
-                                                                    <?php if ($row['prd_percent_discount'] > 0) { ?>
-                                                                        <td class="text-center">
-                                                                            <?php
-                                                                            // คำนวณราคาหลังหักส่วนลด
-                                                                            $priceSale = $row['prd_price'] - ($row['prd_price'] * ($row['prd_percent_discount'] / 100));
-                                                                            ?>
-
-                                                                            <span style="color: #f07c29;"><?php echo "฿" . number_format($priceSale, 2) ?></span>
+                                                                        <?php if ($row['prd_percent_discount'] > 0) { ?>
                                                                             <del><?php echo  "฿" . $row['prd_price'] ?></del><sup class="me-2 text-danger"><?php echo "-" . $row['prd_percent_discount'] . "%" ?></sup>
-                                                                        </td>
-                                                                    <?php } else { ?>
-                                                                        <td class="text-center"><?php echo "฿" . $row['prd_price'] ?> </td>
+                                                                        <?php } ?>
+                                                                    </td>
 
-                                                                    <?php } ?>
 
                                                                     <td class="text-center">
                                                                         <?php
                                                                         $originalId = $row["prd_id"];
-                                                                        require_once("includes/salt.php");   // รหัส Salt 
                                                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                                         ?>
-                                                                        <a href="product_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-info">
+                                                                        <a href="product_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-detail">
                                                                             <i class="fa-solid fa-eye"></i>
                                                                             รายละเอียด
                                                                         </a>
 
-                                                                        <button type="button" class="btn btn-danger btn-delete w-45 ms-2" data-id="<?php echo $row["mwl_id"]; ?>"">
+                                                                        <button type="button" class="btn btn-del btn-delete" data-id="<?php echo $row["mwl_id"]; ?>"">
                                                                             <i class=" fa-solid fa-trash"></i>
                                                                             <span>ลบ</span>
                                                                         </button>

@@ -2,6 +2,8 @@
 $titlePage = "สมาชิก";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/MemberController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -152,10 +154,34 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded-circle" width="50px" height="50px" src="../uploads/img_member/<?php echo $row['mem_profile'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['mem_fname']; ?></td>
-                                                        <td class="text-start"><?php echo $row['mem_lname']; ?></td>
-                                                        <td class="text-start"><?php echo $row['mem_username']; ?></td>
-                                                        <td class="text-start"><?php echo $row['mem_email']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['mem_fname'];
+                                                            $shortFirstName = shortenName($originalName);
+                                                            echo $shortFirstName;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['mem_lname'];
+                                                            $shortLastName = shortenName($originalName);
+                                                            echo $shortLastName;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['mem_username'];
+                                                            $shortUsername = shortenName($originalName);
+                                                            echo $shortUsername;
+                                                            ?>
+                                                        </td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['mem_email'];
+                                                            $shortUsername = shortenName($originalName);
+                                                            echo $shortUsername;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php if ($row['mem_status'] == 1) { ?>
                                                                 <span class="badge rounded-pill bg-success fs-6">ใช้งานได้</span>
@@ -166,7 +192,6 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td>
                                                             <?php
                                                             $originalId = $row["mem_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>

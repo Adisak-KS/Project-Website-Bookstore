@@ -1,5 +1,5 @@
 <?php
-$titlePage = "รถเข็นสินค้า";
+$titlePage = " สรุปรายการสั่งซื้อ";
 
 require_once("db/connectdb.php");
 require_once("db/controller/CartController.php");
@@ -46,7 +46,7 @@ if (empty($_SESSION['mem_id'])) {
                     <div class="breadcrumbs-menu">
                         <ul>
                             <li><a href="index">หน้าแรก</a></li>
-                            <li><a href="#" class="active">รถเข็นสินค้า</a></li>
+                            <li><a href="#" onclick="return false" class="active"> สรุปรายการสั่งซื้อ</a></li>
                         </ul>
                     </div>
                 </div>

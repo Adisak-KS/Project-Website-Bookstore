@@ -2,6 +2,8 @@
 $titlePage = "ประเภทสินค้า";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/ProductTypeController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -17,6 +19,7 @@ $useAuthority = $LoginController->useLoginEmployees($empId);
 $allowedAuthorities = [1, 3, 5]; // [Super Admin, Admin, Sale]
 checkAuthorityEmployees($useAuthority, $allowedAuthorities);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -124,7 +127,13 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         <td class="text-center">
                                                             <img class="rounded" width="50px" height="50px" src="../uploads/img_product_type/<?php echo $row['pty_cover'] ?>">
                                                         </td>
-                                                        <td class="text-start"><?php echo $row['pty_name']; ?></td>
+                                                        <td class="text-start">
+                                                            <?php
+                                                            $originalName = $row['pty_name'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
+                                                            ?>
+                                                        </td>
                                                         <td class="text-center">
                                                             <?php
                                                             if (empty($row['total_view'])) {
@@ -142,13 +151,12 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                             <?php } ?>
                                                         </td>
                                                         <td class="text-center">
+
                                                             <?php
                                                             $originalId = $row["pty_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
                                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                             ?>
-
 
                                                             <a href="product_type_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

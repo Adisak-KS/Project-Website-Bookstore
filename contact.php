@@ -101,7 +101,7 @@ $titlePage  = "ติดต่อเรา";
                                 echo '
                                 <li>
                                    <i class="fa-solid fa-phone"></i>
-                                   <span>เบอรฺโทร : </span>'
+                                   <span>เบอร์โทร : </span>'
                                     . $details['phone'] . '
                                </li>
                                ';

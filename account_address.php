@@ -227,7 +227,7 @@ if (empty($_SESSION['mem_id'])) {
                                                             <div class="w-20">
                                                                 <div class="text-center mb-2">
                                                                     <?php if ($row['addr_status'] == 1) { ?>
-                                                                        <button class="btn btn-secondary btn-sm w-100" disabled>เป็นค่าเริ่มต้นแล้ว</button>
+                                                                        <button class="btn btn-secondary btn-sm" disabled>เป็นค่าเริ่มต้นแล้ว</button>
                                                                     <?php } else { ?>
                                                                         <form action="process/account_address_edit.php" method="post">
                                                                             <input type="hidden" name="mem_id" value="<?php echo $row['mem_id'] ?>" readonly>
@@ -236,25 +236,24 @@ if (empty($_SESSION['mem_id'])) {
                                                                         </form>
                                                                     <?php } ?>
                                                                 </div>
-                                                                <div class="d-flex justify-content-between">
+                                                                <div class="d-flex justify-content-between border border-2">
                                                                     <?php
                                                                     $originalId = $row['addr_id'];
-                                                                    require_once("includes/salt.php");   // รหัส Salt 
                                                                     $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                                                     $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                                                     ?>
 
-                                                                    <a href="account_address_edit_form?id=<?php echo $base64Encoded; ?>" class="btn btn-warning <?php if ($row['addr_status'] == 1) {
+                                                                    <a href="account_address_edit_form?id=<?php echo $base64Encoded; ?>" class="btn btn-edit <?php if ($row['addr_status'] == 1) {
                                                                                                                                                                     echo 'w-100';
                                                                                                                                                                 } else {
                                                                                                                                                                     echo 'w-45';
-                                                                                                                                                                } ?>">
+                                                                                                                                                                } ?> me-auto">
                                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                                         แก้ไข
                                                                     </a>
 
                                                                     <?php if ($row['addr_status'] != 1) { ?>
-                                                                        <button type="button" class="btn btn-danger btn-delete w-45 ms-2" data-id="<?php echo $row["addr_id"]; ?>"">
+                                                                        <button type="button" class="btn btn-del btn-delete ms-3" data-id="<?php echo $row["addr_id"]; ?>"">
                                                                             <i class=" fa-solid fa-trash"></i>
                                                                             <span>ลบ</span>
                                                                         </button>

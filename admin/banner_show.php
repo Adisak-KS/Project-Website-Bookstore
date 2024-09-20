@@ -2,6 +2,8 @@
 $titlePage = "แบนเนอร์";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/BannerController.php");
 require_once('../db/controller/LoginController.php');
 
@@ -95,17 +97,6 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                         </div>
 
 
-                                                        <!-- <div class="mb-3">
-                                                            <label for="auth_status" class="form-label">สถานะการแสดง :</label><span class="text-danger">*</span>
-                                                            <div class="form-check mb-2 form-check-success">
-                                                                <input class="form-check-input" type="radio" name="auth_status" id="1" value="1" checked>
-                                                                <label class="form-check-label" for="1">แสดง</label>
-                                                            </div>
-                                                            <div class="form-check mb-2 form-check-danger">
-                                                                <input class="form-check-input" type="radio" name="auth_status" id="0" value="0">
-                                                                <label class="form-check-label" for="0">ไม่แสดง</label>
-                                                            </div>
-                                                        </div> -->
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                                 <i class="fa-solid fa-xmark me-1"></i>
@@ -143,8 +134,9 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                                     <li class="list-inline-item mx-3">
                                                                         <h5 class="mt-0 text-dark">
                                                                             <?php
-                                                                            $name = $row['bn_name'];
-                                                                            echo (mb_strlen($name, 'UTF-8') > 15) ? mb_substr($name, 0, 15, 'UTF-8') . '...' : $name;
+                                                                            $originalName = $row['bn_name'];
+                                                                            $shortName = shortenName($originalName);
+                                                                            echo $shortName;
                                                                             ?>
                                                                         </h5>
 

@@ -31,7 +31,8 @@ class WishlistController extends BaseController
                         bs_products.prd_name, 
                         bs_products.prd_img1, 
                         bs_products.prd_price, 
-                        bs_products.prd_percent_discount 
+                        bs_products.prd_percent_discount,
+                        (bs_products.prd_price * (100 - bs_products.prd_percent_discount) / 100) AS price_sale
                     FROM bs_members_wishlist
                     INNER JOIN bs_products ON bs_members_wishlist.prd_id = bs_products.prd_id
                     INNER JOIN bs_products_type ON bs_products.pty_id = bs_products_type.pty_id

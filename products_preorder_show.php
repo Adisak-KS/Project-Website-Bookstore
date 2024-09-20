@@ -86,14 +86,13 @@ if (isset($_GET['ptyId'])) {
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($productsPreOrderType10 as $productType) { ?>
+                                    <?php foreach ($productsPreOrderType10 as $row) { ?>
                                         <?php
-                                        $originalId = $productType["pty_id"];
-                                        require_once("includes/salt.php");   // รหัส Salt 
+                                        $originalId = $row["pty_id"];
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_preorder_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $productType['pty_name']; ?><span><?php echo "(" . number_format($productType['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $row['pty_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
 
@@ -105,14 +104,13 @@ if (isset($_GET['ptyId'])) {
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($publishersPreOrder10 as $publisher) { ?>
+                                    <?php foreach ($publishersPreOrder10 as $row) { ?>
                                         <?php
-                                        $originalId = $publisher["pub_id"];
-                                        require_once("includes/salt.php");   // รหัส Salt 
+                                        $originalId = $row["pub_id"];
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_preorder_show?pubId=<?php echo $base64Encoded ?>"><?php echo $publisher['pub_name']; ?><span><?php echo "(" . number_format($publisher['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?pubId=<?php echo $base64Encoded ?>"><?php echo $row['pub_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -124,14 +122,13 @@ if (isset($_GET['ptyId'])) {
                             </div>
                             <div class="left-menu mb-30">
                                 <ul>
-                                    <?php foreach ($authorsPreOrder10 as $author) { ?>
+                                    <?php foreach ($authorsPreOrder10 as $row) { ?>
                                         <?php
-                                        $originalId = $author["auth_id"];
-                                        require_once("includes/salt.php");   // รหัส Salt 
+                                        $originalId = $row["auth_id"];
                                         $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                         $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                         ?>
-                                        <li><a href="products_preorder_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name']; ?><span><?php echo "(" . number_format($author['product_count']) . ")" ?></span></a></li>
+                                        <li><a href="products_preorder_show?authId=<?php echo $base64Encoded ?>"><?php echo $row['auth_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -150,9 +147,9 @@ if (isset($_GET['ptyId'])) {
                                 $ptyId = $Id;
                                 $ptyName = null;
 
-                                foreach ($productsPreOrderType10 as $productType) {
-                                    if ($productType['pty_id'] == $ptyId) {
-                                        $ptyName = $productType['pty_name'];
+                                foreach ($productsPreOrderType10 as $row) {
+                                    if ($row['pty_id'] == $ptyId) {
+                                        $ptyName = $row['pty_name'];
                                         break;
                                     }
                                 }
@@ -171,9 +168,9 @@ if (isset($_GET['ptyId'])) {
                                 $pubId = $Id;
                                 $pubName = null;
 
-                                foreach ($publishersPreOrder10 as $publisher) {
-                                    if ($publisher['pub_id'] == $pubId) {
-                                        $pubName = $publisher['pub_name'];
+                                foreach ($publishersPreOrder10 as $row) {
+                                    if ($row['pub_id'] == $pubId) {
+                                        $pubName = $row['pub_name'];
                                         break;
                                     }
                                 }
@@ -191,9 +188,9 @@ if (isset($_GET['ptyId'])) {
                                 $authId = $Id;
                                 $authName = null;
 
-                                foreach ($authorsPreOrder10 as $author) {
-                                    if ($author['auth_id'] == $authId) {
-                                        $authName = $author['auth_name'];
+                                foreach ($authorsPreOrder10 as $row) {
+                                    if ($row['auth_id'] == $authId) {
+                                        $authName = $row['auth_name'];
                                         break;
                                     }
                                 }
@@ -224,19 +221,18 @@ if (isset($_GET['ptyId'])) {
                         <div class="tab-pane fade show active" id="th">
                             <div class="row">
                                 <?php if ($allProducts) { ?>
-                                    <?php foreach ($allProducts as $product) { ?>
+                                    <?php foreach ($allProducts as  $row) { ?>
                                         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
                                             <!-- single-product-start -->
                                             <?php
-                                            $originalId = $product["prd_id"];
-                                            require_once("includes/salt.php");   // รหัส Salt 
+                                            $originalId =  $row["prd_id"];
                                             $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                             $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                             ?>
                                             <div class="product-wrapper">
                                                 <div class="product-img">
                                                     <a href="#" onclick="return false;">
-                                                        <img src="uploads/img_product/<?php echo $product['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
+                                                        <img src="uploads/img_product/<?php echo  $row['prd_img1'] ?>" alt="book" class="primary" style="height: 250px; object-fit: cover;" />
                                                     </a>
                                                     <div class="quick-view">
                                                         <a class="action-view" href="product_detail?id=<?php echo $base64Encoded; ?>" title="รายละเอียด">
@@ -245,58 +241,46 @@ if (isset($_GET['ptyId'])) {
                                                     </div>
                                                     <div class="product-flag">
                                                         <ul>
-                                                            <?php if ($product['prd_preorder'] == 0) { ?>
+                                                            <?php if ($row['prd_preorder'] == 0) { ?>
                                                                 <li><span class="sale">พรีออเดอร์</span></li>
                                                             <?php } ?>
-                                                            <?php if ($product['prd_percent_discount']) { ?>
-                                                                <li><span class="discount-percentage"><?php echo "-" . $product['prd_percent_discount'] . "%" ?></span></li>
+                                                            <?php if ($row['prd_percent_discount']) { ?>
+                                                                <li><span class="discount-percentage"><?php echo "-" .  $row['prd_percent_discount'] . "%" ?></span></li>
                                                             <?php } ?>
                                                         </ul>
                                                     </div>
                                                 </div>
                                                 <div class="product-details text-center">
+
                                                     <div class="product-rating">
                                                         <ul>
                                                             <?php
-                                                            $review_count = $product['review_count']; // จำนวนคนรีวิว
-                                                            $total_rating = $product['total_rating']; // คะแนน
-                                                            $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                                            // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                                            for ($i = 0; $i < 5; $i++) {
-                                                                if ($i < $average_rating) {
-                                                                    echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                                } else {
-                                                                    echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                                }
-                                                            }
+                                                            $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                                            $totalRating = $row['total_rating']; // คะแนน
+                                                            // แสดง star
+                                                            reviewRatingStars($reviewCount, $totalRating)
                                                             ?>
 
-                                                            <?php if ($review_count > 0) { ?>
-                                                                <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+                                                            <?php if ($reviewCount > 0) { ?>
+                                                                <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                                             <?php } ?>
+
                                                         </ul>
                                                     </div>
-                                                    <?php
-                                                    $prd_name = $product['prd_name'];
-                                                    $max_length = 20;
 
-                                                    $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                                    <?php
+                                                    $originalName = $row['prd_name'];
+                                                    $shortName = shortenName($originalName);
                                                     ?>
-                                                    <h4><a href="#" onclick="return false;"><?php echo $short_name ?></a></h4>
+                                                    <h4><a href="#" onclick="return false;"><?php echo $shortName ?></a></h4>
+
                                                     <div class="product-price">
                                                         <ul>
-                                                            <?php
-                                                            $price = $product['prd_price'];
-                                                            $prdPercentDiscount = $product['prd_percent_discount']; // ส่วนลด(%)
-                                                            $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                                            ?>
                                                             <li>
-                                                                <?php echo "฿" . number_format($priceSale, 2) ?>
-                                                                <?php if ($prdPercentDiscount  > 0) { ?>
-                                                                    <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                                <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                                <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                                    <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                                 <?php } ?>
-
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -347,10 +331,9 @@ if (isset($_GET['ptyId'])) {
                         </div>
                         <div class="tab-pane fade" id="list">
                             <?php if ($allProducts) { ?>
-                                <?php foreach ($allProducts as $product) { ?>
+                                <?php foreach ($allProducts as  $row) { ?>
                                     <?php
-                                    $originalId = $product["prd_id"];
-                                    require_once("includes/salt.php");   // รหัส Salt 
+                                    $originalId =  $row["prd_id"];
                                     $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
                                     $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
                                     ?>
@@ -361,7 +344,7 @@ if (isset($_GET['ptyId'])) {
                                                 <div class="product-wrapper-2">
                                                     <div class="product-img">
                                                         <a href="product_detail?id=<?php echo $base64Encoded ?>">
-                                                            <img src="uploads/img_product/<?php echo $product['prd_img1'] ?>" alt="book" class="primary" style="height: 320px; object-fit: cover; " />
+                                                            <img src="uploads/img_product/<?php echo  $row['prd_img1'] ?>" alt="book" class="primary" style="height: 320px; object-fit: cover; " />
                                                         </a>
                                                     </div>
                                                 </div>
@@ -369,51 +352,39 @@ if (isset($_GET['ptyId'])) {
                                             <div class="col-lg-8 col-md-8 col-12">
                                                 <div class="product-wrapper-content">
                                                     <div class="product-details">
+
                                                         <div class="product-rating">
                                                             <ul>
                                                                 <?php
-                                                                $review_count = $product['review_count']; // จำนวนคนรีวิว
-                                                                $total_rating = $product['total_rating'];; // คะแนน
-                                                                $average_rating = ($review_count > 0) ? round($total_rating / $review_count) : 0;
-
-                                                                // แสดงดาวตามค่าเฉลี่ยการให้คะแนน
-                                                                for ($i = 0; $i < 5; $i++) {
-                                                                    if ($i < $average_rating) {
-                                                                        echo '<li><i class="fa-solid fa-star" style="color: #f07c29;"></i></li>';
-                                                                    } else {
-                                                                        echo '<li><i class="fa-solid fa-star"></i></li>'; // เพิ่มสีเพื่อแสดงดาวที่ว่าง
-                                                                    }
-                                                                }
+                                                                $reviewCount = $row['review_count']; // จำนวนคนรีวิว
+                                                                $totalRating = $row['total_rating']; // คะแนน
+                                                                // แสดง star
+                                                                reviewRatingStars($reviewCount, $totalRating)
                                                                 ?>
-                                                                <?php if ($review_count > 0) { ?>
-                                                                    <span><?php echo "(" . number_format($review_count) . ")" ?> </span>
+
+                                                                <?php if ($reviewCount > 0) { ?>
+                                                                    <span><?php echo "(" . number_format($reviewCount) . ")" ?> </span>
                                                                 <?php } ?>
                                                             </ul>
-
                                                         </div>
-                                                        <?php if ($product['prd_preorder'] == 0) { ?>
+
+                                                        <?php if ($row['prd_preorder'] == 0) { ?>
                                                             <span class="badge rounded-pill text-bg-warning my-2"><i class="fa-solid fa-clock-rotate-left me-1"></i>สินค้าพรีออเดอร์</span>
                                                         <?php } ?>
 
 
                                                         <?php
-                                                        $prd_name = $product['prd_name'];
-                                                        $max_length = 40;
-
-                                                        $short_name = (mb_strlen($prd_name) > $max_length) ? mb_substr($prd_name, 0, $max_length) . '...' : $prd_name;
+                                                        $originalName = $row['prd_name'];
+                                                        $shortName = shortenName($originalName);
                                                         ?>
-                                                        <h4><a href="product_detail?id=<?php echo $base64Encoded ?>"><?php echo $short_name ?></a></h4>
+                                                        <h4><a href="product_detail?id=<?php echo $base64Encoded ?>"><?php echo $shortName ?></a></h4>
+
                                                         <div class="product-price">
                                                             <ul>
-
-                                                                <?php
-                                                                $price = $product['prd_price'];
-                                                                $prdPercentDiscount = $product['prd_percent_discount']; // ส่วนลด(%)
-                                                                $priceSale = $price - ($price * ($prdPercentDiscount / 100));
-                                                                ?>
-                                                                <li><?php echo "฿" . number_format($priceSale, 2) ?></li>
-                                                                <li> <?php if ($prdPercentDiscount  > 0) { ?>
-                                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($price, 2) ?></del></small>
+                                                                <li>
+                                                                    <?php echo "฿" . number_format($row['price_sale'], 2) ?>
+                                                                    <?php if ($row['prd_percent_discount']  > 0) { ?>
+                                                                        <small class="text-secondary ms-2" style="font-size: 0.7em;"><del><?php echo "฿" . number_format($row['prd_price'], 2) ?></del></small>
                                                                     <?php } ?>
                                                                 </li>
                                                             </ul>
@@ -475,7 +446,7 @@ if (isset($_GET['ptyId'])) {
                     </div>
                     <!-- tab-area-end -->
                     <!-- pagination-area-start -->
-                    <div class="pagination-area mt-50">
+                    <!-- <div class="pagination-area mt-50">
                         <div class="list-page-2">
                             <p>Items 1-9 of 11</p>
                         </div>
@@ -488,7 +459,7 @@ if (isset($_GET['ptyId'])) {
                                 <li><a href="#" class="angle"><i class="fa fa-angle-right"></i></a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- pagination-area-end -->
                 </div>
             </div>
