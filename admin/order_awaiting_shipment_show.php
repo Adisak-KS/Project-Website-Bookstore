@@ -2,8 +2,10 @@
 $titlePage = "รายการสั่งซื้อที่รอจัดส่ง";
 
 require_once("../db/connectdb.php");
+require_once("../includes/salt.php");
+require_once("includes/functions.php");
 require_once("../db/controller/OrderController.php");
-require_once("../includes/salt.php");   // รหัส Salt 
+
 
 $OrderController = new OrderController($conn);
 
@@ -80,8 +82,7 @@ $orderStatusUnderReview = $OrderController->getOrderStatusAwaitingShipment();
                                                         <td>
                                                             <?php
                                                             $originalId = $row["ord_id"];
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
 
 

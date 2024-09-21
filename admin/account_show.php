@@ -1,11 +1,9 @@
 <?php
 $titlePage = "บัญชีของฉัน";
-require_once("../db/connectdb.php");
 
-$originalId = $_SESSION["emp_id"];
-require_once("../includes/salt.php");   // รหัส Salt 
-$saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-$base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+require_once("../db/connectdb.php");
+require_once("includes/salt.php");
+require_once("includes/functions.php");
 
 ?>
 <!DOCTYPE html>

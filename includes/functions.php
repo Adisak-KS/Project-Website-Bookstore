@@ -1,4 +1,5 @@
 <?php
+
 // ======================== My Function For Admin and User =====================
 /*
     1. Message Error
@@ -119,6 +120,15 @@ function checkDefaultImg($defaultImagePath, $allowedExtensions, $maxFileSize, $l
     if ($fileSize > $maxFileSize) {
         messageError("ไฟล์ Default ต้องไม่เกิน 2 MB", $locationError);
     }
+}
+
+// ======================== 4. Decode Base64 ID  =============================================
+function encodeBase64ID($originalId, $salt1, $salt2)
+{
+    // นำ salt มารวมกับ id เพื่อความปลอดภัย
+    $saltedId = $salt1 . $originalId . $salt2;
+    // เข้ารหัสข้อมูลโดยใช้ Base64
+    return base64_encode($saltedId);
 }
 
 // ======================== 4. Decode Base64 ID  =============================================

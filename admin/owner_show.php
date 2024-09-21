@@ -10,14 +10,19 @@ require_once('../db/controller/LoginController.php');
 $LoginController = new LoginController($conn);
 $OwnerController = new OwnerController($conn);
 
-$owners = $OwnerController->getOwner();
 
 $empId = $_SESSION['emp_id'];
 
-// ตรวจสอบสิทธิ์การใช้งาน
-$useAuthority = $LoginController->useLoginEmployees($empId);
-$allowedAuthorities = [1, 2]; // [Super Admin, Owner]
-checkAuthorityEmployees($useAuthority, $allowedAuthorities)
+if (!empty($empId)) {
+    // ตรวจสอบสิทธิ์การใช้งาน
+    $useAuthority = $LoginController->useLoginEmployees($empId);
+    $allowedAuthorities = [1, 2]; // [Super Admin, Owner]
+    checkAuthorityEmployees($useAuthority, $allowedAuthorities);
+
+    // แสดงข้อมูล
+    $owners = $OwnerController->getOwner();
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -183,7 +188,7 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                             ?>
                                                         </td>
                                                         <td class="text-start">
-                                                        <?php 
+                                                            <?php
                                                             $originalName = $row['emp_email'];
                                                             $shortUsername = shortenName($originalName);
                                                             echo $shortUsername;
@@ -197,11 +202,9 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                             <?php } ?>
                                                         </td>
                                                         <td>
-
                                                             <?php
                                                             $originalId = $row["emp_id"];
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
 
                                                             <a href="owner_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">

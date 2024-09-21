@@ -2,9 +2,9 @@
 $titlePage = "ประวัติตามหาหนังสือตามสั่ง";
 
 require_once("db/connectdb.php");
-require_once("db/controller/ProductRequestController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+require_once("db/controller/ProductRequestController.php");
 
 $ProductRequestController = new ProductRequestController($conn);
 
@@ -129,9 +129,9 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <td class="text-center">
                                                                         <?php
                                                                         $originalId = $row['prq_id'];
-                                                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                                        $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                                         ?>
+
                                                                         <a href="account_product_request_detail?id=<?php echo $base64Encoded; ?>" class="btn btn-detail">
                                                                             <i class="fa-solid fa-eye"></i>
                                                                             รายละเอียด

@@ -2,9 +2,10 @@
 $titlePage = "รถเข็นสินค้า";
 
 require_once("db/connectdb.php");
-require_once("db/controller/CartController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+require_once("db/controller/CartController.php");
+
 
 $CartController = new CartController($conn);
 
@@ -90,9 +91,7 @@ if (empty($_SESSION['mem_id'])) {
                                         <?php foreach ($productCart as $row) { ?>
                                             <?php
                                             $originalId = $row["prd_id"];
-                                            require_once("includes/salt.php");
-                                            $saltedId = $salt1 . $originalId . $salt2;
-                                            $base64Encoded = base64_encode($saltedId);
+                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                             ?>
 
                                             <input type="hidden" name="prd_id[]" value="<?php echo $row['prd_id'] ?>" readonly>

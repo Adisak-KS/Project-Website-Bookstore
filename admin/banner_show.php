@@ -148,12 +148,12 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                                     </li>
                                                                 </ul>
                                                                 <ul class="list-inline align-self-end">
+
                                                                     <?php
                                                                     $originalId = $row["bn_id"];
-                                                                    require_once("../includes/salt.php");
-                                                                    $saltedId = $salt1 . $originalId . $salt2;
-                                                                    $base64Encoded = base64_encode($saltedId);
+                                                                    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                                     ?>
+                                                                    
                                                                     <li class="list-inline-item">
                                                                         <a href="banner_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                             <i class="fa-solid fa-pen-to-square me-1"></i>

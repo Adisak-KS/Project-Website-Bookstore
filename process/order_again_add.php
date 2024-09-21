@@ -13,8 +13,7 @@ if (isset($_POST['btn-add'])) {
 
 
     $originalId = $ordId;
-    $saltedId = $salt1 . $originalId . $salt2;
-    $base64Encoded = base64_encode($saltedId);
+    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
 
     $locationError = "Location: ../account_order_history_detail?id=$base64Encoded";
     $locationSuccess = "Location: ../cart";
@@ -39,12 +38,11 @@ if (isset($_POST['btn-add'])) {
         messageError("รหัสสินค้าและจำนวนสินค้าไม่เท่ากัน", $locationError);
     }
 
-    if($updateCartItem || $insertCartItem){
-        $_SESSION['success'] = "เพิ่มสินค้าจากรายการสั่งซื้อที่ : ". $ordId." ลงในตะกร้า สำเร็จ";
+    if ($updateCartItem || $insertCartItem) {
+        $_SESSION['success'] = "เพิ่มสินค้าจากรายการสั่งซื้อที่ : " . $ordId . " ลงในตะกร้า สำเร็จ";
         header($locationSuccess);
         exit;
     }
-  
 } else {
     header('Location: ../error_not_result');
     exit;

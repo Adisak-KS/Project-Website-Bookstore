@@ -3,6 +3,7 @@ $titlePage = "หน้าแรก";
 
 require_once("db/connectdb.php");
 require_once("includes/salt.php");
+require_once("includes/functions.php");
 require_once("db/controller/BannerController.php");
 require_once("db/controller/ProductController.php");
 
@@ -68,8 +69,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
 
                             <?php
                             $originalId = $row["prd_id"];
-                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                             ?>
 
                             <!-- single-product-start -->
@@ -232,8 +232,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <?php foreach ($recommendProducts as $row) { ?>
                                 <?php
                                 $originalId = $row["prd_id"];
-                                $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                 ?>
 
                                 <div class="product-wrapper">
@@ -359,8 +358,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <?php foreach ($popularProducts as $row) { ?>
                                 <?php
                                 $originalId = $row["prd_id"];
-                                $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                 ?>
                                 <div class="product-wrapper">
                                     <div class="product-img">
@@ -488,8 +486,7 @@ $mostViewedProducts = $ProductController->getMostViewedProducts();
                             <?php foreach ($mostViewedProducts as $row) { ?>
                                 <?php
                                 $originalId = $row["prd_id"];
-                                $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                 ?>
                                 <div class="product-wrapper">
                                     <div class="product-img">

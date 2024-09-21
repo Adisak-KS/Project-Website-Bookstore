@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . '/../../db/connectdb.php');
 require_once(__DIR__ . '/../../db/controller/OwnerController.php');
-// require_once(__DIR__ . '/../../includes/functions.php');
 require_once(__DIR__ . '/../../includes/functions.php');
 
 
@@ -22,11 +21,13 @@ if (isset($_POST['btn-edit'])) {
     $locationSuccess = "Location: ../owner_show";
 
     $authority = $newEatId;
+
     // ตรวจสอบข้อมูลจาก Form
     valiDateFormUpdateEmployees($fname, $lname, $status, $authority, $locationError);
 
     // update Detail Owner
     $updateDetailOwner = $OwnerController->updateDetailOwner($Id, $fname, $lname);
+    
     if ($updateDetailOwner) {
 
         // หากมีการเปลี่ยนรูปใหม่
@@ -80,10 +81,9 @@ if (isset($_POST['btn-edit'])) {
 
     if ($updateDetailOwner || $updateNewProfile || $updateAuthorityOwner) {
         $_SESSION['success'] = "แก้ไขข้อมูลผู้ดูแลระบบ สำเร็จ";
+        header($locationSuccess);
+        exit;
     }
-
-    header($locationSuccess);
-    exit;
 } else {
     header('Location: ../error_not_result');
     exit;

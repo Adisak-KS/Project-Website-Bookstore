@@ -2,10 +2,10 @@
 $titlePage = "ประวัติการสั่งซื้อ";
 
 require_once("db/connectdb.php");
-require_once("db/controller/MemberController.php");
-require_once("db/controller/OrderController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+require_once("db/controller/MemberController.php");
+require_once("db/controller/OrderController.php");
 
 $MemberController = new MemberController($conn);
 $OrderController = new OrderController($conn);
@@ -152,8 +152,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <td class="text-center">
                                                                         <?php
                                                                         $originalId = $row["ord_id"];
-                                                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                                        $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
 
                                                                         if ($row['ord_status'] == "Pending Payment" || $row['ord_status'] == "Payment Retry") {
                                                                             echo '<a href="checkout_payment?id=' . $base64Encoded . '" class="btn btn-pay"><i class="fa-solid fa-money-bill-transfer"></i> ชำระเงิน</a>';

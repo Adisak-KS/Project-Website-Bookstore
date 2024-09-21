@@ -144,11 +144,8 @@ $productsLow = $ProductController->getProductLow($prdNumberLow);
                                                         <td class="text-center">
                                                             <?php
                                                             $originalId = $row["prd_id"];
-
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
-
 
                                                             <a href="product_stock_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>

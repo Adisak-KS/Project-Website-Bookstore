@@ -2,9 +2,9 @@
 $titlePage = "ที่อยู่จัดส่ง";
 
 require_once("db/connectdb.php");
-require_once("db/controller/CartController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+require_once("db/controller/CartController.php");
 
 $CartController = new CartController($conn);
 
@@ -234,11 +234,11 @@ if (empty($_SESSION['mem_id'])) {
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-12">
                                             <div class="country-select">
-                                                <label class="form-label">ประเภทที่อยู่ <span class="text-danger">*</span</label>
-                                                <select class="form-select" name="addr_type">
-                                                    <option value="1" selected>บ้าน</option>
-                                                    <option value="2">ที่ทำงาน</option>
-                                                </select>
+                                                <label class="form-label">ประเภทที่อยู่ <span class="text-danger">*</span< /label>
+                                                        <select class="form-select" name="addr_type">
+                                                            <option value="1" selected>บ้าน</option>
+                                                            <option value="2">ที่ทำงาน</option>
+                                                        </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
@@ -273,14 +273,14 @@ if (empty($_SESSION['mem_id'])) {
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-12">
                                             <div class="checkout-form-list">
-                                                <label class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span</label>
-                                                <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="รหัสไปราณีย์ จะแสดงเมื่อ จังหวัด อำเภอ ตำบล" readonly>
+                                                <label class="form-label">รหัสไปรษณีย์ <span class="text-danger">*</span< /label>
+                                                        <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="รหัสไปราณีย์ จะแสดงเมื่อ จังหวัด อำเภอ ตำบล" readonly>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-12">
                                             <div class="checkout-form-list">
-                                                <label class="form-label">รายละเอียดเพิ่มเติม <span class="text-danger">*</span</label>
-                                                <textarea name="addr_detail" placeholder="กรุณาระบุ รายละเอียดเพิ่มเติม เช่น บ้านเลขที่ ซอย"></textarea>
+                                                <label class="form-label">รายละเอียดเพิ่มเติม <span class="text-danger">*</span< /label>
+                                                        <textarea name="addr_detail" placeholder="กรุณาระบุ รายละเอียดเพิ่มเติม เช่น บ้านเลขที่ ซอย"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -299,19 +299,17 @@ if (empty($_SESSION['mem_id'])) {
                                                 </tr>
                                             </thead>
                                             <tbody>
+
                                                 <?php
                                                 $totalPriceAllProduct = 0;
                                                 $totalCoinAllProduct = 0;
                                                 $preorderCount = 0;
                                                 ?>
 
-
                                                 <?php foreach ($productCart as $row) { ?>
                                                     <?php
                                                     $originalId = $row["prd_id"];
-                                                    require_once("includes/salt.php");   // รหัส Salt 
-                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
 
                                                     // บวกค่าของ $row['total_price_sale'] เข้าไปใน $totalPriceAllProduct
                                                     $totalPriceAllProduct += $row['total_price_sale'];

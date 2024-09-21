@@ -2,8 +2,10 @@
 $titlePage = "ความคิดเห็นที่รอตรวจสอบ";
 
 require_once("../db/connectdb.php");
+require_once("includes/salt.php");
+require_once("includes/functions.php");
 require_once("../db/controller/ReviewController.php");
-require_once("../includes/salt.php");   // รหัส Salt 
+
 
 $ReviewController = new ReviewController($conn);
 
@@ -85,10 +87,8 @@ $reviews = $ReviewController->getReviewStatusNotShowing();
                                                         <td>
                                                             <?php
                                                             $originalId = $row["prv_id"];
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
-
 
                                                             <a href="review_detail?id=<?php echo $base64Encoded ?>" class="btn btn-info">
                                                                 <i class="fa-solid fa-eye me-1"></i>

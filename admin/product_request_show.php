@@ -2,10 +2,11 @@
 $titlePage = "รายการหนังสือตามสั่ง";
 
 require_once("../db/connectdb.php");
+require_once("includes/salt.php");
+require_once("includes/functions.php");
 require_once("../db/controller/ProductRequestController.php");
 
 $ProductRequestController = new ProductRequestController($conn);
-
 
 $ProductRequest = $ProductRequestController->getProductRequestStatusChecking();
 
@@ -156,11 +157,8 @@ $ProductRequest = $ProductRequestController->getProductRequestStatusChecking();
                                                         <td>
                                                             <?php
                                                             $originalId = $row["prq_id"];
-                                                            require_once("../includes/salt.php");   // รหัส Salt 
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
-
 
                                                             <a href="product_request_detail?id=<?php echo $base64Encoded ?>" class="btn btn-info">
                                                                 <i class="fa-solid fa-eye me-1"></i>

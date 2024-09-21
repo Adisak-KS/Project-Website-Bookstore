@@ -2,9 +2,9 @@
 $titlePage = "สินค้าทั้งหมด";
 
 require_once("db/connectdb.php");
-require_once("db/controller/ProductController.php");
 require_once('includes/salt.php');
 require_once('includes/functions.php');
+require_once("db/controller/ProductController.php");
 
 $ProductController = new ProductController($conn);
 $prdPreorder = 1; //สินค้าปกติ
@@ -79,8 +79,7 @@ if (isset($_GET['ptyId'])) {
                                     <?php foreach ($productsType10 as $row) { ?>
                                         <?php
                                         $originalId = $row["pty_id"];
-                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                        $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
                                         <li><a href="products_show?ptyId=<?php echo $base64Encoded ?>"><?php echo $row['pty_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
@@ -97,8 +96,7 @@ if (isset($_GET['ptyId'])) {
                                     <?php foreach ($publishers10 as $row) { ?>
                                         <?php
                                         $originalId = $row["pub_id"];
-                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                        $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
                                         <li><a href="products_show?pubId=<?php echo $base64Encoded ?>"><?php echo $row['pub_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
@@ -115,8 +113,7 @@ if (isset($_GET['ptyId'])) {
                                     <?php foreach ($authors10 as $author) { ?>
                                         <?php
                                         $originalId = $author["auth_id"];
-                                        $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                        $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                        $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
                                         <li><a href="products_show?authId=<?php echo $base64Encoded ?>"><?php echo $author['auth_name']; ?><span><?php echo "(" . number_format($author['product_count']) . ")" ?></span></a></li>
                                     <?php } ?>
@@ -216,8 +213,7 @@ if (isset($_GET['ptyId'])) {
                                             <!-- single-product-start -->
                                             <?php
                                             $originalId = $row["prd_id"];
-                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                             ?>
                                             <div class="product-wrapper">
                                                 <div class="product-img">
@@ -324,8 +320,7 @@ if (isset($_GET['ptyId'])) {
                                 <?php foreach ($allProducts as $row) { ?>
                                     <?php
                                     $originalId = $row["prd_id"];
-                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                     ?>
                                     <!-- single-shop-start -->
                                     <div class="single-shop mb-30">

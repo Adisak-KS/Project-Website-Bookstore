@@ -307,8 +307,7 @@ if (isset($_GET['id'])) {
                                 <?php foreach ($productsSameType as $row) { ?>
                                     <?php
                                     $originalId = $row["prd_id"];
-                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                     ?>
                                     <div class="product-wrapper me-1">
                                         <div class="product-img">
@@ -397,8 +396,7 @@ if (isset($_GET['id'])) {
                                         <?php foreach ($productAdvertising as $row) { ?>
                                             <?php
                                             $originalId = $row["prd_id"];
-                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                             ?>
                                             <div class="single-most-product bd mb-18">
                                                 <div class="most-product-img">
@@ -437,8 +435,7 @@ if (isset($_GET['id'])) {
                                         <?php foreach ($productAdvertising as $row) { ?>
                                             <?php
                                             $originalId = $row["prd_id"];
-                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                             ?>
                                             <div class="single-most-product bd mb-18">
                                                 <div class="most-product-img">

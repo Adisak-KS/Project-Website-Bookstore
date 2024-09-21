@@ -1,7 +1,10 @@
 <?php
 require_once('../db/connectdb.php');
-require_once('../includes/functions.php');
 require_once("../includes/salt.php");   // รหัส Salt 
+require_once('../includes/functions.php');
+require_once("../db/controller/OrderController.php");
+
+$OrderController = new OrderController($conn);
 
 if (isset($_POST['btn-upload-slip'])) {
     $memId = $_POST['mem_id'];
@@ -9,8 +12,7 @@ if (isset($_POST['btn-upload-slip'])) {
     $oslSlip = $_FILES['osl_slip']['name'];
 
     $originalId = $ordId;
-    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
 
     $locationError = "Location: ../checkout_payment?id=$base64Encoded";
     $locationSuccess = "Location: ../account_order_history";
@@ -45,12 +47,11 @@ if (isset($_POST['btn-upload-slip'])) {
         }
     }
 
-    if($insertSlip){
-        $_SESSION['success'] = "ชำระเงินรายการสั่งซื้อที่ ". $ordId ." สำเร็จ";
+    if ($insertSlip) {
+        $_SESSION['success'] = "ชำระเงินรายการสั่งซื้อที่ " . $ordId . " สำเร็จ";
         header($locationSuccess);
         exit;
     }
-   
 } else {
     header('Location: ../error_not_result');
     exit;

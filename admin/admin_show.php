@@ -200,8 +200,7 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                         <td>
                                                             <?php
                                                             $originalId = $row["emp_id"];
-                                                            $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                            $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                            $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
 
 

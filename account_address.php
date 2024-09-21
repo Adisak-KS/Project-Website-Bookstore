@@ -2,10 +2,10 @@
 $titlePage = "จัดการที่อยู่";
 
 require_once("db/connectdb.php");
-require_once("db/controller/MemberController.php");
-require_once("db/controller/MemberAddressController.php");
 require_once("includes/salt.php");
 require_once("includes/functions.php");
+require_once("db/controller/MemberController.php");
+require_once("db/controller/MemberAddressController.php");
 
 $MemberController = new MemberController($conn);
 $MemberAddressController = new MemberAddressController($conn);
@@ -237,10 +237,10 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <?php } ?>
                                                                 </div>
                                                                 <div class="d-flex justify-content-between border border-2">
+
                                                                     <?php
-                                                                    $originalId = $row['addr_id'];
-                                                                    $saltedId = $salt1 . $originalId . $salt2; // นำ salt มารวมกับ id เพื่อความปลอดภัย
-                                                                    $base64Encoded = base64_encode($saltedId); // เข้ารหัสข้อมูลโดยใช้ Base64
+                                                                    $originalId = $row["addr_id"];
+                                                                    $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                                     ?>
 
                                                                     <a href="account_address_edit_form?id=<?php echo $base64Encoded; ?>" class="btn btn-edit <?php if ($row['addr_status'] == 1) {
