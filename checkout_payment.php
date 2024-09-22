@@ -138,7 +138,7 @@ if (empty($_SESSION['mem_id'])) {
                                         <input type="file" name="osl_slip" class="form-control mx-auto" accept="image/png, image/jpg, image/jpeg" onchange="previewImg(this)">
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <img class="mt-3 previewImage" width="100%" style="object-fit: cover;" alt="">
+                                        <img class="mt-3 previewImage"  alt="">
                                     </div>
                                 </div>
                             </div>

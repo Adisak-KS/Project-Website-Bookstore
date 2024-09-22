@@ -2,12 +2,13 @@
 $titlePage = "ลบสมาชิก";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/MemberController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/MemberController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$MemberController = new MemberController($conn);
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -15,8 +16,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $MemberController = new MemberController($conn);
     $members = $MemberController->getDetailMember($Id);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

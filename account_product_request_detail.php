@@ -130,7 +130,15 @@ if (empty($_SESSION['mem_id'])) {
                                                             <p><strong>เล่มที่ : </strong> <?php echo number_format($detail['prq_prd_volume_number']) ?></p>
                                                         <?php } ?>
 
-                                                        <p><strong>รายละเอียดอื่น ๆ : </strong> <?php echo $detail['prq_detail'] ?></p>
+                                                        <p>
+                                                            <strong>รายละเอียดอื่น ๆ : </strong>
+                                                            <?php
+                                                            $originalName = $detail['prq_detail'];
+                                                            $maxLength = 50;
+                                                            $shortDetail = shortenName($originalName, $maxLength);
+                                                            echo $shortDetail
+                                                            ?>
+                                                        </p>
 
                                                         <div>
                                                             <?php if ($detail['prq_status'] !== 'success') { ?>
@@ -254,21 +262,29 @@ if (empty($_SESSION['mem_id'])) {
                                                                     <p><strong>เล่มที่ : </strong> <?php echo number_format($row['prp_prd_volume_number']) ?></p>
                                                                 <?php } ?>
 
-                                                                <p><strong>รายละเอียดอื่น ๆ : </strong> <?php echo $row['prp_detail'] ?></p>
+                                                                <p>
+                                                                    <strong>รายละเอียดอื่น ๆ : </strong>
+                                                                    <?php
+                                                                    $originalName = $row['prp_detail'];
+                                                                    $maxLength = 50;
+                                                                    $shortDetail = shortenName($originalName, $maxLength);
+                                                                    echo $shortDetail
+                                                                    ?>
+                                                                </p>
 
-                                                                <div>
-                                                                    <?php if ($row['prp_status'] == 'wait') { ?>
+                                                                <div class="mt-2">
+                                                                    <?php if ($detail['prq_status'] == 'result') { ?>
                                                                         <form action="process/product_request_add.php" method="post">
-                                                                            <input type="number" name="prq_id" value="<?php echo $row['prq_id'] ?>" readonly>
-                                                                            <input type="number" name="prp_id" value="<?php echo $row['prp_id'] ?>" readonly>
+                                                                            <input type="hidden" name="prq_id" value="<?php echo $row['prq_id'] ?>" readonly>
+                                                                            <input type="hidden" name="prp_id" value="<?php echo $row['prp_id'] ?>" readonly>
 
-                                                                            <button type="submit" name="btn-confirm-product-request" class="btn btn-sqr">
-                                                                                <i class="fa-solid fa-floppy-disk"></i>
+                                                                            <button type="submit" name="btn-confirm-product-request" class="btn btn-confirm">
+                                                                                <i class="fa-solid fa-check"></i>
                                                                                 ใช่ สินค้าที่ตามหา
                                                                             </button>
 
-                                                                            <button type="submit" name="btn-reset-product-request" class="btn btn-sqr">
-                                                                                <i class="fa-solid fa-floppy-disk"></i>
+                                                                            <button type="submit" name="btn-reset-product-request" class="btn btn-del">
+                                                                                <i class="fa-solid fa-x"></i>
                                                                                 ไม่ใช่ สินค้าที่ตามหา ค้นหาใหม่
                                                                             </button>
                                                                         </form>

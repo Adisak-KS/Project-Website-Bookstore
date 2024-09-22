@@ -2,8 +2,9 @@
 $titlePage = "รายงานยอดขายสินค้า";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ReportSaleController.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/ReportSaleController.php");
+
 
 $LoginController = new LoginController($conn);
 $ReportSaleController = new ReportSaleController($conn);
@@ -161,11 +162,12 @@ $chartReportProductPopular = $ReportSaleController->getChartReportProductPopular
                                     <!-- ผลการค้นหา  -->
                                     <?php if (isset($_GET['time_start']) || isset($_GET['time_end']) || isset($_GET['price_start']) || isset($_GET['price_end']) || isset($_GET['mem_username']) || isset($_GET['ord_status'])) { ?>
                                         <div class="mt-1">
-                                            <?php if (!empty($_GET['time_start']) || !empty($_GET['time_end']) || ! (isset($_GET['price_start']) && $_GET['price_start'] !== '') ||  (isset($_GET['price_end']) && $_GET['price_end'] !== '') ||  !empty($_GET['mem_username']) || !empty($_GET['ord_status'])) { ?>
+                                            <?php if (!empty($_GET['time_start']) ||  !empty($_GET['time_end']) || (isset($_GET['price_start']) && $_GET['price_start'] !== '') || (isset($_GET['price_end']) && $_GET['price_end'] !== '') || !empty($_GET['mem_username']) ||  !empty($_GET['ord_status'])) { ?>
                                                 <div class="mt-2">
-                                                    <P>ผลการค้นหา : </P>
+                                                    <p>ผลการค้นหา : </p>
                                                 </div>
                                             <?php } ?>
+
 
                                             <div class="row">
 

@@ -92,11 +92,11 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities);
                                                             <div class="mb-3">
                                                                 <label for="pmt_status" class="form-label">สถานะการแสดง :</label><span class="text-danger">*</span>
                                                                 <div class="form-check mb-2 form-check-success">
-                                                                    <input class="form-check-input" type="radio" name="pmt_status" id="1" value="1">
+                                                                    <input class="form-check-input" type="radio" name="pmt_status" id="1" value="1" checked>
                                                                     <label class="form-check-label" for="1">แสดง</label>
                                                                 </div>
                                                                 <div class="form-check mb-2 form-check-danger">
-                                                                    <input class="form-check-input" type="radio" name="pmt_status" id="0" value="0" checked>
+                                                                    <input class="form-check-input" type="radio" name="pmt_status" id="0" value="0">
                                                                     <label class="form-check-label" for="0">ไม่แสดง</label>
                                                                 </div>
                                                             </div>

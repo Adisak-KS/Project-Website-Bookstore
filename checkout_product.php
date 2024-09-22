@@ -169,7 +169,10 @@ if (empty($_SESSION['mem_id'])) {
                                         ยืนยันใช้เหรียญ
                                     </a>
                                 </div>
+                            <?php } else { ?>
+                                <input name="total_price_all_product" type="hidden" value="<?php echo $totalPriceAllProduct; ?>" readonly>
                             <?php } ?>
+
                         </div>
                         <div class="col-lg-4 col-md-6 col-12">
                             <div class="cart_totals">
@@ -225,8 +228,12 @@ if (empty($_SESSION['mem_id'])) {
                                             <th class="mt-1">ช่องทางชำระเงิน : </th>
                                             <td>
                                                 <select name="pmt_id" class="form-select form-select-sm" aria-label="Default select example">
-                                                    <?php foreach ($payments as $payment) { ?>
-                                                        <option value="<?php echo $payment['pmt_id']; ?>"><?php echo $payment['pmt_bank']; ?></option>
+                                                    <?php if ($payments) { ?>
+                                                        <?php foreach ($payments as $payment) { ?>
+                                                            <option value="<?php echo $payment['pmt_id']; ?>"><?php echo $payment['pmt_bank']; ?></option>
+                                                        <?php } ?>
+                                                    <?php } else { ?>
+                                                        <option value="">ไม่พบช่องทางชำระเงิน</option>
                                                     <?php } ?>
                                                 </select>
                                             </td>

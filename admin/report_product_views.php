@@ -2,8 +2,8 @@
 $titlePage = "รายงานยอดเข้าชม";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ReportViewController.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/ReportViewController.php");
 
 $LoginController = new LoginController($conn);
 $ReportViewController = new ReportViewController($conn);

@@ -2,12 +2,14 @@
 $titlePage = "ลบโปรโมชั่น";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/PromotionController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/PromotionController.php");
+
 
 $LoginController = new LoginController($conn);
+$PromotionController = new PromotionController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +18,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $PromotionController = new PromotionController($conn);
     $promotion = $PromotionController->getDetailPromotion($Id);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

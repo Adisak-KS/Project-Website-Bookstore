@@ -2,12 +2,13 @@
 $titlePage = "ลบแบนเนอร์";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/BannerController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/BannerController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$BannerController = new BannerController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +17,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $bnId = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $BannerController = new BannerController($conn);
     $banner = $BannerController->getDetailBanner($bnId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

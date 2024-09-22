@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขข้อมูลช่องทางจัดส่ง";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ShippingController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/ShippingController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$ShippingController = new ShippingController($conn);
 
 
 if (isset($_GET['id'])) {
@@ -18,7 +19,7 @@ if (isset($_GET['id'])) {
     // ถอดรหัส Id
     $shpId = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-    $ShippingController = new ShippingController($conn);
+    
     $shipping = $ShippingController->getDetailShipping($shpId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

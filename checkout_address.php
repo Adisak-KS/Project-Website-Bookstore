@@ -212,7 +212,7 @@ if (empty($_SESSION['mem_id'])) {
                                             <input class="form-check-input" type="radio" name="addr_id" id="2" value="0" <?php if (!$address) {
                                                                                                                                 echo 'checked';
                                                                                                                             } ?>>
-                                            <label for="" class="form-label">ใช้ที่อยู่จัดส่งชั่วคราว<span class="text-danger"> *(กรุณาเช็คเช็ค เพื่อใช้ที่อยู่จัดส่งชั่วคราว)</span></label>
+                                            <label for="" class="form-label">ใช้ที่อยู่จัดส่งชั่วคราว<span class="text-danger"> *(กรุณาเช็ค เพื่อใช้ที่อยู่จัดส่งชั่วคราว)</span></label>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-12">
                                             <div class="checkout-form-list">

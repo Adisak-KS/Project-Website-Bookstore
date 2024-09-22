@@ -203,7 +203,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                             // กรณีเป็นการซื้อสินค้า
                                                                             echo 'ได้รับเหรียญจากการซื้อสินค้า';
                                                                             if (!empty($row['ord_id'])) {
-                                                                                echo " รายการสั่งซื้อที่: " . $row['ord_id'];
+                                                                                echo " รายการสั่งซื้อที่ : " . $row['ord_id'];
                                                                             }
                                                                         } elseif ($row['mhc_transaction_type'] == 'discount') {
                                                                             // กรณีใช้เหรียญเป็นส่วนลด

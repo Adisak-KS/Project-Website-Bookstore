@@ -2,9 +2,11 @@
 $titlePage = "รายละเอียดรายการตามหาสินค้าตามสั่ง";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ProductRequestController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/ProductRequestController.php");
+
+$ProductRequestController = new ProductRequestController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -13,8 +15,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $prqId = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $ProductRequestController = new ProductRequestController($conn);
     $productRequest = $ProductRequestController->getProductRequestDetail($prqId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
@@ -161,7 +161,7 @@ if (isset($_GET['id'])) {
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="card">
-                                <form id="formProductResponse" novalidate action="process/product_request_add.php" method="post" enctype="multipart/form-data">
+                                <form id="formProductResponse" novalidate action="process/product_response_add.php" method="post" enctype="multipart/form-data">
                                     <div class="card-body">
                                         <h4 class="mb-3 header-title text-warning">
                                             <i class="fa-solid fa-share fa-rotate-180"></i>
@@ -308,7 +308,7 @@ if (isset($_GET['id'])) {
                 cancelButtonText: 'ยกเลิก',
                 preConfirm: function() {
                     return $.ajax({
-                            url: 'process/product_request_cancel',
+                            url: 'process/product_response_cancel.php',
                             type: 'POST',
                             data: {
                                 prqId: prqId,

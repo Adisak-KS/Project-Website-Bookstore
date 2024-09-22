@@ -4,8 +4,9 @@ $titlePage = "สำนักพิมพ์";
 require_once("../db/connectdb.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
-require_once("../db/controller/PublisherController.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/PublisherController.php");
+
 
 $LoginController = new LoginController($conn);
 $PublisherController = new PublisherController($conn);

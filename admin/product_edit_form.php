@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขสินค้า";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/ProductController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$ProductController = new ProductController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +17,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $ProductController = new ProductController($conn);
     $product = $ProductController->getDetailProduct($Id);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

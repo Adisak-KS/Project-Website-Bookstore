@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขผู้ดูแลระบบ";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AdminController.php");
 require_once("../includes/salt.php");
 require_once('../includes/functions.php');
+require_once("../db/controller/AdminController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$AdminController = new AdminController($conn);
 
 
 if (isset($_GET['id'])) {
@@ -17,8 +18,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id 
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $AdminController = new AdminController($conn);
     $admins = $AdminController->getDetailAdmin($Id);
 
     //ตรวจสอบว่ามีข้อมูลหรือไม่

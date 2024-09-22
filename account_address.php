@@ -236,7 +236,7 @@ if (empty($_SESSION['mem_id'])) {
                                                                         </form>
                                                                     <?php } ?>
                                                                 </div>
-                                                                <div class="d-flex justify-content-between border border-2">
+                                                                <div class="d-flex justify-content-between">
 
                                                                     <?php
                                                                     $originalId = $row["addr_id"];

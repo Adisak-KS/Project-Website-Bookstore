@@ -3,12 +3,11 @@ $titlePage = "รายการสั่งซื้อที่รอจัด
 
 require_once("../db/connectdb.php");
 require_once("../includes/salt.php");
-require_once("includes/functions.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/OrderController.php");
 
 
 $OrderController = new OrderController($conn);
-
 
 $orderStatusUnderReview = $OrderController->getOrderStatusAwaitingShipment();
 

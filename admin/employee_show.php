@@ -68,7 +68,7 @@ checkAuthorityEmployees($useAuthority, $allowedAuthorities)
                                                 <div class="modal-dialog modal-dialog-scrollable">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มผู้ดูแลระบบ</h1>
+                                                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มพนักงาน</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">

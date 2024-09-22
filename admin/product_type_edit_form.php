@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขประเภทสินค้า";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ProductTypeController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/ProductTypeController.php");
 
 $LoginController = new LoginController($conn);
+$ProductTypeController = new ProductTypeController($conn);
 
 if (isset($_GET['id'])) {
     $_SESSION["base64Encoded"] = $_GET["id"];
@@ -16,7 +17,7 @@ if (isset($_GET['id'])) {
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-    $ProductTypeController = new ProductTypeController($conn);
+   
     $productType = $ProductTypeController->getDetailProductType($Id);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

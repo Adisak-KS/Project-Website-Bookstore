@@ -2,9 +2,12 @@
 $titlePage = "แก้ไขจำนวนสินค้า";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ProductController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/ProductController.php");
+
+
+$ProductController = new ProductController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -13,8 +16,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $ProductController = new ProductController($conn);
     $product = $ProductController->getDetailProduct($Id);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
@@ -59,7 +60,7 @@ if (isset($_GET['id'])) {
                 <!-- Start Content-->
                 <div class="container-fluid">
 
-                    <form id="formProduct" action="process/product_stock_edit" method="post">
+                    <form id="formProduct" action="process/product_stock_edit.php" method="post">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="card">

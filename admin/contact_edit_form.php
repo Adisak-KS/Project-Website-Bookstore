@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขข้อมูลช่องทางติดต่อ";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/ContactController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/ContactController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$ContactController = new ContactController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +17,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $ctId = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $ContactController = new ContactController($conn);
     $contact = $ContactController->getDetailContact($ctId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

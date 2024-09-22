@@ -154,7 +154,7 @@ if (empty($_SESSION['mem_id'])) {
                                                 </p>
 
                                                 <?php if ($order['ord_tracking_number']) { ?>
-                                                    <p>หมายเลขติดตามสินค้า : <a href=""><?php echo $order['ord_tracking_number'] ?></a></p>
+                                                    <p>หมายเลขติดตามสินค้า : <a href="https://maayoung.com/"><?php echo $order['ord_tracking_number'] ?></a></p>
                                                 <?php } ?>
 
                                                 <table class="table table-responsive table-striped table-bordered">

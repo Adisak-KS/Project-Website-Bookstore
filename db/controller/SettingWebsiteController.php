@@ -61,7 +61,7 @@ class SettingWebsiteController extends BaseController
     {
         try {
             $sql = "UPDATE bs_settings_website
-                        SET st_status = :st_status";
+                    SET st_status = :st_status";
 
             // Check if $stDetail is provided and append it to the SQL query
             if ($stDetail !== null) {

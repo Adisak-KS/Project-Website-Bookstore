@@ -30,26 +30,6 @@ if (isset($_POST['btn-edit'])) {
     $prdNewImg2 = $_FILES['prd_newImg2']['name'];
 
 
-    echo "prdId : " . $prdId . "<br>";
-    echo "prdName : " . $prdName . "<br>";
-    echo "prdISBN : " . $prdISBN . "<br>";
-    echo "prdCoin : " . $prdCoin . "<br>";
-    echo "prdQuqantity : " . $prdQuantity . "<br>";
-    echo "prdPrice : " . $prdPrice . "<br>";
-    echo "OldPtyId : " . $oldPtyId . "<br>";
-    echo "ptyId : " . $ptyId . "<br>";
-    echo "pubId : " . $pubId . "<br>";
-    echo "authId : " . $authId . "<br>";
-    echo "prdPreorder : " . $prdPreorder . "<br>";
-    echo "prdStatus : " . $prdStatus . "<br>";
-    echo "prdDetail : " . $prdDetail . "<br>";
-    echo "<hr>";
-    echo "prdImg1 : " . $prdImg1 . "<br>";
-    echo "prdNewImg1 : " . $prdNewImg1 . "<br>";
-    echo "<hr>";
-    echo "prdImg2 : " . $prdImg2 . "<br>";
-    echo "prdNewImg2 : " . $prdNewImg2 . "<br>";
-
     $base64Encoded = $_SESSION["base64Encoded"];
     $locationError = "Location: ../product_edit_form?id=$base64Encoded";
     $locationSuccess = "Location: ../product_show";

@@ -65,7 +65,7 @@ if (!empty($_SESSION['mem_id'])) {
                         </form>
 
                         <div class="d-flex justify-content-between">
-                            <a href="#">ลืมรหัสผ่าน?</a>
+                            <!-- <a href="#">ลืมรหัสผ่าน?</a> -->
                             <a href="register_form">สมาชิกใหม่? สมัครสมาชิก ที่นี่</a>
                         </div>
 

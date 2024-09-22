@@ -2,9 +2,11 @@
 $titlePage = "แก้ไขข้อมูลรหัสผ่าน";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/EmployeeController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/EmployeeController.php");
+
+$EmployeeController = new EmployeeController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -13,8 +15,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id 
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $EmployeeController = new EmployeeController($conn);
     $employees = $EmployeeController->getDetailEmployee($Id);
 
     //ตรวจสอบว่ามีข้อมูลหรือไม่

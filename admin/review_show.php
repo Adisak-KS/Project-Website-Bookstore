@@ -2,8 +2,8 @@
 $titlePage = "ความคิดเห็นที่รอตรวจสอบ";
 
 require_once("../db/connectdb.php");
-require_once("includes/salt.php");
-require_once("includes/functions.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/ReviewController.php");
 
 
@@ -68,12 +68,17 @@ $reviews = $ReviewController->getReviewStatusNotShowing();
                                                     <tr>
                                                         <td class="text-start"><?php echo $row['prv_time_create']; ?></td>
                                                         <td class="text-start">
-                                                            <?php echo $row['prd_name']; ?>
+                                                            <?php
+                                                            $originalName = $row['prd_name'];
+                                                            $maxLength = 40;
+                                                            $shortName = shortenName($originalName, $maxLength);
+                                                            echo  $shortName ;
+                                                            ?>
                                                         </td>
                                                         <td class="text-start">
                                                             <?php echo $row['mem_username']; ?>
                                                         </td>
-                                                        <td class="text-start">
+                                                        <td class="text-center">
                                                             <?php echo $row['ord_id']; ?>
                                                         </td>
 

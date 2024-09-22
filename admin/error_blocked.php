@@ -3,13 +3,14 @@ $titlePage = "ระงับการใช้งาน";
 
 require_once("../db/connectdb.php");
 require_once("../db/controller/LoginController.php");
+
 $LoginController = new LoginController($conn);
 
 $Id = $_SESSION["emp_id"];
 $checkStatus = $LoginController->checkStatusBlockedEmployees($Id);
 
 if ($checkStatus && $checkStatus['emp_status'] == 1) {
-    header('Location: index.php');
+    header('Location: index');
     exit;
 }
 

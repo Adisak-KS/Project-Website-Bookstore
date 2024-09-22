@@ -2,12 +2,13 @@
 $titlePage = "ลบผู้แต่ง";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/AuthorController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/AuthorController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$AuthorController = new AuthorController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +17,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส ID
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $AuthorController = new AuthorController($conn);
     $author = $AuthorController->getDetailAuthor($Id);
 
     $qtyProduct = $AuthorController->amountProductInAuthor($Id);

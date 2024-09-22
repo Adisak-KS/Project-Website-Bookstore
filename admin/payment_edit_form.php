@@ -2,12 +2,13 @@
 $titlePage = "แก้ไขช่องทางชำระเงิน";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/PaymentController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
+require_once("../db/controller/PaymentController.php");
 require_once('../db/controller/LoginController.php');
 
 $LoginController = new LoginController($conn);
+$PaymentController = new PaymentController($conn);
 
 
 if (isset($_GET['id'])) {
@@ -17,8 +18,7 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $pmtId = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $PaymentController = new PaymentController($conn);
+    
     $payment = $PaymentController->getDetailPayment($pmtId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม

@@ -726,7 +726,7 @@ function validateFormShipping($shpName, $shpPrice, $shpDetail, $shpStatus, $loca
         messageError("ชื่อขนส่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if (empty($shpPrice)) {
+    if (!isset($shpPrice)) {
         messageError("กรุณาระบุ ราคาขนส่ง", $locationError);
     } elseif (!is_numeric($shpPrice) || $shpPrice < 0) {
         messageError("ราคาขนส่ง ต้องเป็นตัวเลข และมากกว่า 0", $locationError);
@@ -965,7 +965,7 @@ function valiDateFromProductRequest($memId, $prqTitle, $prqPrdName, $prqPublishe
         messageError("ผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if (!is_numeric($prqPrdVolumeNumber) || $prqPrdVolumeNumber < 0 || floor($prqPrdVolumeNumber) != $prqPrdVolumeNumber) {
+    if ($prqPrdVolumeNumber !== "" && (!is_numeric($prqPrdVolumeNumber) || $prqPrdVolumeNumber < 0 || floor($prqPrdVolumeNumber) != $prqPrdVolumeNumber)) {
         messageError("เล่มที่ ต้องเป็นจำนวนเต็มบวก", $locationError);
     }
 
@@ -1006,7 +1006,7 @@ function valiDateFromProductResponse($prqId, $empId, $prpPrdName, $prpPublisher,
         messageError("ผู้แต่ง ต้องไม่เกิน 100 ตัวอักษร", $locationError);
     }
 
-    if (!is_numeric($prpPrdVolumeNumber) || $prpPrdVolumeNumber < 0 || floor($prpPrdVolumeNumber) != $prpPrdVolumeNumber) {
+    if ($prpPrdVolumeNumber !== "" && (!is_numeric($prpPrdVolumeNumber) || $prpPrdVolumeNumber <= 0 || floor($prpPrdVolumeNumber) != $prpPrdVolumeNumber)) {
         messageError("เล่มที่ ต้องเป็นจำนวนเต็มบวกและมากกว่า 0", $locationError);
     }
 

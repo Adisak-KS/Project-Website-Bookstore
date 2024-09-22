@@ -2,8 +2,11 @@
 $titlePage = "บัญชีของฉัน";
 
 require_once("../db/connectdb.php");
-require_once("includes/salt.php");
-require_once("includes/functions.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
+
+$originalId = $_SESSION["emp_id"];
+$base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
 
 ?>
 <!DOCTYPE html>

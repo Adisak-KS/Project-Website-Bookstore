@@ -97,7 +97,16 @@ if (isset($_GET['ptyId'])) {
                                         $originalId = $row["pty_id"];
                                         $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
-                                        <li><a href="products_promotions?ptyId=<?php echo $base64Encoded ?>"><?php echo $row['pty_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
+                                        <li>
+                                            <a href="products_promotions?ptyId=<?php echo $base64Encoded ?>">
+                                                <?php
+                                                $originalName = $row['pty_name'];
+                                                $shortName = shortenName($originalName);
+                                                echo $shortName;
+                                                ?>
+                                                <span><?php echo "(" . number_format($row['product_count']) . ")" ?></span>
+                                            </a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
 
@@ -115,7 +124,16 @@ if (isset($_GET['ptyId'])) {
                                         $originalId = $row["pub_id"];
                                         $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
-                                        <li><a href="products_promotions?pubId=<?php echo $base64Encoded ?>"><?php echo $row['pub_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
+                                        <li>
+                                            <a href="products_promotions?pubId=<?php echo $base64Encoded ?>">
+                                                <?php
+                                                $originalName = $row['pub_name'];
+                                                $shortName = shortenName($originalName);
+                                                echo $shortName;
+                                                ?>
+                                                <span><?php echo "(" . number_format($row['product_count']) . ")" ?></span>
+                                            </a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -132,7 +150,16 @@ if (isset($_GET['ptyId'])) {
                                         $originalId = $row["auth_id"];
                                         $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                         ?>
-                                        <li><a href="products_promotions?authId=<?php echo $base64Encoded ?>"><?php echo $row['auth_name']; ?><span><?php echo "(" . number_format($row['product_count']) . ")" ?></span></a></li>
+                                        <li>
+                                            <a href="products_promotions?authId=<?php echo $base64Encoded ?>">
+                                                <?php
+                                                $originalName = $row['auth_name'];
+                                                $shortName = shortenName($originalName);
+                                                echo $shortName;
+                                                ?>
+                                                <span><?php echo "(" . number_format($row['product_count']) . ")" ?></span>
+                                            </a>
+                                        </li>
                                     <?php } ?>
                                 </ul>
                             </div>
@@ -226,7 +253,7 @@ if (isset($_GET['ptyId'])) {
                             <div class="row">
                                 <?php if ($allProducts) { ?>
                                     <?php foreach ($allProducts as $row) { ?>
-                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
                                             <!-- single-product-start -->
                                             <?php
                                             $originalId = $row["prd_id"];

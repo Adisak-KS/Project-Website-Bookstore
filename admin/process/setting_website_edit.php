@@ -21,14 +21,14 @@ if (isset($_POST['btn-edit'])) {
     if ($stId == 1) {
         $stDetail = $_POST['st_detail'];
 
-        $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stDetail, $stStatus, $stId);
+        $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stStatus, $stId, $stDetail);
     } elseif ($stId == 2) {
 
         $stFavicon = $_POST['st_favicon'];
         $stNewFavicon = $_FILES['st_newFavicon']['name'];
 
         if (!empty($stNewFavicon)) {
-           
+
             $allowedExtensions = ['png', 'jpg', 'jpeg', 'ico'];
 
             $fileExtension = strtolower(pathinfo($stNewFavicon, PATHINFO_EXTENSION));
@@ -51,23 +51,22 @@ if (isset($_POST['btn-edit'])) {
                     if (!empty($stFavicon)) {
                         deleteImg($stFavicon, $folderUploads);
                     }
-                    $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stDetail, $stStatus, $stId);
-
+                    $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stStatus, $stId, $stDetail);
                 } else {
                     messageError("คัดลอกไฟล์ผิดพลาด", $locationError);
                 }
             }
         } else {
 
-            $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stDetail = null, $stStatus, $stId);
+            $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stStatus, $stId, $stDetail = null);
         }
-    }elseif($stId == 3){
+    } elseif ($stId == 3) {
 
         $stLogo = $_POST['st_logo'];
         $stNewLogo = $_FILES['st_newLogo']['name'];
 
         if (!empty($stNewLogo)) {
-           
+
             $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
             $fileExtension = strtolower(pathinfo($stNewLogo, PATHINFO_EXTENSION));
@@ -90,24 +89,22 @@ if (isset($_POST['btn-edit'])) {
                     if (!empty($stLogo)) {
                         deleteImg($stLogo, $folderUploads);
                     }
-                    $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stDetail, $stStatus, $stId);
-
+                    $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stStatus,  $stId, $stDetail);
                 } else {
                     messageError("คัดลอกไฟล์ผิดพลาด", $locationError);
                 }
             }
         } else {
 
-            $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stDetail = null, $stStatus, $stId);
+            $updateSettingWebsite = $SettingWebsiteController->updateDetailSettingWebsite($stStatus, $stId, $stDetail = null);
         }
     }
-
-
 
 
     if ($updateSettingWebsite) {
         $_SESSION['success'] = "แก้ไขข้อมูลการตั้งค่าเว็บไซต์ สำเร็จ";
         header($locationSuccess);
+        exit;
     }
 } else {
     header('Location: ../error_not_result');

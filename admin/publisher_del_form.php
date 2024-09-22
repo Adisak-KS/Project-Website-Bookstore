@@ -2,12 +2,14 @@
 $titlePage = "ลบสำนักพิมพ์";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/PublisherController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/PublisherController.php");
+
 
 $LoginController = new LoginController($conn);
+$PublisherController = new PublisherController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -17,7 +19,7 @@ if (isset($_GET['id'])) {
     // ถอดรหัส Id
     $Id = decodeBase64ID($base64Encoded, $salt1, $salt2);
 
-    $PublisherController = new PublisherController($conn);
+   
     $publisher = $PublisherController->getDetailPublisher($Id);
 
     $qtyProduct = $PublisherController->amountProductInPublisher($Id);

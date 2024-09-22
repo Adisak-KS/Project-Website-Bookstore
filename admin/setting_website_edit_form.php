@@ -2,12 +2,14 @@
 $titlePage = "แก้ไขข้อมูลตั้งค่าเว็บไซต์";
 
 require_once("../db/connectdb.php");
-require_once("../db/controller/SettingWebsiteController.php");
 require_once("../includes/salt.php");
 require_once("../includes/functions.php");
 require_once('../db/controller/LoginController.php');
+require_once("../db/controller/SettingWebsiteController.php");
+
 
 $LoginController = new LoginController($conn);
+$SettingWebsiteController = new SettingWebsiteController($conn);
 
 if (isset($_GET['id'])) {
 
@@ -16,8 +18,6 @@ if (isset($_GET['id'])) {
 
     // ถอดรหัส Id
     $stId = decodeBase64ID($base64Encoded, $salt1, $salt2);
-
-    $SettingWebsiteController = new SettingWebsiteController($conn);
     $settingWebsite = $SettingWebsiteController->getDetailSettingWebsite($stId);
 
     // ตรวจสอบว่ามีข้อมูลที่ตรงกับ id ไหม
@@ -64,7 +64,7 @@ if (isset($_GET['id'])) {
 
                 <!-- Start Content-->
                 <div class="container-fluid">
-                    <form id="formSettingWebsite" novalidate action="process/setting_website_edit" method="post" enctype="multipart/form-data">
+                    <form id="formSettingWebsite" novalidate action="process/setting_website_edit.php" method="post" enctype="multipart/form-data">
                         <div class="row">
                             <!-- id="formProductType" -->
                             <div class="col-lg-6">

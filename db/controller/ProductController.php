@@ -958,4 +958,25 @@ class ProductController extends BaseController
             return false;
         }
     }
+
+
+    
+    // ============================= 29. updatePRoductStock ===================================
+    function updateProductStock($prdQuantity, $prdId)
+    {
+        try {
+            $sql = "UPDATE bs_products
+                    SET prd_quantity = :prd_quantity
+                    WHERE prd_id = :prd_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':prd_quantity',$prdQuantity , PDO::PARAM_STR);
+            $stmt->bindParam(':prd_id',$prdId , PDO::PARAM_STR);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "<hr>Error in updateProductStock : " . $e->getMessage();
+            return false;
+        }
+    }
+
 }

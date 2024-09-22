@@ -511,7 +511,9 @@ $(document).ready(function () {
             pro_percent_discount: {
                 required: true,
                 number: true,
-                pattern: /^(?:100|[1-9]?[0-9])$/
+                pattern: /^(?:100|[1-9]?[0-9])$/,
+                min:0,
+                max:100,
             },
             pro_time_start: {
                 required: true,
@@ -536,7 +538,9 @@ $(document).ready(function () {
             pro_percent_discount: {
                 required: "กรุณาระบุ เปอร์เซ็นต์ส่วนลด",
                 number: "เปอร์เซ็นต์ส่วนลด ต้องเป็นตัวเลข",
-                pattern: "ต้องเป็นตัวเลข 0 - 100 เท่านั้น"
+                pattern: "ต้องเป็นตัวเลข 0 - 100 เท่านั้น",
+                min: "ต่ำสุดคือ 0",
+                max: "สูงสุดคือ 100",
             },
             pro_time_start: {
                 required: "กรุณาระบุ วันเริ่มโปรโมชั่น",

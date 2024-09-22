@@ -67,7 +67,7 @@ $author = $ProductController->getAuthor();
                                     <div class="d-flex justify-content-between">
                                         <h4 class="mt-0 header-title">ข้อมูลสินค้าทั้งหมด</h4>
                                         <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditPromotion">
-                                            <i class="fa-regular fa-square-plus me-1"></i>
+                                            <i class="fa-solid fa-gear me-1"></i>
                                             <span>ตั้งค่าเมนูส่วนลด</span>
                                         </button>
                                     </div>
@@ -304,6 +304,7 @@ $author = $ProductController->getAuthor();
                                                             $originalId = $row["prd_id"];
                                                             $base64Encoded   = encodeBase64ID($originalId, $salt1, $salt2);
                                                             ?>
+                                                            
                                                             <a href="product_edit_form?id=<?php echo $base64Encoded ?>" class="btn btn-warning">
                                                                 <i class="fa-solid fa-pen-to-square me-1"></i>
                                                                 <span>แก้ไข</span>

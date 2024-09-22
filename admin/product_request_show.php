@@ -2,8 +2,8 @@
 $titlePage = "รายการหนังสือตามสั่ง";
 
 require_once("../db/connectdb.php");
-require_once("includes/salt.php");
-require_once("includes/functions.php");
+require_once("../includes/salt.php");
+require_once("../includes/functions.php");
 require_once("../db/controller/ProductRequestController.php");
 
 $ProductRequestController = new ProductRequestController($conn);
@@ -140,8 +140,9 @@ $ProductRequest = $ProductRequestController->getProductRequestStatusChecking();
                                                         <td class="text-start"><?php echo $row['prq_time_create']; ?></td>
                                                         <td class="text-start">
                                                             <?php
-                                                            $title = $row['prq_title'];
-                                                            echo mb_strlen($title, 'UTF-8') > 40 ? mb_substr($title, 0, 40, 'UTF-8') . '...' : $title;
+                                                            $originalName = $row['prq_title'];
+                                                            $shortName = shortenName($originalName);
+                                                            echo $shortName;
                                                             ?>
                                                         </td>
                                                         <td class="text-start">
