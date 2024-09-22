@@ -120,7 +120,7 @@ $chartReportProductPopular = $ReportSaleController->getChartReportProductPopular
                                                             </div>
                                                             <div class="col mb-3">
                                                                 <label for="">ราคาสูงสุด :</label>
-                                                                <input type="number" name="price_end" class="form-control" placeholder="ราคาสูงสุด" value="<?php echo (isset($_GET['price_start']) && $_GET['price_start'] !== '') ? $_GET['price_start'] : ''; ?>" value="<?php echo (isset($_GET['price_end']) && $_GET['price_end'] !== '') ? $_GET['price_end'] : ''; ?>">
+                                                                <input type="number" name="price_end" class="form-control" placeholder="ราคาสูงสุด" value="<?php echo (isset($_GET['price_end']) && $_GET['price_end'] !== '') ? $_GET['price_end'] : ''; ?>" value="<?php echo (isset($_GET['price_end']) && $_GET['price_end'] !== '') ? $_GET['price_end'] : ''; ?>">
                                                             </div>
                                                         </div>
 

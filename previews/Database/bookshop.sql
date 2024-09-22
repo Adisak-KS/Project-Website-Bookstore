@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2024 at 10:34 AM
+-- Generation Time: Sep 22, 2024 at 12:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -158,7 +158,7 @@ INSERT INTO `bs_employees` (`emp_id`, `emp_profile`, `emp_fname`, `emp_lname`, `
 (27, 'img_66ee773c8c754fea85fec392d4f0d8e101726904124.png', 'ผู้ดูแลระบบ', 'สูงสุด', 'superAdmin', '$2y$10$ufwPgUYdZqkLK/3DtpPYT.U5InDVr8/JqNScvsUMLbe5qzmuRq8S6', 'Adisak@example.com', 1, '2024-09-21 07:30:03', '2024-09-21 07:40:31'),
 (29, 'img_66ee7d15c06c3fb30f3d1552a35381c001726905621.png', 'เจ้าของร้าน', 'ทดสอบหนึ่ง', 'owner1', '$2y$10$azj28NHG0nAuGSeW5AHdWu0ym1Mr1Z78IoCX9tnt.K3ske/o0nWB6', 'owner1@gmail.com', 1, '2024-09-21 08:00:21', '2024-09-21 08:00:21'),
 (31, 'img_66ee7f524482d69dfd3b5191ab40466c31726906194.png', 'ผู้ดูแลระบบ', 'ทดสอบหนึ่ง', 'admin1', '$2y$10$kVcpeRjaiKzomiaWaaIK0OlBhA28ICHW63DaT/EmtdY//Ikww0M1y', 'admin1@example.com', 1, '2024-09-21 08:07:13', '2024-09-21 08:09:54'),
-(34, 'img_66ee8351156a15767de6c598458e46d731726907217.png', 'พนักงาน', 'ทดสอบหนึ่ง', 'employee1', '$2y$10$ePJiv7Mb0JxMXyNlQL3qeu9Iab6SXO2PfUCPuOBYhbfiwbxqsuez.', 'employee1@gmail.com', 1, '2024-09-21 08:26:57', '2024-09-22 08:29:48');
+(34, 'img_66ee8351156a15767de6c598458e46d731726907217.png', 'พนักงาน', 'ทดสอบหนึ่ง', 'employee1', '$2y$10$ePJiv7Mb0JxMXyNlQL3qeu9Iab6SXO2PfUCPuOBYhbfiwbxqsuez.', 'employee1@gmail.com', 1, '2024-09-21 08:26:57', '2024-09-22 10:02:38');
 
 -- --------------------------------------------------------
 
@@ -181,8 +181,7 @@ INSERT INTO `bs_employees_authority` (`ea_id`, `emp_id`, `eat_id`, `ea_time`) VA
 (186, 27, 1, '2024-09-21 07:30:03'),
 (190, 29, 2, '2024-09-21 08:00:21'),
 (192, 31, 3, '2024-09-21 08:07:13'),
-(206, 34, 5, '2024-09-22 08:29:48'),
-(207, 34, 6, '2024-09-22 08:29:48');
+(208, 34, 6, '2024-09-22 10:02:38');
 
 -- --------------------------------------------------------
 
@@ -236,7 +235,7 @@ CREATE TABLE `bs_members` (
 
 INSERT INTO `bs_members` (`mem_id`, `mem_fname`, `mem_lname`, `mem_coin`, `mem_username`, `mem_password`, `mem_email`, `mem_status`, `mem_profile`, `mem_time_create`, `mem_time_update`) VALUES
 (5, 'สมาชิก', 'ทดสอบหนึ่ง', 18, 'member1', '$2y$10$ulIWRfJQWZay4P3SPEqeueFA4BW/a5xAvNXZvrUW8iCfwLJirznTC', 'member1@gmail.com', 1, 'img_66ee84baab2fe957815281aceda48be201726907578.png', '2024-09-21 08:28:45', '2024-09-22 06:26:17'),
-(7, 'สมาชิกสอง', 'ทดสอบสอง', 10, 'member2', '$2y$10$FG1D.4x4AAMkgL7f1tu6LOppu8raHi25GLhf7NeYv58RVlXFwE8Wa', 'member2@example.com', 1, 'img_66efb82a23e619f1a60832a7ad5aac4141726986282.png', '2024-09-22 06:24:42', '2024-09-22 06:26:17');
+(7, 'สมาชิกสอง', 'ทดสอบสอง', 8, 'member2', '$2y$10$FG1D.4x4AAMkgL7f1tu6LOppu8raHi25GLhf7NeYv58RVlXFwE8Wa', 'member2@example.com', 1, 'img_66efb82a23e619f1a60832a7ad5aac4141726986282.png', '2024-09-22 06:24:42', '2024-09-22 10:44:23');
 
 -- --------------------------------------------------------
 
@@ -291,7 +290,9 @@ CREATE TABLE `bs_members_history_coins` (
 
 INSERT INTO `bs_members_history_coins` (`mhc_id`, `mhc_from_mem_id`, `mhc_to_mem_id`, `mhc_coin_amount`, `mhc_transaction_type`, `ord_id`, `mhc_status`, `mhc_time`) VALUES
 (22, NULL, 5, 27, 'purchase', 24, 1, '2024-09-22 06:07:39'),
-(23, 5, 7, 10, 'transfer', NULL, 1, '2024-09-22 06:26:17');
+(23, 5, 7, 10, 'transfer', NULL, 1, '2024-09-22 06:26:17'),
+(24, 7, NULL, 5, 'discount', 25, 1, '2024-09-22 10:41:54'),
+(25, NULL, 7, 3, 'purchase', 25, 1, '2024-09-22 10:44:23');
 
 -- --------------------------------------------------------
 
@@ -336,7 +337,8 @@ CREATE TABLE `bs_orders` (
 --
 
 INSERT INTO `bs_orders` (`ord_id`, `mem_id`, `ord_coins_discount`, `ord_coins_earned`, `ord_price`, `ord_tracking_number`, `ord_status`, `ord_time_create`, `ord_time_update`) VALUES
-(24, 5, 0, 27, 653.25, '7893541258', 'Completed', '2024-09-22 04:12:36', '2024-09-22 06:07:39');
+(24, 5, 0, 27, 653.25, '7893541258', 'Completed', '2024-09-22 04:12:36', '2024-09-22 06:07:39'),
+(25, 7, 5, 3, 191.98, '775849911111111', 'Completed', '2024-08-01 10:41:53', '2024-08-03 10:44:23');
 
 -- --------------------------------------------------------
 
@@ -366,7 +368,8 @@ CREATE TABLE `bs_orders_address` (
 --
 
 INSERT INTO `bs_orders_address` (`oad_id`, `ord_id`, `addr_id`, `oad_type`, `oad_fname`, `oad_lname`, `oad_phone`, `oad_province`, `oad_district`, `oad_subdistrict`, `oad_zip_code`, `oad_detail`, `oad_time_create`, `oad_time_update`) VALUES
-(17, 24, 6, 1, 'สมาชิก', 'ทดสอบหนึ่ง', '0844566021', 'กรุงเทพมหานคร', 'เขตหนองจอก', 'คลองสิบสอง', 10530, 'บ้านเลขที่ 15/18, ซอย 74', '2024-09-22 04:12:36', '2024-09-22 04:12:36');
+(17, 24, 6, 1, 'สมาชิก', 'ทดสอบหนึ่ง', '0844566021', 'กรุงเทพมหานคร', 'เขตหนองจอก', 'คลองสิบสอง', 10530, 'บ้านเลขที่ 15/18, ซอย 74', '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
+(18, 25, NULL, 2, 'สมาชิกทดสอบสอง', 'ทดสอบสอง', '0265781235', 'นครนายก', 'ปากพลี', 'โคกกรวด', 26130, 'บ้านเลขที่ 35 , ซอย 4', '2024-09-22 10:41:53', '2024-09-22 10:41:53');
 
 -- --------------------------------------------------------
 
@@ -393,7 +396,8 @@ CREATE TABLE `bs_orders_items` (
 
 INSERT INTO `bs_orders_items` (`oit_id`, `ord_id`, `prd_id`, `oit_name`, `oit_coin`, `oit_quantity`, `oit_price`, `oit_percent_discount`, `oit_time_create`, `oit_time_update`) VALUES
 (28, 24, 126, 'THE GREATEST VERSION OF MINE ตำราการพัฒนาตัวเองที่ใช้ได้ ', 15, 1, 450.00, 0, '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
-(29, 24, 122, 'ครอบครัวตึ๋งหนืด37 เศรษฐีออนไลน์', 6, 2, 185.00, 50, '2024-09-22 04:12:36', '2024-09-22 04:12:36');
+(29, 24, 122, 'ครอบครัวตึ๋งหนืด37 เศรษฐีออนไลน์', 6, 2, 185.00, 50, '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
+(30, 25, 121, 'เรื่องวุ่นๆของวัยรุ่นมือใหม่:ฮอร์โมน ร่างกาย ใจว้าวุ่น', 3, 1, 195.00, 10, '2024-09-22 10:41:53', '2024-09-22 10:41:53');
 
 -- --------------------------------------------------------
 
@@ -417,7 +421,8 @@ CREATE TABLE `bs_orders_payments` (
 --
 
 INSERT INTO `bs_orders_payments` (`opm_id`, `ord_id`, `pmt_id`, `opm_bank`, `opm_name`, `opm_number`, `opm_time_create`, `opm_time_update`) VALUES
-(17, 24, 16, 'ออมสิน', 'นายบัญชี ทดสอบ', '1234567890', '2024-09-22 04:12:36', '2024-09-22 04:12:36');
+(17, 24, 16, 'ออมสิน', 'นายบัญชี ทดสอบ', '1234567890', '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
+(18, 25, 17, 'กสิกร', 'นายกสิกร ทดสอบโอน', '1145789302', '2024-09-22 10:41:53', '2024-09-22 10:41:53');
 
 -- --------------------------------------------------------
 
@@ -440,7 +445,8 @@ CREATE TABLE `bs_orders_promotions` (
 --
 
 INSERT INTO `bs_orders_promotions` (`opm_id`, `ord_id`, `pro_id`, `opm_name`, `opm_percent_discount`, `opm_time_create`, `opm_time_update`) VALUES
-(7, 24, 5, 'ลดฤดูร้อน', 5, '2024-09-22 04:12:36', '2024-09-22 04:12:36');
+(7, 24, 5, 'ลดฤดูร้อน', 5, '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
+(8, 25, 5, 'ลดฤดูร้อน', 5, '2024-09-22 10:41:53', '2024-09-22 10:41:53');
 
 -- --------------------------------------------------------
 
@@ -463,7 +469,8 @@ CREATE TABLE `bs_orders_shippings` (
 --
 
 INSERT INTO `bs_orders_shippings` (`osp_id`, `ord_id`, `shp_id`, `osp_name`, `osp_price`, `osp_time_create`, `osp_time_update`) VALUES
-(17, 24, 11, 'Kerry', 50.00, '2024-09-22 04:12:36', '2024-09-22 04:12:36');
+(17, 24, 11, 'Kerry', 50.00, '2024-09-22 04:12:36', '2024-09-22 04:12:36'),
+(18, 25, 13, 'Flash Express', 30.00, '2024-09-22 10:41:53', '2024-09-22 10:41:53');
 
 -- --------------------------------------------------------
 
@@ -484,7 +491,8 @@ CREATE TABLE `bs_orders_slips` (
 --
 
 INSERT INTO `bs_orders_slips` (`osl_id`, `ord_id`, `mem_id`, `osl_slip`, `osl_time`) VALUES
-(7, 24, 5, 'img_66ef9bb1d81265a76a2958f6ea695c00f1726978993.jpg', '2024-09-22 04:23:13');
+(7, 24, 5, 'img_66ef9bb1d81265a76a2958f6ea695c00f1726978993.jpg', '2024-09-22 04:23:13'),
+(8, 25, 7, 'img_66eff4be0706a48ad22701b3ffe805b841727001790.jpg', '2024-09-22 10:43:10');
 
 -- --------------------------------------------------------
 
@@ -546,7 +554,7 @@ CREATE TABLE `bs_products` (
 --
 
 INSERT INTO `bs_products` (`prd_id`, `prd_name`, `prd_img1`, `prd_img2`, `prd_isbn`, `prd_coin`, `prd_quantity`, `prd_number_pages`, `prd_detail`, `prd_price`, `prd_percent_discount`, `pty_id`, `pub_id`, `auth_id`, `prd_preorder`, `prd_status`, `prd_time_create`, `prd_time_update`) VALUES
-(121, 'เรื่องวุ่นๆของวัยรุ่นมือใหม่:ฮอร์โมน ร่างกาย ใจว้าวุ่น', 'img_66eeb32e3152a1b3295969111f6b212fb1726919470.jpg', 'img_66eeb32e325bf9260028ad6aa365bfaa61726919470.jpg', '9786160468928', 3, 30, 192, '<p style=\"text-align:justify;\"><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">&nbsp;&nbsp; ช่วงเวลาที่ร่างกายและจิตใจเติบโตและเปลี่ยนผ่านจากวัยเด็กเข้าสู่วัยรุ่นอาจทำให้น้อง ๆ รู้สึกขัดเขิน วิตกกังวล รวมทั้งอยากรู้อยากเห็นเรื่องเพศแต่ไม่กล้าถามใคร ผู้เชี่ยวชาญจากศูนย์การเรียนรู้และให้คำปรึกษาเรื่องเพศศึกษาเพื่อเยาวชน \"อะฮ่า\" ประเทศเกาหลีใต้ (Aha Sexuality Education &amp; Counseling Center for Youth หรือ Aha! Center) จึงรวบรวมคำถามที่วัยรุ่นส่วนใหญ่อยากรู้ พร้อมคำตอบจากผู้เชี่ยวชาญเพื่อให้น้อง ๆ ได้เรียนรู้เรื่องเพศศึกษาอย่างถูกต้อง มีทัศนคติที่ดีเกี่ยวกับเรื่องเพศ เข้าใจการเปลี่ยนแปลงที่ตัวเองกำลังเผชิญอยู่ และใช้ชีวิตวัยรุ่นได้อย่างปลอดภัยและมีความสุข</span></p>', 195.00, 10, 17, 10, 21, 1, 1, '2024-09-21 11:48:35', '2024-09-22 07:53:41'),
+(121, 'เรื่องวุ่นๆของวัยรุ่นมือใหม่:ฮอร์โมน ร่างกาย ใจว้าวุ่น', 'img_66eeb32e3152a1b3295969111f6b212fb1726919470.jpg', 'img_66eeb32e325bf9260028ad6aa365bfaa61726919470.jpg', '9786160468928', 3, 29, 192, '<p style=\"text-align:justify;\"><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">&nbsp;&nbsp; ช่วงเวลาที่ร่างกายและจิตใจเติบโตและเปลี่ยนผ่านจากวัยเด็กเข้าสู่วัยรุ่นอาจทำให้น้อง ๆ รู้สึกขัดเขิน วิตกกังวล รวมทั้งอยากรู้อยากเห็นเรื่องเพศแต่ไม่กล้าถามใคร ผู้เชี่ยวชาญจากศูนย์การเรียนรู้และให้คำปรึกษาเรื่องเพศศึกษาเพื่อเยาวชน \"อะฮ่า\" ประเทศเกาหลีใต้ (Aha Sexuality Education &amp; Counseling Center for Youth หรือ Aha! Center) จึงรวบรวมคำถามที่วัยรุ่นส่วนใหญ่อยากรู้ พร้อมคำตอบจากผู้เชี่ยวชาญเพื่อให้น้อง ๆ ได้เรียนรู้เรื่องเพศศึกษาอย่างถูกต้อง มีทัศนคติที่ดีเกี่ยวกับเรื่องเพศ เข้าใจการเปลี่ยนแปลงที่ตัวเองกำลังเผชิญอยู่ และใช้ชีวิตวัยรุ่นได้อย่างปลอดภัยและมีความสุข</span></p>', 195.00, 10, 17, 10, 21, 1, 1, '2024-09-21 11:48:35', '2024-09-22 10:41:53'),
 (122, 'ครอบครัวตึ๋งหนืด37 เศรษฐีออนไลน์', 'img_66eeb3ee1ded3e6339834e853fd7f2bdf1726919662.jpg', 'img_66eeb3ee1fc17f289021e0ac9cec9ac5f1726919662.jpg', '9786160469215', 6, 68, 184, '<p style=\"text-align:justify;\"><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">&nbsp; ในยุคนี้ใครๆ ก็อยากร่ำรวยจากการขายของออนไลน์ว่าแต่ไม่ใช่เรื่องง่ายเลย เพราะไม่ใช่ทุกอย่างที่ขายดี แต่ไม่ต้องห่วง ครอบครัวตึ๋งหนืดจะมาสอนวิธีให้เคล็ดลับขายได้ ขายดี ลงทุนน้อย กำไรงามแบบตึ๋งหนืด พร้อมด้วยเทคนิคการประหยัดแบบสุดตืดสุดฮา&nbsp;</span></p>', 185.00, 50, 17, 10, 22, 1, 1, '2024-09-21 11:53:21', '2024-09-22 04:12:36'),
 (123, 'ปล่อยแม่มดคนนั้นซะ เล่ม 22', 'img_66eeb507a8e43ff8ce5d4ed1e2da62a6d1726919943.jpg', 'img_66eeb507a9ffd53132c841e2c651c58881726919943.jpg', '9786160632190', 10, 100, 336, '<p style=\"text-align:justify;\"><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">\'เดิมทีโรแลนด์มองว่าโลกแห่งความฝันเป็นเหมือนคลังความรู้ไม่นึกเลยว่าพักนี้มันจะสร้างความวุ่นวายให้เขาไม่เว้นวันหลังการกัดกินที่สะเทือนเลื่อนลั่นไปทั่วเมืองปริซึมโรแลนด์ก็ได้พบกับแขกที่มาเยือนโดยไม่คาดฝันอีกฝ่ายหน้าตาเหมือนปีศาจในเศษเสี้ยวความทรงจำเกือบทุกประการจะขาดก็แค่ดวงตาที่สามเท่านั้นแต่ยังไม่ทันสืบสาวจนพบคำตอบ เขาก็ได้เจอกับเทวทูตที่มิสต์เคยพูดถึง!เวลานี้สถานการณ์ฝั่งโลกแห่งความจริงก็ไม่ได้ดีไปกว่ากันภารกิจขนย้ายผู้อพยพจากต่างแดนที่ดูแล้วไม่ซับซ้อนกลับต้องติดขัดสาเหตุก็เพราะหมอกสีแดงได้คืบคลานเข้ามาในดินแดนมนุษย์แล้ว...</span></p>', 439.00, 30, 16, 11, 23, 1, 1, '2024-09-21 11:57:19', '2024-09-21 11:59:03'),
 (124, 'มาสเตอร์กับมาร์การิตา THE MASTER AND MARGARITA', 'img_66eeb5d2612a703bb6a343ede95febb591726920146.jpg', 'img_66eeb5d2623649b098a48ede7d00fde6b1726920146.jpg', '9786167691749', 0, 25, 472, '<p style=\"text-align:justify;\"><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">บ่ายวันหนึ่งในฤดูใบไม้ผลิ ซาตานปรากฏกายขึ้นในกรุงมอสโก</span><br><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">พร้อมกับพวกพ้องสร้างความโกลาหล แตกตื่น และเปลี่ยนวัน</span><br><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">ธรรมดาสามัญ ให้กลายเป็นวันมืดมิดที่สุดของรัสเซีย \"อีวาน</span><br><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">เบซดอมนี\" ถูกจับส่งตัวเข้าโรงพยาบาลบ้า หลังจากนั้น \"อีวาน\"</span><br><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">ได้พบกับ \"มาสเตอร์\" ชายผู้อุทิศตนให้กับความจริงและได้รับฟัง</span><br><span style=\"color:rgb(0,0,0);font-family:THSarabun, Arial, sans-serif;font-size:13px;\">เรื่องราวของ \"มาร์การิตา\" หญิงผู้อุทิศตนให้กับความรัก</span></p>', 350.00, 3, 16, 12, 24, 1, 1, '2024-09-21 12:01:06', '2024-09-21 12:02:26'),
@@ -724,7 +732,16 @@ INSERT INTO `bs_products_views` (`prv_id`, `prd_id`, `pty_id`, `prv_view`, `prv_
 (180, 125, 18, 1, '2024-09-22 04:23:42'),
 (181, 126, 19, 1, '2024-09-22 06:11:06'),
 (182, 126, 19, 1, '2024-09-22 06:16:50'),
-(183, 122, 17, 1, '2024-09-22 06:17:11');
+(183, 122, 17, 1, '2024-09-22 06:17:11'),
+(184, 129, 21, 1, '2024-09-22 10:40:25'),
+(185, 121, 17, 1, '2024-09-22 10:40:29'),
+(186, 121, 17, 1, '2024-09-22 10:40:33'),
+(187, 129, 21, 1, '2024-09-22 10:48:05'),
+(188, 131, 22, 1, '2024-09-22 10:48:07'),
+(189, 124, 16, 1, '2024-09-22 10:48:08'),
+(190, 128, 21, 1, '2024-09-22 10:48:19'),
+(191, 123, 16, 1, '2024-09-22 10:48:24'),
+(192, 127, 20, 1, '2024-09-22 10:48:26');
 
 -- --------------------------------------------------------
 
@@ -1064,7 +1081,7 @@ ALTER TABLE `bs_banners`
 -- AUTO_INCREMENT for table `bs_cart`
 --
 ALTER TABLE `bs_cart`
-  MODIFY `crt_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสตะกร้า', AUTO_INCREMENT=68;
+  MODIFY `crt_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสตะกร้า', AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `bs_contacts`
@@ -1082,7 +1099,7 @@ ALTER TABLE `bs_employees`
 -- AUTO_INCREMENT for table `bs_employees_authority`
 --
 ALTER TABLE `bs_employees_authority`
-  MODIFY `ea_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=208;
+  MODIFY `ea_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT for table `bs_employees_authority_type`
@@ -1106,7 +1123,7 @@ ALTER TABLE `bs_members_address`
 -- AUTO_INCREMENT for table `bs_members_history_coins`
 --
 ALTER TABLE `bs_members_history_coins`
-  MODIFY `mhc_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=24;
+  MODIFY `mhc_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `bs_members_wishlist`
@@ -1118,43 +1135,43 @@ ALTER TABLE `bs_members_wishlist`
 -- AUTO_INCREMENT for table `bs_orders`
 --
 ALTER TABLE `bs_orders`
-  MODIFY `ord_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการสั่งซื้อ', AUTO_INCREMENT=25;
+  MODIFY `ord_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการสั่งซื้อ', AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_address`
 --
 ALTER TABLE `bs_orders_address`
-  MODIFY `oad_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสที่อยู่จัดส่ง', AUTO_INCREMENT=18;
+  MODIFY `oad_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสที่อยู่จัดส่ง', AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_items`
 --
 ALTER TABLE `bs_orders_items`
-  MODIFY `oit_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสินค้าในรายการสั่งซื้อ', AUTO_INCREMENT=30;
+  MODIFY `oit_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสินค้าในรายการสั่งซื้อ', AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_payments`
 --
 ALTER TABLE `bs_orders_payments`
-  MODIFY `opm_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=18;
+  MODIFY `opm_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_promotions`
 --
 ALTER TABLE `bs_orders_promotions`
-  MODIFY `opm_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการโปรโมชั่นที่ใช้', AUTO_INCREMENT=8;
+  MODIFY `opm_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการโปรโมชั่นที่ใช้', AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_shippings`
 --
 ALTER TABLE `bs_orders_shippings`
-  MODIFY `osp_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=18;
+  MODIFY `osp_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `bs_orders_slips`
 --
 ALTER TABLE `bs_orders_slips`
-  MODIFY `osl_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=8;
+  MODIFY `osl_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `bs_payments`
@@ -1196,7 +1213,7 @@ ALTER TABLE `bs_products_type`
 -- AUTO_INCREMENT for table `bs_products_views`
 --
 ALTER TABLE `bs_products_views`
-  MODIFY `prv_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=184;
+  MODIFY `prv_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'รหัสรายการ', AUTO_INCREMENT=193;
 
 --
 -- AUTO_INCREMENT for table `bs_promotions`

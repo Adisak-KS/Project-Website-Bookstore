@@ -512,8 +512,8 @@ $(document).ready(function () {
                 required: true,
                 number: true,
                 pattern: /^(?:100|[1-9]?[0-9])$/,
-                min:0,
-                max:100,
+                min: 0,
+                max: 100,
             },
             pro_time_start: {
                 required: true,
@@ -1278,8 +1278,15 @@ $(document).ready(function () {
     });
     $.validator.addMethod("greaterThan", function (value, element, param) {
         let target = $(param).val();
+
+        // ตรวจสอบว่ามีการกรอก price_start ก่อน
+        if (!target) {
+            return true; // ไม่ทำการตรวจสอบหาก price_start ว่าง
+        }
+
         return this.optional(element) || (parseFloat(value) >= parseFloat(target));
     }, "ราคาสูงสุดต้องมากกว่าราคาต่ำสุด");
+
 
     $("#formSearchSale").validate({
         rules: {
